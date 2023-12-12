@@ -3,60 +3,8 @@ var fs = require("fs"); // imports fs
 
 function DayThree()
 {
-    let data = fs.readFileSync("day-3/input-2023-3.txt", "utf-8").replace(/[^0-9]/g, " ").split(" ");
-    let dataNumbers = [];
-    let myregex = /\d/;
-    for (let i = 0; i < data.length; i++)
-    {
-        if (myregex.test(data[i]))
-        {
-            dataNumbers.push(data[i]);
-        }
-    }
-    for (let i = 0; i < dataNumbers.length; i++)
-    {
-        console.log(dataNumbers[i]);
-    }
-}
+    // 1) first identify all symbols and mark around them in an array the same size as the input
 
-function DayThree2()
-{
-    let lines = fs.readFileSync("day-3/input-2023-3.txt", "utf-8").split("\n");
-    
-    // create validator which will be used to pre-determine if a value is a number
-    let validator = new Array(lines.length);
-    for (let i = 0; i < lines.length; i++)
-    {
-        validator[i] = new Array(lines[i].length).fill(0);
-    }
-
-    //console.log(validator[0][13]);
-
-    let numberRegex = /[0-9]/;
-    for (let row = 0; row < lines.length; row++)
-    {
-        for (let col = 0; col < lines[row].length; col++)
-        {
-            if (numberRegex.test(lines[row][col]))
-            {
-                validator[row][col] = 1;
-                //console.log(`Success! This value is a number: ${lines[row][col]}`);
-            }
-            else
-            {
-                //console.log(lines[row][col]);
-            }
-        }
-    }
-
-    //console.log(validator[0][13]);
-
-    // Iterate through every validated value and  
-}
-
-function DayThree3()
-{
-    //identify all symbols
     let lines = fs.readFileSync("day-3/input-2023-3.txt", "utf-8").split("\n").filter(line => line.trim() !== "");
     
     // create validator which will be used to pre-determine if a value is a number
@@ -71,10 +19,8 @@ function DayThree3()
     {
         for (let col = 0; col < lines[row].length; col++)
         {
-            if (numberRegex.test(lines[row][col]))
+            if (numberRegex.test(lines[row][col]) && lines[row][col] !== "\r") // this \r was breaking everything!
             {
-                //console.log("A number has been found");
-                validator[row][col] = "S"; // mark as S for Symbol
                 // top row
                 if (row > 0)
                 {
@@ -183,9 +129,9 @@ function DayThree3()
             {
                 numberString += lines[row][col];
             }
-            else if (numberString[numberString.length- 1] !== " ")
+            else if (numberString[numberString.length- 1] !== ",")
             {
-                numberString += " ";
+                numberString += ",";
             }
         }
     }
@@ -193,7 +139,7 @@ function DayThree3()
     //test
     console.log(numberString);
 
-    let arrayOfFinalNumbers = numberString.split(" ");
+    let arrayOfFinalNumbers = numberString.split(",").filter(str => str !== ""); // filter out empty strings (does nothing)
 
     let finalTotal = 0;
     for (let x = 0; x < arrayOfFinalNumbers.length; x++)
@@ -201,11 +147,15 @@ function DayThree3()
         let parsedNumber = parseInt(arrayOfFinalNumbers[x], 10);
         if (!isNaN(parsedNumber))
         {
-            finalTotal += parsedNumber;
+            finalTotal = finalTotal + parsedNumber;
         }
-        console.log(`Total: ${finalTotal}, number: ${arrayOfFinalNumbers[x]}`);
+        if (x < 10)
+        {
+            console.log(`first 10 values: ${arrayOfFinalNumbers[x]}`);
+        }
+        //console.log(`Total: ${finalTotal}, number: ${arrayOfFinalNumbers[x]}`);
     }
     console.log(`Your final total is ${finalTotal}`);
 }
 
-DayThree3();
+DayThree();
