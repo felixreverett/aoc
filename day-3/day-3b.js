@@ -1,6 +1,6 @@
 //day 3
 /* Conceptual approach:
-> Create identically sized array to input
+> Create identically sized array to my input
 > Go through input and check for numbers at each *, keeping a tally
 > If 2 adjacent numbers, proceed:
   >  mark this asterisk differently in the new array
@@ -14,63 +14,175 @@ function DayThree()
 
     let lines = fs.readFileSync("day-3/input-2023-3.txt", "utf-8").split("\n").filter(line => line.trim() !== "");
     
-    // create validator which will be used to pre-determine if a value is a number
+    // create validator "mirror" structure
     let validator = new Array(lines.length);
-    let numberRegex = /[0-9]/;
+    
     for (let i = 0; i < lines.length; i++)
     {
         validator[i] = new Array(lines[i].length || 0).fill("."); // mark as . as filler
     }
 
+    let numberRegex = /[0-9]/;
+    let total = 0;
+    // 3) Iterate through Lines to identify "gears" *
     for (let row = 0; row < lines.length; row++)
     {
         for (let col = 0; col < lines[row].length; col++)
         {
-            let adjacentNumberTotal = 0;
-            let indicesToAdjust = []; // record every row-col that has been changed in case the adjacent number total exceeds 2
+            let adjacentNumbers = 0;
             if (lines[row][col] === "*")
             {
                 // top row
-                if (row > 0) // if there is a row above
+                if (row > 0) // if there is a row above the gear
                 {
-                    let middleOfRowIsNumber = false;
-                    if (numberRegex.test(lines[row - 1][col])) // if directly above is number
+                    if (numberRegex.test(lines[row - 1][col]))
                     {
-                        validator[row - 1][col] = "N";
-                        middleOfRowIsNumber = true;
-                        adjacentNumberTotal++;
+                        // if the value directly above the gear is a number, there is at most 1 number on the top row
+                        adjacentNumbers++;
                     }
 
-                    if (col > 0) // if there is a col to the left
+                    else
                     {
-                        validator[row - 1][col - 1] = "V"; // mark as V for Validated (adjacent to a Symbol)
-                    }
-                    validator[row-1][col] = "V";
-                    if (col < lines[row - 1].length - 1)
-                    {
-                        validator[row - 1][col + 1] = "V";
+                        if (col > 0) // if there is a col to the left
+                        {
+                            if (numberRegex.test(lines[row - 1][col - 1]))
+                            {
+                                adjacentNumbers++;
+                            }
+                        }
+                        
+                        if (col < lines[row - 1].length - 1) // if there is a col to the right
+                        {
+                            if (numberRegex.test(lines)[row - 1][col + 1])
+                            {
+                                adjacentNumbers++;
+                            }
+                        }
                     }
                 }
+
                 // middle row
                 if (col > 0)
                 {
-                    validator[row][col - 1] = "V";
+                    if (numberRegex.test(lines)[row][col - 1])
+                    {
+                        adjacentNumbers++;
+                    }
                 }
+
                 if (col < lines[row].length - 1)
                 {
-                    validator[row][col + 1] = "V";
+                    if (numberRegex.test(lines)[row][col + 1])
+                    {
+                        adjacentNumbers++;
+                    }
                 }
+
                 // bottom row
                 if (row < lines.length - 1)
                 {
+                    if (numberRegex.test(lines[row + 1][col]))
+                    {
+                        // if the value directly below the gear is a number, there is at most 1 number on the bottom row
+                        adjacentNumbers++;
+                    }
+
+                    else
+                    {
+                        if (col > 0) // if there is a col to the left
+                        {
+                            if (numberRegex.test(lines[row + 1][col - 1]))
+                            {
+                                adjacentNumbers++;
+                            }
+                        }
+                        
+                        if (col < lines[row - 1].length - 1) // if there is a col to the right
+                        {
+                            if (numberRegex.test(lines)[row + 1][col + 1])
+                            {
+                                adjacentNumbers++;
+                            }
+                        }
+                    }
+                }
+
+                // Find and multiply the numbers if exactly 2 were found and add to total
+                if (adjacentNumbers === 2)
+                {
+                    numbersToMultiply = []; // should be length 2
+
+                    // top row
+                    if (row > 0) // if there is a row above the gear
+                    {
+                        if (numberRegex.test(lines[row - 1][col]))
+                        {
+                            // find leftmost connected number and go right
+                        }
+
+                        else
+                        {
+                            if (col > 0) // if there is a col to the left
+                            {
+                                if (numberRegex.test(lines[row - 1][col - 1]))
+                                {
+                                    // find leftmost connected number and go right
+                                }
+                            }
+                            
+                            if (col < lines[row - 1].length - 1) // if there is a col to the right
+                            {
+                                if (numberRegex.test(lines)[row - 1][col + 1])
+                                {
+                                    // find leftmost connected number and go right (probably just go right)
+                                }
+                            }
+                        }
+                    }
+
+                    // middle row
                     if (col > 0)
                     {
-                        validator[row + 1][col - 1] = "V";
+                        if (numberRegex.test(lines)[row][col - 1])
+                        {
+                            // find leftmost connected number and go right
+                        }
                     }
-                    validator[row + 1][col] = "V";
-                    if (col < lines[row + 1].length - 1)
+
+                    if (col < lines[row].length - 1)
                     {
-                        validator[row + 1][col + 1] = "V";
+                        if (numberRegex.test(lines)[row][col + 1])
+                        {
+                            // find leftmost connected number and go right (go right)
+                        }
+                    }
+
+                    // bottom row
+                    if (row < lines.length - 1)
+                    {
+                        if (numberRegex.test(lines[row + 1][col]))
+                        {
+                            // find leftmost connected number and go right
+                        }
+
+                        else
+                        {
+                            if (col > 0) // if there is a col to the left
+                            {
+                                if (numberRegex.test(lines[row + 1][col - 1]))
+                                {
+                                    // find leftmost connected number and go right
+                                }
+                            }
+                            
+                            if (col < lines[row - 1].length - 1) // if there is a col to the right
+                            {
+                                if (numberRegex.test(lines)[row + 1][col + 1])
+                                {
+                                    // find leftmost connected number and go right
+                                }
+                            }
+                        }
                     }
                 }
             }
