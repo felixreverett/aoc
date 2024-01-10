@@ -1,9 +1,15 @@
 class Map
 {
-    constructor(mapName, mapData)
+    constructor(mapSrc, mapDest)
     {
-        this.mapName = mapName;
-        this.mapData = mapData;
+        this.mapSrc = mapSrc;
+        this.mapDest = mapDest;
+        this.mapData = [];
+    }
+
+    AddData(data)
+    {
+        this.mapData.push(data);
     }
 }
 

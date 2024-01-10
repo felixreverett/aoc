@@ -10,28 +10,40 @@ function DayFive()
 {
     // 1) first identify all symbols and mark around them in an array the same size as the input
     let lines = fs.readFileSync("day-5/sample-input-2023-5.txt", "utf-8")
-        .replace("\r", "")
+        .replace("\r\r", "")
         .split("\n")
         .filter(line => line.trim() !== "")
 
-    let seedsListIndex = lines.findIndex(i => i === "seeds:");
-    let seedsList = lines[seedsListIndex].split(" ").filter(value => value.trim() !== "seeds:");
-    lines.splice(seedsListIndex, 1);
+    var mapList = [];
+
+    //let seedsListIndex = lines.findIndex(i => i === /seeds:.*/);
+    //console.log(seedsListIndex);
+    //let seedsList = lines[seedsListIndex].split(" ").filter(value => value.trim() !== "seeds:");
+    //lines.splice(seedsListIndex, 1);
+
+    //lines.split(/[a-z]*-to-[a-z]* map:/)
 
     for (let line = 0; line < lines.length; line++)
-
-    /*for (let line = 0; line < lines.length; line++)
     {
-        // seeds List
-        seedsList = 
-        if (lines[line].startsWith("seeds:"))
+        if (lines[line].match(/[a-z]*-to-[a-z]* map:/))
         {
-            seedsList = lines[line].split(" ").filter(value => value.trim() !== "seeds:");
+            let mapData = [];
+            let mapSrc = lines[line].split("-to-")[0];
+            let mapDest = lines[line].split("-to-")[1];
+
+            let pointer = 1;
+            while (line + pointer < lines.length && lines[line + pointer][0].match(/\d/))
+            {
+                mapData.push(lines[line + pointer].replace("\r", "").split(" "));
+                pointer++;
+            }
+
+            //console.log(mapData);
+            mapList.push(new Map(mapSrc, mapDest, mapData));
         }
-        else if()
-    }*/
- 
-    console.log(seedsList);
+    }
+
+    //console.log(mapList.length);
 }
 
 DayFive();
