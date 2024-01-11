@@ -1,16 +1,12 @@
 class Map
 {
-    constructor(mapSrc, mapDest)
+    constructor(mapSrc, mapDest, mapData)
     {
         this.mapSrc = mapSrc;
         this.mapDest = mapDest;
-        this.mapData = [];
+        this.mapData = mapData;
     }
 
-    AddData(data)
-    {
-        this.mapData.push(data);
-    }
 }
 
 module.exports = Map;
