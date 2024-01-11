@@ -16,20 +16,20 @@ function DayFive()
 
     var mapList = [];
 
-    //let seedsListIndex = lines.findIndex(i => i === /seeds:.*/);
-    //console.log(seedsListIndex);
-    //let seedsList = lines[seedsListIndex].split(" ").filter(value => value.trim() !== "seeds:");
-    //lines.splice(seedsListIndex, 1);
+    // Generate seeds list
+    let seedsListIndex = lines.findIndex(i => i.match(/seeds:.*/));
+    let seedsList = lines[seedsListIndex].replace("\r", "").split(" ").filter(value => value.trim() !== "seeds:");
+    console.log(seedsList);
 
-    //lines.split(/[a-z]*-to-[a-z]* map:/)
-
+    
+    // Generate maps
     for (let line = 0; line < lines.length; line++)
     {
         if (lines[line].match(/[a-z]*-to-[a-z]* map:/))
         {
             let mapData = [];
             let mapSrc = lines[line].split("-to-")[0];
-            let mapDest = lines[line].split("-to-")[1];
+            let mapDest = lines[line].split("-to-")[1].replace(" map:", "");
 
             let pointer = 1;
             while (line + pointer < lines.length && lines[line + pointer][0].match(/\d/))
@@ -38,12 +38,18 @@ function DayFive()
                 pointer++;
             }
 
-            //console.log(mapData);
+            console.log(`Source: ${mapSrc}`);
+            console.log(`Destination: ${mapDest}`);
+            console.log(mapData);
             mapList.push(new Map(mapSrc, mapDest, mapData));
         }
     }
 
-    //console.log(mapList.length);
+    // Process every seed
+    for (let s = 0; s < seedsList.length; s++)
+    {
+        
+    }
 }
 
 DayFive();
