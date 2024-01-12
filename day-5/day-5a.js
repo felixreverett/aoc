@@ -2,14 +2,10 @@
 var fs = require("fs"); // imports fs
 const Map = require("./Map.js");
 
-// Solution:
-// 1) Parse input into each line
-// detect if a line
-
 function DayFive()
 {
     // 1) first identify all symbols and mark around them in an array the same size as the input
-    let lines = fs.readFileSync("day-5/sample-input-2023-5.txt", "utf-8")
+    let lines = fs.readFileSync("day-5/input-2023-5.txt", "utf-8")
         .replace("\r\r", "")
         .split("\n")
         .filter(line => line.trim() !== "")
@@ -40,9 +36,9 @@ function DayFive()
 
             mapData.sort((a,b) => b[1] - a[1]);
 
-            console.log(`Source: "${mapSrc}"`);
-            console.log(`Destination: "${mapDest}"`);
-            console.log(mapData[0]);
+            //console.log(`Source: "${mapSrc}"`);
+            //console.log(`Destination: "${mapDest}"`);
+            //console.log(mapData[0]);
             mapList.push(new Map(mapSrc, mapDest, mapData));
         }
     }
@@ -67,7 +63,7 @@ function DayFive()
     }
 
     console.log(seedsList);
-    console.log(finalValuesList);
+    console.log(`The lowest value is: ${finalValuesList.sort((a, b) => a - b)[0]}`);
     
 }
 
@@ -75,21 +71,21 @@ function DayFive()
 function MapAValue(mapData, value)
     {
         value = parseInt(value);
-        console.log("Your current map data is:");
-        console.log(mapData);
+        //console.log("Your current map data is:");
+        //console.log(mapData);
         for (let i = 0; i < mapData.length; i++)
         {
             if (value >= mapData[i][1] && value < mapData[i][1] + mapData[i][2])
             {
-                console.log(`a map was found for value ${value} at mapSource ${mapData[i][1]}`);
-                console.log(mapData[i][0]);
+                //console.log(`a map was found for value ${value} at mapSource ${mapData[i][1]}`);
+                //console.log(mapData[i][0]);
                 value = mapData[i][0] + (value - mapData[i][1]);
-                console.log(value);
+                //console.log(value);
                 return value;
             }
         }
 
-        console.log(`no match was found for value ${value}`);
+        //console.log(`no match was found for value ${value}`);
         return value; // no map was found
     }
 
