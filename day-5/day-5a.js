@@ -18,7 +18,7 @@ function DayFive()
 
     // Generate seeds list
     let seedsListIndex = lines.findIndex(i => i.match(/seeds:.*/));
-    let seedsList = lines[seedsListIndex].replace("\r", "").split(" ").filter(value => value.trim() !== "seeds:");
+    let seedsList = lines[seedsListIndex].replace("\r", "").split(" ").filter(value => value.trim() !== "seeds:").map(Number);
     //console.log(seedsList);
 
     
@@ -34,11 +34,11 @@ function DayFive()
             let pointer = 1;
             while (line + pointer < lines.length && lines[line + pointer][0].match(/\d/))
             {
-                mapData.push(lines[line + pointer].replace("\r", "").split(" "));
+                mapData.push(lines[line + pointer].replace("\r", "").split(" ").map(Number));
                 pointer++;
             }
 
-            mapData.sort((a,b) => a[1] - b[1]);
+            mapData.sort((a,b) => b[1] - a[1]);
 
             console.log(`Source: "${mapSrc}"`);
             console.log(`Destination: "${mapDest}"`);
@@ -66,6 +66,7 @@ function DayFive()
         finalValuesList.push(theValue);
     }
 
+    console.log(seedsList);
     console.log(finalValuesList);
     
 }
@@ -73,17 +74,22 @@ function DayFive()
 /// returns an integer value using a sorted map (descending)
 function MapAValue(mapData, value)
     {
-        console.log(`Your current map data is: ${mapData}`);
+        value = parseInt(value);
+        console.log("Your current map data is:");
+        console.log(mapData);
         for (let i = 0; i < mapData.length; i++)
         {
-            if (value >= mapData[i][1])
+            if (value >= mapData[i][1] && value < mapData[i][1] + mapData[i][2])
             {
-                //console.log("a map was found");
-                return mapData[i][0] + value - 1;
+                console.log(`a map was found for value ${value} at mapSource ${mapData[i][1]}`);
+                console.log(mapData[i][0]);
+                value = mapData[i][0] + (value - mapData[i][1]);
+                console.log(value);
+                return value;
             }
         }
 
-        //console.log("no match was found");
+        console.log(`no match was found for value ${value}`);
         return value; // no map was found
     }
 
