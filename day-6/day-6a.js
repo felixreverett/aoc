@@ -14,14 +14,41 @@ var fs = require("fs"); // imports fs
 
 function DaySix()
 {
-    console.log(`The lower limit is: ${getLowerLimit(0, 30, 200, 30)}`);
+    /*
+    let lines = fs.readFileSync("day-6/sample-input-2023-6.txt", "utf-8")
+        .replace("\r", "")
+        .split("\n");
+    let raceTimeList = lines[0].split(" ").filter(i => i !== "Time:").filter(i => i !== "");
+    let recordDistanceList = lines[1].split(" ").filter(i => i !== "Distance:").filter(i => i !== "");
+    let marginOfErrorList = [];
+
+    for (let race = 0; race < raceTimeList.length; race++)
+    {
+        let lowerLimit = getLowerLimit(0, raceTimeList[race], recordDistanceList[race], raceTimeList[race]);
+        //let UpperLimit = getUpperLimit(0, raceTimeList[race], recordDistanceList[race], raceTimeList[race]);
+        //marginOfErrorList.push(UpperLimit - lowerLimit + 1);
+    }
+    */
+
+    //console.log(marginOfErrorList);
+
+    
+    let lowerLimit = getLowerLimit(0, 7, 9, 7); // every value above this and below upper limit is valid
+    let lowerLimitDistance = ReturnDistanceFromPressTime(lowerLimit, 7);
+    console.log(`The lower limit is: ${lowerLimit}ms which would give you the distance of ${lowerLimitDistance}`);
+
+    let upperLimit = getUpperLimit(0, 7, 9, 7); // every value above this and below upper limit is valid
+    let upperLimitDistance = ReturnDistanceFromPressTime(upperLimit, 7);
+    console.log(`The upper limit is: ${upperLimit}ms which would give you the distance of ${upperLimitDistance}`);
+
+
 }
 
 function getLowerLimit(min, max, recordDistance, raceTime)
 {
-    let midPoint = Math.ceil((min + max)/2);
+    let midPoint = Math.floor((min + max)/2);
     let newDistance = ReturnDistanceFromPressTime(midPoint, raceTime);
-    console.log(`At midpoint ${midPoint}, the distance gained is ${newDistance}`);
+    console.log(`At midpoint ${midPoint}, the distance gained is ${newDistance} and needs to be >= ${recordDistance}`);
     if (newDistance === recordDistance)
     {
         console.log("lower limit found");
@@ -29,11 +56,45 @@ function getLowerLimit(min, max, recordDistance, raceTime)
     }
     else if (newDistance > recordDistance)
     {
-        return getLowerLimit(min, midPoint, recordDistance, raceTime);
+        if (ReturnDistanceFromPressTime(midPoint - 1, raceTime) <= recordDistance)
+        {
+            return midPoint;
+        }
+        else
+        {
+            return getLowerLimit(min, midPoint, recordDistance, raceTime);
+        }
     }
     else //newDistance < recordDistance
     {
-        return getLowerLimit(midPoint, max, recordDistance, raceTime);
+        return getLowerLimit(midPoint + 1, max, recordDistance, raceTime);
+    }
+}
+
+function getUpperLimit(min, max, recordDistance, raceTime)
+{
+    let midPoint = Math.ceil((min + max)/2);
+    let newDistance = ReturnDistanceFromPressTime(midPoint, raceTime);
+    console.log(`At midpoint ${midPoint}, the distance gained is ${newDistance} and needs to be >= ${recordDistance}`);
+    if (newDistance === recordDistance)
+    {
+        console.log("upper limit found");
+        return midPoint;
+    }
+    else if (newDistance < recordDistance)
+    {
+        return getUpperLimit(midPoint, max, recordDistance, raceTime);
+    }
+    else //newDistance > recordDistance
+    {
+        if (ReturnDistanceFromPressTime(midPoint - 1, raceTime) >= recordDistance)
+        {
+            return midPoint;
+        }
+        else
+        {
+            return getUpperLimit(midPoint - 1, max, recordDistance, raceTime);
+        }
     }
 }
 
