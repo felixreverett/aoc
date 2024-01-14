@@ -79,21 +79,24 @@ function getUpperLimit(min, max, recordDistance, raceTime)
     if (newDistance === recordDistance)
     {
         console.log("upper limit found");
-        return midPoint;
+        return midPoint - 1; //highest value above the record
     }
-    else if (newDistance < recordDistance)
+    else if (newDistance > recordDistance) //output still too high, check higher inputs
     {
-        return getUpperLimit(midPoint, max, recordDistance, raceTime);
+        console.log("newDistance > recordDistance --> output still too high. Check higher inputs");
+        return getUpperLimit(midPoint + 1, max, recordDistance, raceTime);
     }
-    else //newDistance > recordDistance
+
+    else //newDistance < recordDistance --> we've gone beyond the upper limit. Check one lower
     {
-        if (ReturnDistanceFromPressTime(midPoint - 1, raceTime) >= recordDistance)
+        console.log("newdistance < recordDistance --> output too low. Check lower");
+        if (ReturnDistanceFromPressTime(midPoint + 1) <= recordDistance)
         {
             return midPoint;
         }
         else
         {
-            return getUpperLimit(midPoint - 1, max, recordDistance, raceTime);
+            return getUpperLimit(min, midPoint - 1, recordDistance, raceTime);
         }
     }
 }
