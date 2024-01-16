@@ -21,40 +21,30 @@ function DaySix()
     let recordDistanceList = lines[1].split(" ").filter(i => i !== "Distance:").filter(i => i !== "");
     let marginOfErrorList = [];
 
-    console.log(raceTimeList);
-    console.log(recordDistanceList);
-
     for (let race = 0; race < raceTimeList.length; race++)
     {
-        console.log(`===== Race ${race} =====`);
         let lowerLimit = getLowerLimit(0, raceTimeList[race], recordDistanceList[race], raceTimeList[race]);
         let lowerLimitDistance = ReturnDistanceFromPressTime(lowerLimit, 7);
         
         let upperLimit = getUpperLimit(0, raceTimeList[race], recordDistanceList[race], raceTimeList[race]);
         let upperLimitDistance = ReturnDistanceFromPressTime(upperLimit, 7);
-        console.log(`The lower limit is: ${lowerLimit}ms which would give you the distance of ${lowerLimitDistance}`);
-        console.log(`The upper limit is: ${upperLimit}ms which would give you the distance of ${upperLimitDistance}`);
         marginOfErrorList.push(upperLimit - lowerLimit + 1);
     }
     
+    let totalMargin = 1;
+    for (let i = 0; i < marginOfErrorList.length; i++)
+    {
+        totalMargin *= marginOfErrorList[i];
+    }
 
-    console.log(marginOfErrorList);
+    console.log(`The total margin of error is ${totalMargin}`);
 
-    
-    //let lowerLimit = getLowerLimit(0, 7, 9, 7); // every value above this and below upper limit is valid
-    //let lowerLimitDistance = ReturnDistanceFromPressTime(lowerLimit, 7);
-    //console.log(`The lower limit is: ${lowerLimit}ms which would give you the distance of ${lowerLimitDistance}`);
-
-    //let upperLimit = getUpperLimit(0, 7, 9, 7); // every value above this and below upper limit is valid
-    //let upperLimitDistance = ReturnDistanceFromPressTime(upperLimit, 7);
-    //console.log(`The upper limit is: ${upperLimit}ms which would give you the distance of ${upperLimitDistance}`);
 }
 
 function getLowerLimit(min, max, recordDistance, raceTime)
 {
     let midPoint = Math.floor((min + max)/2);
     let newDistance = ReturnDistanceFromPressTime(midPoint, raceTime);
-    console.log(`At midpoint ${midPoint}, the distance gained is ${newDistance} and needs to be >= ${recordDistance}`);
     if (newDistance === recordDistance)
     {
         console.log("lower limit found");
@@ -81,33 +71,28 @@ function getUpperLimit(min, max, recordDistance, raceTime)
 {
     let midPoint = Math.floor((min + max)/2);
     let newDistance = ReturnDistanceFromPressTime(midPoint, raceTime);
-    console.log(`At midpoint ${midPoint}, the distance gained is ${newDistance} and needs to be >= ${recordDistance}`);
+    
     if (newDistance === recordDistance)
     {
-        console.log("upper limit a found (A)");
         return midPoint - 1; //highest value above the record
     }
     else if (newDistance > recordDistance) //output still too high, check higher inputs
     {
         if (ReturnDistanceFromPressTime(midPoint + 1, raceTime) <= recordDistance)
         {
-            console.log("upper limit found (B)");
             return midPoint; // this is the highest index above the record
         }
         else
         {
-            console.log("newDistance > recordDistance --> output still too high. Check higher inputs");
             return getUpperLimit(midPoint, max, recordDistance, raceTime);
         }
     }
 
     else //newDistance < recordDistance --> we've gone beyond the upper limit. Check one lower
     {
-        console.log("newdistance < recordDistance --> output too low. Check lower");
         if (ReturnDistanceFromPressTime(midPoint - 1, raceTime) > recordDistance)
         {
             // The midpoint was one higher than the upper limit, so return midPoint - 1
-            console.log("upper limit found (C)")
             return midPoint - 1;
         }
         else
