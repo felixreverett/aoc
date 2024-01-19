@@ -18,15 +18,35 @@
 var fs = require("fs"); // imports fs
 const Hand = require("./Hand.js");
 
-const T5k = new Type(0);
-const 
+const typeMap = new Map([
+  ["FiveOfAKind",     0],
+  ["FourOfAKind",     1],
+  ["FullHouse",       2],
+  ["ThreeOfAKind",    3],
+  ["TwoPairs",        4],
+  ["OnePair",         5],
+  ["HighCard",        6],
+]);
 
-function DaySix()
+function DaySeven()
 {
-    let lines = fs.readFileSync("day-6/input-2023-6.txt", "utf-8")
-        .replace("\r", "")
-        .split("\n");
-   
+  let lines = fs.readFileSync("day-7/sample-input-2023-7.txt", "utf-8")
+    .split("\n")
+    .map(i => i.replace("\r", ""))
+
+  let handsList = [];
+  
+  for (let l = 0; l < lines.length; l++)
+  {
+    let splitLine = lines[l].split(" ");
+    handsList.push(
+      new Hand(splitLine[0], parseInt(splitLine[1]))
+    );
+  }
+  
+  console.log(handsList);
+  //let testHand = new Hand("23332", 10);
+  
 }
 
 DaySeven();
