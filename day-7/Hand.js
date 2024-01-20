@@ -2,7 +2,7 @@ class Hand
 {
     constructor(cards, bid)
     {
-        this.cards = cards;                 // str
+        this.cards = cards;                 // str[]
         this.cardQuantities = []            // 2d array
         this.bid = bid;                     // int
         this.type;                          // str
@@ -11,6 +11,7 @@ class Hand
         this.type = this.CalculateType();   // set type
         //console.log(this.cardQuantities);
         //console.log(this.type);
+        this.cards.unshift(this.type);
     }
 
     CalculateType()
