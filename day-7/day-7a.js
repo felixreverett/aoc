@@ -1,20 +1,5 @@
 //day 7a
 
-/* Solution Plan:
-> Parse input:
-  > Create list hands[] of HAND datatype which has the cards, the bid, the type, the rank
-  > type:
-    > T5K five of a kind
-    > T4K four of a kind
-    > TFH full house
-    > T3K three of a kind
-    > T2P two pair
-    > T1P one pair
-    > THC high card
-> Determine every hand's type
-> Sort by type, then by rank within that type
-> Iterate through hands[] and write output to console
-*/
 var fs = require("fs"); // imports fs
 const Hand = require("./Hand.js");
 
@@ -59,8 +44,6 @@ function DaySeven()
     );
   }
   
-  //console.log(handsList);
-  
   // 3. sorting handsList
   handsList.sort((a, b) =>
   {
@@ -77,15 +60,13 @@ function DaySeven()
 
   })
 
-  console.log("Post sort:");
-
-  //console.log(handsList);
-
   // 4. 
   let totalWinnings = 0;
+
   for (let i = 0; i < handsList.length; i++)
   {
-    totalWinnings += (handsList.length - i + 1) * handsList[i].bid;
+    totalWinnings = totalWinnings + ((1000 - i) * handsList[i].bid);
+    //console.log(`Hand: ${i + 1} | cards: ${handsList[i].cards} | bid ${handsList[i].bid} * ${1000 - i} | total: ${totalWinnings}`);
   }
   console.log(`Total winnings for this hands list: ${totalWinnings}`);
 }
