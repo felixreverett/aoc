@@ -1,7 +1,7 @@
-//day 7a
+//day 7b
 
 var fs = require("fs"); // imports fs
-const Hand = require("./Hand.js");
+const Hand = require("./Hand-b.js");
 
 const typeAndCardOrderMap = new Map([
   ["FiveOfAKind",     0],
@@ -14,16 +14,16 @@ const typeAndCardOrderMap = new Map([
   ["A",   7],
   ["K",   8],
   ["Q",   9],
-  ["J",   10],
-  ["T",   11],
-  ["9",   12],
-  ["8",   13],
-  ["7",   14],
-  ["6",   15],
-  ["5",   16],
-  ["4",   17],
-  ["3",   18],
-  ["2",   19],
+  ["T",   10],
+  ["9",   11],
+  ["8",   12],
+  ["7",   13],
+  ["6",   14],
+  ["5",   15],
+  ["4",   16],
+  ["3",   17],
+  ["2",   18],
+  ["J",   19]
 ]);
 
 function DaySeven()
