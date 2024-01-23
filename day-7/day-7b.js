@@ -66,7 +66,7 @@ function DaySeven()
   for (let i = 0; i < handsList.length; i++)
   {
     totalWinnings = totalWinnings + ((1000 - i) * handsList[i].bid);
-    //console.log(`Hand: ${i + 1} | cards: ${handsList[i].cards} | bid ${handsList[i].bid} * ${1000 - i} | total: ${totalWinnings}`);
+    console.log(`Hand: ${i + 1} | cards: ${handsList[i].cards} | bid ${handsList[i].bid} * ${1000 - i} | total: ${totalWinnings}`);
   }
   console.log(`Total winnings for this hands list: ${totalWinnings}`);
 }

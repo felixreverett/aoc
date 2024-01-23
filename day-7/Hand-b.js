@@ -20,8 +20,9 @@ class Hand
                     this.jesters++;
                 }
             }
-            
+            let text = `The hand of ${this.cards} has ${this.jesters} jesters and type ${this.type}`;
             this.type = this.AdjustTypeForJesters();
+            console.log(`${text} --> returning type ${this.type}`);
         }
         
         this.cards.unshift(this.type);
@@ -95,10 +96,10 @@ class Hand
 
     AdjustTypeForJesters()
     {
-        console.log(`The hand of ${this.cards} has ${this.jesters} jesters and type ${this.type}`);
         switch (this.jesters)
         {
-            case 5 || 4:
+            case 5:
+            case 4:
             {
                 return "FiveOfAKind";
             }
@@ -119,9 +120,12 @@ class Hand
                 {
                     return "FiveOfAKind";
                 }
-                else // two pairs --> four of a kind
+                else if (this.type === "TwoPairs")
                 {
                     return "FourOfAKind";
+                }
+                else{
+                    return "ThreeOfAKind";
                 }
             }
             case 1:
