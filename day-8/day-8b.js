@@ -22,8 +22,6 @@ function DayEight()
     mapsList.push(new Map(source, destination));
   }
 
-  console.log(mapsList);
-
   // 3. Find all locations starting with "A"
   let locationsList = [];
   let locationsCycleLengths = [];
@@ -37,15 +35,11 @@ function DayEight()
     }
   }
 
-  console.log(locationsList); // test
-  console.log(locationsCycleLengths);
-
   // 4. For every item in the locationsList, find the cycle length. Find the LCM between all values to get the solution.
   
   for (let l = 0; l < locationsList.length; l++)
   {
     let steps = 0;
-    let firstCase = locationsList[l];
     let cycleFound = false;
     let breakCase = false;
 
@@ -77,9 +71,7 @@ function DayEight()
           break;
         }
 
-        console.log(`${locationsList[l]} vs ${firstCase}}`);
-
-        if (locationsList[l] === firstCase)
+        if (locationsList[l].endsWith("Z"))
         {
           locationsCycleLengths[l] = steps;
           cycleFound = true;
@@ -89,7 +81,7 @@ function DayEight()
     }
   }
   
-  console.log(locationsCycleLengths);
+  console.log(`The solution is the LCM of ${locationsCycleLengths}`);
 }
 
 DayEight();
