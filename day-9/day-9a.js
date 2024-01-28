@@ -6,7 +6,7 @@ const History = require("../day-9/History.js");
 function DayNine()
 {
   // 1. Parsing input
-  let lines = fs.readFileSync("day-9/sample-input-2023-9.txt", "utf-8")
+  let lines = fs.readFileSync("day-9/input-2023-9.txt", "utf-8")
     .split("\n")
     .map(i => i.replace("\r", ""));
 
@@ -17,6 +17,15 @@ function DayNine()
     let sequence = lines[line].split(" ").map(i => parseInt(i));
     Histories.push(new History(sequence));
   }
+
+  let total = 0;
+  for (let h = 0; h < Histories.length; h++)
+  {
+    console.log(Histories[h].nextValue);
+    total += Histories[h].nextValue;
+  }
+
+  console.log(`Day 9a solution is ${total}`);
   
 }
 
