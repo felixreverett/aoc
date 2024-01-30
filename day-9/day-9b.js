@@ -14,7 +14,7 @@ function DayNine()
 
   for (let line = 0; line < lines.length; line++)
   {
-    let sequence = lines[line].split(" ").map(i => parseInt(i)).reverse();
+    let sequence = lines[line].split(" ").map(i => parseInt(i))
     Histories.push(new History(sequence));
   }
 
