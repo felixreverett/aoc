@@ -6,7 +6,7 @@ const Coord = require("../day-X0/Coord.js");
 function DayTen()
 {
   // 1. Parsing input
-  let lines = fs.readFileSync("day-X0/sample-input-2023-10.txt", "utf-8")
+  let lines = fs.readFileSync("day-X0/input-2023-10.txt", "utf-8")
     .split("\n")
     .map(i => i.replace("\r", ""))
     .map(i => i.replace(" ", ""))
@@ -203,6 +203,9 @@ function DayTen()
       console.log(row);
     }
   }
+
+  //5. Solution
+  console.log(`The greatest distance from the start point is: ${distanceFromStart + 1}`);
 
 }
 
