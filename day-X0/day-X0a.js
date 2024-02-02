@@ -41,8 +41,8 @@ function DayTen()
   let distanceFromStart = 0;
   while (!endFound)
   {
-    console.log(distanceFromStart);
     distanceFromStart++;
+    console.log(distanceFromStart);
     // find the two directions to travel
     // iterate through, one at a time
     for (let p = 0; p < pointers.length; p++)
@@ -71,7 +71,9 @@ function DayTen()
           }
           else
           {
+            console.log("End found at -");
             distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
+            distanceFromStart++;
             //console.log(distanceArray); //debug
             endFound = true;
           }
@@ -92,7 +94,9 @@ function DayTen()
           }
           else
           {
+            console.log("End found at 7");
             distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
+            distanceFromStart++;
             //console.log(distanceArray); //debug
             endFound = true;
           }
@@ -113,7 +117,9 @@ function DayTen()
           }
           else
           {
+            console.log("End found at |");
             distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
+            distanceFromStart++;
             //console.log(distanceArray); //debug
             endFound = true;
           }
@@ -134,7 +140,9 @@ function DayTen()
           }
           else
           {
+            console.log("End found at J");
             distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
+            distanceFromStart++;
             //console.log(distanceArray); //debug
             endFound = true;
           }
@@ -155,7 +163,9 @@ function DayTen()
           }
           else
           {
+            console.log("End found at L");
             distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
+            distanceFromStart++;
             //console.log(distanceArray); //debug
             endFound = true;
           }
@@ -176,6 +186,8 @@ function DayTen()
           }
           else
           {
+            console.log("End found at F");
+            distanceFromStart++;
             distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
             //console.log(distanceArray); //debug
             endFound = true;
@@ -190,6 +202,8 @@ function DayTen()
       }
     }
   }
+
+  // 5. Print the loop
   //console.log(distanceArray); //debug
   for (let i = 0; i < distanceArray.length; i++)
   {
@@ -204,18 +218,9 @@ function DayTen()
     }
   }
 
-  //5. Solution
-  console.log(`The greatest distance from the start point is: ${distanceFromStart + 1}`);
+  //6. Solution
+  console.log(`The greatest distance from the start point is: ${distanceFromStart}`);
 
-}
-
-function nextValue(position)
-{
-  var row; var col;
-
-
-  
-  return [row, col];
 }
 
 function getStartPoints(sCoord, lines)
