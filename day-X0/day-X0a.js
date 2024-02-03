@@ -12,29 +12,15 @@ function DayTen()
     .map(i => i.replace(" ", ""))
     .map(i => i.split(""));
 
-  // 2. Map to an array of distances from S
-  let distanceArray = [];
-  for (let i = 0; i < lines.length; i++)
-  {
-    let subArray = [];
-    for (let j = 0; j < lines[i].length; j++)
-    {
-      subArray.push("_");
-    }
-    distanceArray.push(subArray);
-  }
-
-  console.log(distanceArray); //debug
-  console.log(lines); //debug
+  // 2. Create an array of distances from S
+  let distanceArray = getDistanceArray(lines);
 
   // 3. Find S
   let sCoord = findS(lines);
   distanceArray[sCoord.row][sCoord.col] = 0;
-  console.log(sCoord); //debug
 
   // 4. Find startpoints
   let pointers = getStartPoints(sCoord, lines);
-  console.log(pointers); //debug
 
   // 5. Iterate through lines from each startpoint, reading values to find next pipe and writing distances to distanceArray
   let endFound = false;
@@ -61,20 +47,15 @@ function DayTen()
           console.log("found: -");
           if ( !distanceArray[pointers[p].row][pointers[p].col - 1].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row][pointers[p].col - 1] = distanceFromStart;
             pointers[p].col -= 1;
           }
           else if ( !distanceArray[pointers[p].row][pointers[p].col + 1].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row][pointers[p].col + 1] = distanceFromStart;
             pointers[p].col += 1;
           }
           else
           {
             console.log("End found at -");
-            distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
-            distanceFromStart++;
-            //console.log(distanceArray); //debug
             endFound = true;
           }
           break;
@@ -84,20 +65,15 @@ function DayTen()
           console.log("found: 7");
           if ( !distanceArray[pointers[p].row][pointers[p].col - 1].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row][pointers[p].col - 1] = distanceFromStart;
             pointers[p].col -= 1;
           }
           else if ( !distanceArray[pointers[p].row + 1][pointers[p].col].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row + 1][pointers[p].col] = distanceFromStart;
             pointers[p].row += 1;
           }
           else
           {
             console.log("End found at 7");
-            distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
-            distanceFromStart++;
-            //console.log(distanceArray); //debug
             endFound = true;
           }
           break;
@@ -107,20 +83,15 @@ function DayTen()
           console.log("found: |");
           if ( !distanceArray[pointers[p].row - 1][pointers[p].col].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row - 1][pointers[p].col] = distanceFromStart;
             pointers[p].row -= 1;
           }
           else if ( !distanceArray[pointers[p].row + 1][pointers[p].col].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row + 1][pointers[p].col] = distanceFromStart;
             pointers[p].row += 1;
           }
           else
           {
             console.log("End found at |");
-            distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
-            distanceFromStart++;
-            //console.log(distanceArray); //debug
             endFound = true;
           }
           break;
@@ -130,20 +101,15 @@ function DayTen()
           console.log("found: J");
           if ( !distanceArray[pointers[p].row - 1][pointers[p].col].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row - 1][pointers[p].col] = distanceFromStart;
             pointers[p].row -= 1;
           }
           else if ( !distanceArray[pointers[p].row][pointers[p].col - 1].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row][pointers[p].col - 1] = distanceFromStart;
             pointers[p].col -= 1;
           }
           else
           {
             console.log("End found at J");
-            distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
-            distanceFromStart++;
-            //console.log(distanceArray); //debug
             endFound = true;
           }
           break;
@@ -153,20 +119,15 @@ function DayTen()
           console.log("found: L");
           if ( !distanceArray[pointers[p].row - 1][pointers[p].col].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row - 1][pointers[p].col] = distanceFromStart;
             pointers[p].row -= 1;
           }
           else if ( !distanceArray[pointers[p].row][pointers[p].col + 1].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row][pointers[p].col + 1] = distanceFromStart;
             pointers[p].col += 1;
           }
           else
           {
             console.log("End found at L");
-            distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
-            distanceFromStart++;
-            //console.log(distanceArray); //debug
             endFound = true;
           }
           break;
@@ -176,20 +137,15 @@ function DayTen()
           console.log("found: F");
           if ( !distanceArray[pointers[p].row][pointers[p].col + 1].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row][pointers[p].col + 1] = distanceFromStart;
             pointers[p].col += 1;
           }
           else if ( !distanceArray[pointers[p].row + 1][pointers[p].col].toString().match(/[\d]/) )
           {
-            distanceArray[pointers[p].row + 1][pointers[p].col] = distanceFromStart;
             pointers[p].row += 1;
           }
           else
           {
             console.log("End found at F");
-            distanceFromStart++;
-            distanceArray[pointers[p].row][pointers[p].col] = distanceFromStart;
-            //console.log(distanceArray); //debug
             endFound = true;
           }
           break;
@@ -203,14 +159,20 @@ function DayTen()
     }
   }
 
-  // 5. Print the loop
-  //console.log(distanceArray); //debug
+  // 6. Print the loop
   for (let i = 0; i < distanceArray.length; i++)
   {
     let row = "";
     for (let j = 0; j < distanceArray[i].length; j++)
     {
-      row += `-${distanceArray[i][j]}-`;
+      if (parseInt(distanceArray[i][j]))
+      {
+        row += `-${distanceArray[i][j]}-`;
+      }
+      else
+      {
+        row += `------`;
+      }
     }
     if (row.match(/[\d]/))
     {
@@ -218,9 +180,24 @@ function DayTen()
     }
   }
 
-  //6. Solution
+  // 7. Solution
   console.log(`The greatest distance from the start point is: ${distanceFromStart}`);
 
+}
+
+function getDistanceArray(lines)
+{
+  let distanceArray = [];
+  for (let i = 0; i < lines.length; i++)
+  {
+    let subArray = [];
+    for (let j = 0; j < lines[i].length; j++)
+    {
+      subArray.push("_");
+    }
+    distanceArray.push(subArray);
+  }
+  return distanceArray;
 }
 
 function getStartPoints(sCoord, lines)
