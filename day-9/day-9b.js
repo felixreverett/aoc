@@ -14,7 +14,7 @@ function DayNine()
 
   for (let line = 0; line < lines.length; line++)
   {
-    let sequence = lines[line].split(" ").map(i => parseInt(i))
+    let sequence = lines[line].split(" ").map(i => parseInt(i)).reverse(); // only change between 9a and 9b
     Histories.push(new History(sequence));
   }
 
