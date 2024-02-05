@@ -179,23 +179,57 @@ function DayTen()
     {
       row.push(mirrorArray[i][j]);
     }
-    if (row.includes("╔") || row.includes("╚") || row.includes("╝") || row.includes("║") || row.includes("╗") || row.includes("═") )
-    {
-      newMirrorArray.push(row);
-    }
+    newMirrorArray.push(row);
   }
 
   // 7. Solution
-  let area = 0; let insideLoop = false;
+  let area = 0; let insideLoop = false; let lastVertical;
 
   for (let r = 1; r < newMirrorArray.length - 1; r++)
   {
-    for (let c = 0; c < newMirrorArray[r].length; c++) //c++ lol
+    lastVertical = "None"; // use this to determine whether a "loop switch" has happened
+
+    for (let c = 0; c < newMirrorArray[r].length; c++)
     {
       let currentValue = newMirrorArray[r][c];
-      if (currentValue.match(/[╔|╚|╝|║|╗]/))
+      
+      switch (currentValue)
       {
-        insideLoop = !insideLoop;
+        case "╔":
+        {
+          lastVertical = "╔";
+        }
+        case "╝":
+        {
+          if (lastVertical === "╔")
+          {
+            insideLoop = !insideLoop;
+          }
+
+          lastVertical = "╝";
+        }
+        case "╚":
+        {
+          lastVertical = "╚";
+        }
+        case "╗":
+        {
+          if (lastVertical === "╚")
+          {
+            insideLoop = !insideLoop;
+          }
+
+          lastVertical = "╗";
+        }
+        case "║":
+        {
+          insideLoop = !insideLoop;
+          lastVertical = "║";
+        }
+        default:
+        {
+          break;
+        }
       }
 
       if (insideLoop && currentValue === "_")
@@ -208,8 +242,7 @@ function DayTen()
     insideLoop = false;
   }
 
-  //console.log(newMirrorArray);
-  console.log(`The total area within the loop is ${area}.`)
+  console.log(`The total area within the loop is ${area}.`);
 
   for (let i = 0; i < newMirrorArray.length; i++)
   {
@@ -220,6 +253,8 @@ function DayTen()
     }
     console.log(row);
   }
+
+  console.log(`The total area within the loop is ${area}.`);
   
 
 }
