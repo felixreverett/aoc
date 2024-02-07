@@ -9,23 +9,21 @@ const Galaxy = require("./Galaxy.js");
 function DayEleven()
 {
   // 1. Parsing input
-  let space = fs.readFileSync("day-X1/sample-input-2023-11.txt", "utf-8")
+  let space = fs.readFileSync("day-X1/input-2023-11.txt", "utf-8")
     .split("\n")
     .map(i => i.replace("\r", ""))
     .map(i => i.split(""));
 
   let expandedSpace = expandSpace(space);
 
-  // debug to see if it worked
-  for (let i = 0; i < expandedSpace.length; i++)
-  {
-    let row = "";
-    for (let j = 0; j < expandedSpace[i].length; j++)
-    {
-      row += expandedSpace[i][j];
-    }
-    console.log(row);
-  }
+  let galaxyList = getGalaxyList(expandedSpace);
+  
+  let galaxyDistances = getGalaxyDistances(galaxyList);
+
+  let totalGalaxyDistance = galaxyDistances.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  console.log(`The total sum of galaxy distances is: ${totalGalaxyDistance}`);
+  
 }
 
 function expandSpace(space)
@@ -92,9 +90,43 @@ function expandSpace(space)
     }
   }
 
-  console.log(space); //debug
-
   return space;
+}
+
+function getGalaxyList(space)
+{
+  let galaxyIndex = 0; let galaxyList = [];
+  for (let row = 0; row < space.length; row++)
+  {
+    for (let col = 0; col < space[row].length; col++)
+    {
+      if (space[row][col] === "#")
+      {
+        galaxyIndex++;
+        galaxyList.push(new Galaxy(galaxyIndex, row, col));
+      }
+    }
+  }
+
+  return galaxyList;
+}
+
+function getGalaxyDistances(galaxyList)
+{
+  let galaxyDistances = [];
+  let pointer = 1; // prevent counting galaxy-to-galaxy distance twice
+
+  for (let galaxyA = 0; galaxyA < galaxyList.length; galaxyA++)
+  {
+    for (let galaxyB = pointer; galaxyB < galaxyList.length; galaxyB++)
+    {
+      let AtoB = Math.abs(galaxyList[galaxyA].row - galaxyList[galaxyB].row) + Math.abs(galaxyList[galaxyA].col - galaxyList[galaxyB].col);
+      galaxyDistances.push(AtoB);
+    }
+    pointer++;
+  }
+
+  return galaxyDistances;
 }
 
 DayEleven();
