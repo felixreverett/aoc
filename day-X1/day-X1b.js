@@ -16,9 +16,20 @@ function DayEleven()
 
   let expandedSpace = expandSpace(space);
 
+  //debug
+  for (let r = 0; r < expandedSpace.length; r++)
+  {
+    let currentRow = "";
+    for (let c = 0; c < expandedSpace[r].length; c++)
+    {
+      currentRow += expandedSpace[r][c];
+    }
+    console.log(currentRow);
+  }
+
   let galaxyList = getGalaxyList(expandedSpace);
   
-  let galaxyDistances = getGalaxyDistances(galaxyList);
+  let galaxyDistances = getGalaxyDistances(galaxyList, expandedSpace);
 
   let totalGalaxyDistance = galaxyDistances.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
@@ -59,8 +70,6 @@ function expandSpace(space)
     }
   }
 
-  console.log(space); //debug
-
   // prepare rowTracker
   let rowTracker = [];
   for (let r = 0; r < space.length; r++)
@@ -88,7 +97,7 @@ function expandSpace(space)
     {
       for (let col = 0; col < space[row].length; col++)
       {
-        space[row][col] === "M";
+        space[row][col] = "M";
       }
     }
   }
@@ -114,7 +123,7 @@ function getGalaxyList(space)
   return galaxyList;
 }
 
-function getGalaxyDistances(galaxyList)
+function getGalaxyDistances(galaxyList, expandedSpace)
 {
   let galaxyDistances = [];
   let pointer = 1; // prevent counting galaxy-to-galaxy distance twice
@@ -123,8 +132,60 @@ function getGalaxyDistances(galaxyList)
   {
     for (let galaxyB = pointer; galaxyB < galaxyList.length; galaxyB++)
     {
-      let AtoB = Math.abs(galaxyList[galaxyA].row - galaxyList[galaxyB].row) + Math.abs(galaxyList[galaxyA].col - galaxyList[galaxyB].col);
-      galaxyDistances.push(AtoB);
+      let currentGalaxyDistance = 0;
+
+      // find lower of two rows
+      let startRow; let endRow;
+      if (galaxyList[galaxyA].row <= galaxyList[galaxyB].row)
+      {
+        startRow = galaxyList[galaxyA].row;
+        endRow = galaxyList[galaxyB].row;
+      }
+      else
+      {
+        startRow = galaxyList[galaxyB].row;
+        endRow = galaxyList[galaxyA].row;
+      }
+
+      // find lower of two cols
+      let startCol; let endCol;
+      if (galaxyList[galaxyA].col <= galaxyList[galaxyB].col)
+      {
+        startCol = galaxyList[galaxyA].col;
+        endCol = galaxyList[galaxyB].col;
+      }
+      else
+      {
+        startCol = galaxyList[galaxyB].col;
+        endCol = galaxyList[galaxyA].col;
+      }
+
+      // calculate distances
+      for (let r = startRow; r < endRow; r++)
+      {
+        if (expandedSpace[r][startCol] === "M")
+        {
+          currentGalaxyDistance += 1000000;
+        }
+        else
+        {
+          currentGalaxyDistance++;
+        }
+      }
+
+      for (let c = startCol; c < endCol; c++)
+      {
+        if (expandedSpace[endRow][c] === "M")
+        {
+          currentGalaxyDistance += 1000000;
+        }
+        else
+        {
+          currentGalaxyDistance++;
+        }
+      }
+
+      galaxyDistances.push(currentGalaxyDistance);
     }
     pointer++;
   }
