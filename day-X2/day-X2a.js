@@ -11,7 +11,7 @@ const ConditionRecord = require("./ConditionRecord.js");
 function DayTwelve()
 {
   // 1. Parsing input
-  let records = fs.readFileSync("day-X2/sample-input-2023-12.txt", "utf-8")
+  let records = fs.readFileSync("day-X2/input-2023-12.txt", "utf-8")
     .split("\n")
     .map(i => i.replace("\r", ""));
 

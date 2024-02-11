@@ -43,7 +43,7 @@ class ConditionRecord
 
             if (valid)
             {
-                console.log(`Valid arrangement found at ${brokenRecord}`);
+                //console.log(`Valid arrangement found at ${brokenRecord}`);
                 this.possibleArrangements++;
             }
         }
