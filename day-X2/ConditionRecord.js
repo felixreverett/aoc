@@ -4,29 +4,42 @@ class ConditionRecord
     {
         this.record = record; // string
         this.contiguousGroups = contiguousGroups; // list
-        this.possibleArrangements = 0;
-        this.CalculateArrangements(this.record);
+
+        this.possibleXArrangements = 0;
+        this.possibleX2Arrangements = 0;
+        this.possibleX3Arrangements = 0;
+        this.possibleX4Arrangements = 0;
+        this.possibleX5Arrangements = 0;
+
+        this.possibleTotalArrangements = 0;
+
+        this.possibleXArrangements = this.CalculateArrangements(this.record, 0);
+
+        // X?X?X?X?X = 16 arrangements
+        // .X. -> multiply result by possibleXarrangements
+        // X#X.X#X -> calculate separately, multiply results together.
+        let groupRecord = "X?X?X?X?X";
+        this.CalculateTotalArrangements(groupRecord);
     }
 
-    CalculateArrangements(record)
+    CalculateArrangements(record, sum)
     {
         let indexOfQ = record.indexOf("?");
 
         if (indexOfQ !== -1)
         {
             let newRecordA = record.replace("?", ".");
-            this.CalculateArrangements(newRecordA);
+            sum = this.CalculateArrangements(newRecordA, sum);
 
             let newRecordB = record.replace("?", "#");
-            this.CalculateArrangements(newRecordB);
+            sum = this.CalculateArrangements(newRecordB, sum);
         }
 
         else
         {
-            //console.log(`Arrangement found at ${record}`);
             // test if valid. increment if valid.
             let brokenRecord = record.split(".").filter(i => i !== "");
-            //console.log(`This is split into ${brokenRecord}`);
+            
             let valid = false;
             if (this.contiguousGroups.length === brokenRecord.length)
             {
@@ -43,9 +56,31 @@ class ConditionRecord
 
             if (valid)
             {
-                //console.log(`Valid arrangement found at ${brokenRecord}`);
-                this.possibleArrangements++;
+                return sum + 1;
             }
+            else
+            {
+                return sum;
+            }
+        }
+    }
+
+    CalculateTotalArrangements(groupRecord)
+    {
+        let indexOfQ = groupRecord.indexOf("?");
+
+        if (indexOfQ !== -1)
+        {
+            let newGroupRecordA = groupRecord.replace("?", ".");
+            this.CalculateTotalArrangements(newGroupRecordA);
+
+            let newGroupRecordB = groupRecord.replace("?", "#");
+            this.CalculateTotalArrangements(newGroupRecordB);
+        }
+
+        else
+        {
+            console.log(groupRecord);
         }
     }
 }

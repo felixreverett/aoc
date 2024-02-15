@@ -17,27 +17,27 @@ function DayTwelve()
     let currentRecord = records[r].split(" ");
 
     let condition = currentRecord[0];
-    let conditionFive = condition;
+    /*let conditionFive = condition;
     for (let i = 0; i < 4; i++)
     {
       conditionFive = conditionFive + "?" + condition;
-    }
+    }*/
 
     let contiguousGroups = currentRecord[1].split(",").map(i => parseInt(i));
-    let contiguousGroupsFive = contiguousGroups;
+    /*let contiguousGroupsFive = contiguousGroups;
     for (let i = 0; i < 4; i++)
     {
       contiguousGroupsFive += contiguousGroups;
-    }
+    }*/
 
     console.log(`Calculating: ${r + 1}/${records.length}`);
-    conditionRecordList.push(new ConditionRecord(conditionFive, contiguousGroupsFive));
+    conditionRecordList.push(new ConditionRecord(condition, contiguousGroups));
   }
 
   let sumOfArrangements = 0;
   for (let r = 0; r < conditionRecordList.length; r++)
   {
-    sumOfArrangements += conditionRecordList[r].possibleArrangements;
+    //sumOfArrangements += conditionRecordList[r].possibleArrangements;
   }
   console.log(`The total sum of possible arrangements and solution is: ${sumOfArrangements}`);
 
