@@ -29,9 +29,9 @@ function DayTwelve()
   let sumOfArrangements = 0;
   for (let r = 0; r < conditionRecordList.length; r++)
   {
-    sumOfArrangements += conditionRecordList[r].possibleArrangements;
+    sumOfArrangements += conditionRecordList[r].totalArrangements;
   }
-  console.log(`The total sum of possible arrangements and solution is: ${sumOfArrangements}`);
+  console.log(`The total sum of total arrangements (and solution) is: ${sumOfArrangements}`);
 
 }
 

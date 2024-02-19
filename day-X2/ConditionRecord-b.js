@@ -4,20 +4,30 @@ class ConditionRecord
     {
         this.record = record; // string
         this.contiguousGroups = contiguousGroups; // list
-        this.totalArrangements = this.CalculateArrangements(this.record, 0);
+        
+        this.recordTimesFive = record;
+        this.contiguousGroupsTimesFive = contiguousGroups;
+        for (let i = 0; i < 4; i ++)
+        {
+            this.recordTimesFive += "?" + record;
+            this.contiguousGroupsTimesFive = this.contiguousGroupsTimesFive.concat(contiguousGroups);
+        }
+
+        this.recordTimesFive;
+        this.totalArrangements = this.CalculateArrangements(this.recordTimesFive, this.contiguousGroupsTimesFive, 0);
     }
 
-    CalculateArrangements(record, sum)
+    CalculateArrangements(record, contiguousGroups, sum)
     {
         let indexOfQ = record.indexOf("?");
 
         if (indexOfQ !== -1)
         {
             let newRecordA = record.replace("?", ".");
-            sum = this.CalculateArrangements(newRecordA, sum);
+            sum = this.CalculateArrangements(newRecordA, contiguousGroups, sum);
 
             let newRecordB = record.replace("?", "#");
-            sum = this.CalculateArrangements(newRecordB, sum);
+            sum = this.CalculateArrangements(newRecordB, contiguousGroups, sum);
 
             return sum;
         }
@@ -28,13 +38,13 @@ class ConditionRecord
             let brokenRecord = record.split(".").filter(i => i !== "");
             
             let valid = false;
-            if (this.contiguousGroups.length === brokenRecord.length)
+            if (contiguousGroups.length === brokenRecord.length)
             {
                 valid = true;
 
                 for (let i = 0; i < brokenRecord.length; i++)
                 {
-                    if (brokenRecord[i].length !== this.contiguousGroups[i])
+                    if (brokenRecord[i].length !== contiguousGroups[i])
                     {
                         valid = false;
                     }
