@@ -20,26 +20,63 @@ class Pattern
     AttemptVerticalSymmetry()
     {
         let row = 0;
-        for (let a = 0; a < rowLength -1; a++)
+
+        for (let a = 0; a < this.rowLength -1; a++)
         {
-            b = a + 1;
-            if (patternData[row][a] == patternData[row][b]) // if a and b could reflect, check all adjacents on that row
+            b = a + 1; let boundsLimit = Math.lower(a, this.rowLength - b);
+            this.RowsMatch() // continue here
+        }
+
+        for (let a = 0; a < this.rowLength - 1; a++)
+        {
+            b = a + 1; let boundsLimit = Math.lower(a, this.rowLength - b);
+
+            if (!this.RowMatch(boundsLimit, row, a, b))
             {
-                let adjacentLimit = Math.lower(a, rowLength - b); // only check within confines of
-                for (let checkAdjacent = 1; checkAdjacent < adjacentLimit; checkAdjacent++)
-                {
-                    if (patternData[row][a - checkAdjacent] != patternData[row][b + checkAdjacent])
-                    {
-                        break;
-                    }
+                console.log(`Debug: no line of symmetry found on row ${row} at a = ${a}.`);
+            }
 
-                    else
-                    {
+            else
+            {
 
-                    }
-                }
             }
         }
+        
+    }
+
+    RowsMatch()
+    {
+        for (let row = 0; row < this.rowLength; row++)
+        {
+            if (!this.RowMatch(boundsLimit, row, a, b))
+                {
+                    console.log(`Debug: no line of symmetry found on row ${row} at a = ${a}.`);
+                    return false;
+                }
+
+                else
+                {
+
+                }
+        }
+    }
+
+    /*bool*/ RowMatch(/*int*/ boundsLimit, row, a, b)
+    {
+        for (let CheckAdjacent = 0; checkAdjacent < boundsLimit; checkAdjacent++)
+        {
+            if (this.patternData[row][a - checkAdjacent] != this.patternData[row][b + checkAdjacent])
+            {
+                return false;
+            }
+
+            else
+            {
+                console.log(`These are the same char: ${pattern[row][a - checkAdjacent]}, ${pattern[row][b + checkAdjacent]}`);
+            }
+        }
+
+        return true; // full row is symmetrical along symmetry ab
     }
 }
 
