@@ -11,24 +11,22 @@ const Pattern = require("./Pattern.js");
 function DayThirteen()
 {
   // 1. Separate patterns
-  let patterns = fs.readFileSync("day-X3/input-2023-13.txt", "utf-8")
+  let patterns = fs.readFileSync("day-X3/sample-input-2023-13.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n\n");
 
-  // 2. Create object for each pattern
+  console.log(patterns);
+
+  
+  // 2. Create list of Pattern objects
   let patternList = [];
-  for (let p = 0; p < patterns.length; p++)
+
+  for (let pat = 0; pat < patterns.length; pat++)
   {
-    let patterndata = [];
-    for (let r = 0; r < patterns[p].length; r++)
-    {
-      let row = patterns[p][r].split("");
-      patterndata.push(row);
-    }
+    let newPatternData = patterns[pat].split("\n");
 
-    let newPattern = new Pattern(patterndata);
-
-    patternList.push(newPattern);
+    console.log(newPatternData);
+    patternList.push(new Pattern(pat, newPatternData));
   }
 
 }

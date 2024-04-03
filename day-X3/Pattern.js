@@ -1,12 +1,20 @@
 class Pattern
 {
-    constructor(patternData)
+    constructor(identifier, patternData)
     {
+       this.identifier = identifier;
+
        this.patternData = patternData;
-       this.rowLength = patternData[0].length;
-       this.colLength = patternData.length;
+       this.numberOfCols = patternData[0].length;
+       this.numberOfRows = patternData.length;
+
        this.symmetryType;
+       this.a;
        this.solution;
+       this.AttemptVerticalSymmetry();
+       
+       console.log(this.a);
+       console.log(this.solution);
     }
 
     // attempt vertical symmetry
@@ -19,63 +27,66 @@ class Pattern
 
     AttemptVerticalSymmetry()
     {
-        let row = 0;
-
-        for (let a = 0; a < this.rowLength -1; a++)
+        // 1. Iterate through every ab pair along the top row
+        for (let a = 0; a < this.numberOfCols - 1; a++)
         {
-            b = a + 1; let boundsLimit = Math.lower(a, this.rowLength - b);
-            this.RowsMatch() // continue here
+            let b = a + 1; let boundsLimit = Math.min(a, this.numberOfCols - 1 - b);
+
+            // 2. Test every following row for symmetry mirrored at ab
+            if(this.RowsMatch(a, b, boundsLimit))
+            {
+                this.symmetryType = "vertical";
+                this.a = a;
+                return true;
+            }
         }
 
-        for (let a = 0; a < this.rowLength - 1; a++)
-        {
-            b = a + 1; let boundsLimit = Math.lower(a, this.rowLength - b);
+        // 3. Return false if no vertical symmetry is found
+        return false;
+    }
 
-            if (!this.RowMatch(boundsLimit, row, a, b))
+    RowsMatch(a, b, boundsLimit)
+    {
+        // 1. Iterate through every row from 0 and test if the row is mirrored at ab
+        console.log(`Trying a RowsMatch at a: ${a}, b: ${b}.`); //debug
+        for (let row = 0; row < this.numberOfRows; row++)
+        {
+            if (this.IsRowMirrored(boundsLimit, row, a, b))
             {
-                console.log(`Debug: no line of symmetry found on row ${row} at a = ${a}.`);
+                console.log(`> Row ${row} is mirrored`); //debug
+                // proceed to next row
             }
 
             else
             {
-
+                // 2. If any row is not mirrored, there is no vertical symmetry at ab -> return false
+                console.log(`> No line of symmetry found on row ${row} at ab = ${a}, ${b}`);
+                return false;
             }
         }
-        
+
+        // 3. If all rows are mirrored, there is vertical symmetry at ab -> return true
+        console.log(`All rows at ab ${a}, ${b} are mirrored.`);
+        return true;
     }
 
-    RowsMatch()
+    IsRowMirrored(boundsLimit, row, a, b)
     {
-        for (let row = 0; row < this.rowLength; row++)
-        {
-            if (!this.RowMatch(boundsLimit, row, a, b))
-                {
-                    console.log(`Debug: no line of symmetry found on row ${row} at a = ${a}.`);
-                    return false;
-                }
-
-                else
-                {
-
-                }
-        }
-    }
-
-    /*bool*/ RowMatch(/*int*/ boundsLimit, row, a, b)
-    {
-        for (let CheckAdjacent = 0; checkAdjacent < boundsLimit; checkAdjacent++)
+        for (let checkAdjacent = 0; checkAdjacent <= boundsLimit; checkAdjacent++)
         {
             if (this.patternData[row][a - checkAdjacent] != this.patternData[row][b + checkAdjacent])
             {
+                console.log(`>> Opposing values on row ${row} are not symmetrical. Returning false`); //debug
                 return false;
             }
 
             else
             {
-                console.log(`These are the same char: ${pattern[row][a - checkAdjacent]}, ${pattern[row][b + checkAdjacent]}`);
+                console.log(`>> These are the same char: ${this.patternData[row][a - checkAdjacent]} ${this.patternData[row][b + checkAdjacent]}`);
             }
         }
 
+        console.log(`> Full Row is mirrored. Returning true`); //debug
         return true; // full row is symmetrical along symmetry ab
     }
 }
