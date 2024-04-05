@@ -1,13 +1,10 @@
-// day X3a
-// - Data is parsed and separated into Pattern classes, which has become my preference
-//   as I continue to develop in JavaScript with an object-oriented approach.
-// - The pattern class then processes its own solution on instantiation. It's not the
-//   most compact code, but it is easy to follow and helps me debug and improve.
+// day X3b
+// Functionally the same as 13a, but PatternB.js will run different code to test for exactly 1 mismatch (or "smudge")
 
 var fs = require("fs"); // imports fs
-const Pattern = require("./Pattern.js");
+const Pattern = require("./PatternB.js");
 
-function DayThirteen()
+function DayThirteenB()
 {
   // 1. Separate patterns
   let patterns = fs.readFileSync("day-X3/input-2023-13.txt", "utf-8")
@@ -34,8 +31,8 @@ function DayThirteen()
     solution += patternList[pat].solution;
   }
 
-  console.log(`Day 13a solution: ${solution}`);
+  console.log(`Day 13b solution: ${solution}`);
 
 }
 
-DayThirteen();
+DayThirteenB();
