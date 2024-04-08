@@ -5,7 +5,7 @@ var fs = require("fs"); // imports fs
 function DayFourteen()
 {
   // 1. Parse input into startReflectorDish
-  let startReflectorDish = fs.readFileSync("day-X4/sample-input-2023-14.txt", "utf-8")
+  let startReflectorDish = fs.readFileSync("day-X4/input-2023-14.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n");
 
@@ -68,6 +68,20 @@ function DayFourteen()
     }
     console.log(row);
   }
+
+  // 4. Find solution
+  let solution = 0;
+  for (let r = 0; r < endReflectorDish.length; r++)
+  {
+    for (let c = 0; c < endReflectorDish[r].length; c++)
+    {
+      if (endReflectorDish[r][c] === "O")
+      {
+        solution += (endReflectorDish.length - r);
+      }
+    }
+  }
+  console.log(`Day 14a solution: ${solution}`);
 
 }
 
