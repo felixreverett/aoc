@@ -13,9 +13,9 @@ class ReflectorDish
 
         let lowestRockRow = this.MakeLowestRockRow("North");
 
-        for (let r = 0; r < this.reflectorDish.length; r++)
+        for (let r = 0; r < this.rows; r++)
         {
-            for (let c = 0; c < this.reflectorDish[r].length; c++)
+            for (let c = 0; c < this.columns; c++)
             {
                 if (this.reflectorDish[r][c] === "O")
                 {
@@ -36,7 +36,33 @@ class ReflectorDish
 
     TiltEast(){}
 
-    TiltSouth(){}
+    TiltSouth()
+    {
+        let newReflectorDish = this.MakeNewReflectorDish();
+
+        let lowestRockRow = this.MakeLowestRockRow("South");
+
+        for (let r = this.rows - 1; r >= 0; r--)
+        {
+            for (let c = 0; c < this.columns; c++)
+            {
+                if (this.reflectorDish[r][c] === "O")
+                {
+                    newReflectorDish[lowestRockRow[c]][c] = "O";
+                    lowestRockRow[c] -= 1;
+                }
+
+                else if (this.reflectorDish[r][c] === "#")
+                {
+                    newReflectorDish[r][c] = "#";
+                    lowestRockRow[c] = r - 1;
+                }
+            }
+        }
+
+        this.reflectorDish = newReflectorDish;   
+    }
+
     TiltWest(){}
 
     CountLoad()
@@ -89,14 +115,14 @@ class ReflectorDish
             {
                 for (let r = 0; r < this.rows; r++)
                 {
-                    lowestRockRow.push(this.rows);
+                    lowestRockRow.push(this.rows - 1);
                 }
             }
             case "East":
             {
                 for (let r = 0; r < this.columns; r++)
                 {
-                    lowestRockRow.push(this.columns);
+                    lowestRockRow.push(this.columns - 1);
                 }
             }
             case "West":

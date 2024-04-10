@@ -11,8 +11,8 @@ function DayFourteenB()
   .split("\n");
 
   let reflectorDish = new ReflectorDish(startReflectorDish);
-  reflectorDish.Print();
-  reflectorDish.TiltNorth(); //here
+  //reflectorDish.Print();
+  reflectorDish.TiltSouth(); //here
   reflectorDish.Print();
   reflectorDish.CountLoad();
 
