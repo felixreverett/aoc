@@ -12,10 +12,46 @@ function DayFourteenB()
 
   let reflectorDish = new ReflectorDish(startReflectorDish);
   //reflectorDish.Print();
-  reflectorDish.TiltSouth(); //here
+
+  let memos = []; // loop might take more than 1 cycle to get to same pos
+
+  for (let i = 0; i < 1000000000; i++)
+  {
+    newMemo = ConvertToMemo(reflectorDish.reflectorDish);
+    
+    if (memos.includes(newMemo))
+    {
+      break;
+    }
+
+    else
+    {
+      memos.push(newMemo);
+
+      reflectorDish.TiltNorth();
+      reflectorDish.TiltWest();
+      reflectorDish.TiltSouth();
+      reflectorDish.TiltEast();
+    }
+
+  }
+
   reflectorDish.Print();
   reflectorDish.CountLoad();
 
+}
+
+function ConvertToMemo(reflectorDish)
+{
+  let memo = "";
+  for (let r = 0; r < reflectorDish.length; r++)
+  {
+    for (let c = 0; c < reflectorDish[r].length; c++)
+    {
+      memo += reflectorDish[r][c];
+    }
+  }
+  return memo;
 }
 
 DayFourteenB();

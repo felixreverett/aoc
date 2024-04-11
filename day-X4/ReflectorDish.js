@@ -34,7 +34,32 @@ class ReflectorDish
         this.reflectorDish = newReflectorDish;
     }
 
-    TiltEast(){}
+    TiltEast()
+    {
+        let newReflectorDish = this.MakeNewReflectorDish();
+
+        let lowestRockRow = this.MakeLowestRockRow("East");
+
+        for (let c = this.columns; c >= 0; c--)
+        {
+            for (let r = 0; r < this.rows; r++)
+            {
+                if (this.reflectorDish[r][c] === "O")
+                {
+                    newReflectorDish[r][lowestRockRow[r]] = "O";
+                    lowestRockRow[r] -= 1;
+                }
+
+                else if (this.reflectorDish[r][c] === "#")
+                {
+                    newReflectorDish[r][c] = "#";
+                    lowestRockRow[r] = c - 1;
+                }
+            }
+        }
+
+        this.reflectorDish = newReflectorDish;
+    }
 
     TiltSouth()
     {
@@ -63,7 +88,32 @@ class ReflectorDish
         this.reflectorDish = newReflectorDish;   
     }
 
-    TiltWest(){}
+    TiltWest()
+    {
+        let newReflectorDish = this.MakeNewReflectorDish();
+
+        let lowestRockRow = this.MakeLowestRockRow("West");
+
+        for (let c = 0; c < this.columns; c++)
+        {
+            for (let r = 0; r < this.rows; r++)
+            {
+                if (this.reflectorDish[r][c] === "O")
+                {
+                    newReflectorDish[r][lowestRockRow[r]] = "O";
+                    lowestRockRow[r] += 1;
+                }
+
+                else if (this.reflectorDish[r][c] === "#")
+                {
+                    newReflectorDish[r][c] = "#";
+                    lowestRockRow[r] = c + 1;
+                }
+            }
+        }
+
+        this.reflectorDish = newReflectorDish;
+    }
 
     CountLoad()
     {
