@@ -15,12 +15,19 @@ function DayFourteenB()
 
   let memos = []; // loop might take more than 1 cycle to get to same pos
 
-  for (let i = 0; i < 1000000000; i++)
+  let loops = 1000000000;
+
+  for (let i = 0; i < loops; i++)
   {
-    newMemo = ConvertToMemo(reflectorDish.reflectorDish);
+    newMemo = [ConvertToMemo(reflectorDish.reflectorDish), i];
     
-    if (memos.includes(newMemo))
+    let isMemoInMemos = memos.find(subArray => subArray[0] === newMemo[0]);
+
+    if (isMemoInMemos)
     {
+      console.log(isMemoInMemos);
+      console.log(`The cycle repeats between ${isMemoInMemos[1]} and ${i}`);
+
       break;
     }
 
