@@ -6,7 +6,7 @@ const ReflectorDish = require("./ReflectorDish.js");
 function DayFourteenB()
 {
   // 1. Parse input into startReflectorDish
-  let startReflectorDish = fs.readFileSync("day-X4/sample-input-2023-14.txt", "utf-8")
+  let startReflectorDish = fs.readFileSync("day-X4/input-2023-14.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n");
 
@@ -27,6 +27,21 @@ function DayFourteenB()
     {
       console.log(isMemoInMemos);
       console.log(`The cycle repeats between ${isMemoInMemos[1]} and ${i}`);
+      let loopLength = i - isMemoInMemos[1];
+      console.log(loopLength);
+      let remainingCycles = parseInt(Math.floor((loops - i) / loopLength));
+      console.log(remainingCycles);
+      let jumpTo = remainingCycles * loopLength;
+      console.log(jumpTo);
+      i += jumpTo;
+      console.log(i);
+      for (let j = 0; j < loops - i; j++)
+      {
+        reflectorDish.TiltNorth();
+        reflectorDish.TiltWest();
+        reflectorDish.TiltSouth();
+        reflectorDish.TiltEast();
+      }
 
       break;
     }
