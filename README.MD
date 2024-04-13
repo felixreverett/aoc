@@ -10,4 +10,5 @@
 
 ## Notable practices I've learnt:
 - **maps** (day 7)
+- **memoization** (day 14b)
 
