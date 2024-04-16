@@ -4,7 +4,7 @@ var fs = require("fs"); // imports fs
 
 function DayFifteen()
 {
-  // 1. Parse input into startReflectorDish
+  // 1. Parse input
   let initialisationSteps = fs.readFileSync("day-X5/input-2023-15.txt", "utf-8")
   .replace(/\r/gm, "").replace(/\n/gm, "")
   .split(",");
