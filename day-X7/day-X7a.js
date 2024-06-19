@@ -12,7 +12,9 @@ function DaySeventeen()
   .replace(/\r/gm, "")
   .split("\n").map(i => i.split(""));
 
-  console.log(input);
+  console.log(heatMap);
+
+  // Starting at 0,0 create node with values row, col, entryDirection, 
 }
 
 DaySeventeen();

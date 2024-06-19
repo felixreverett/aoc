@@ -11,4 +11,5 @@
 ## Notable practices I've learnt:
 - **maps** (day 7)
 - **memoization** (day 14b)
+- **destructuring assignment** (day 18a) > concise assignment of multiple variables
 
