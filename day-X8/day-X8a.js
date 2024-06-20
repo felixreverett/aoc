@@ -6,6 +6,7 @@
 
 var fs = require("fs"); // imports fs
 const Instruction = require("./Instruction.js");
+const Trench = require("./Trench.js");
 
 function DayEighteen()
 {
@@ -68,10 +69,26 @@ function DayEighteen()
     }
   }
 
+  // 3b. Test
   console.log(`The leftMost value was ${leftMost}`);
   console.log(`The rightMost value was ${rightMost}`);
   console.log(`The upMost value was ${upMost}`);
   console.log(`The downMost value was ${downMost}`);
+
+  // 4. Create the trench array
+  let numberOfRows = rightMost - leftMost + 1;
+  let numberOfColumns = downMost - upMost + 1;
+  let trench = new Trench(numberOfRows, numberOfColumns, instructionsList);
+  trench.InitialiseTrench();  
+
+  // 4b. Test
+  trench.Print();
+
+  // 5. Fill in the trench array using the instructions
+  let trenchX = 0 - leftMost; // we want to imagine our start to be 0,0, so we need to offset the actual value by leftMost and upMost
+  let trenchY = 0 - upMost;
+  trench.Dig(trenchX, trenchY, instructionsList);
+  trench.Print();  
 }
 
 DayEighteen();
