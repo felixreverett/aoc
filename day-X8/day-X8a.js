@@ -84,11 +84,15 @@ function DayEighteen()
   // 4b. Test
   trench.Print();
 
-  // 5. Fill in the trench array using the instructions
+  // 5. Fill in the trench array edges using the instructions
   let trenchX = 0 - leftMost; // we want to imagine our start to be 0,0, so we need to offset the actual value by leftMost and upMost
   let trenchY = 0 - upMost;
   trench.Dig(trenchX, trenchY, instructionsList);
   trench.Print();  
+
+  // 6. Fill in middle of trench array
+  trench.Fill();
+  trench.Print();
 }
 
 DayEighteen();

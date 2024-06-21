@@ -67,6 +67,52 @@ class Trench
       }
     }
 
+    Fill()
+    {
+        let isEntrenched;
+        for (let row = 0; row < this.Trench.length; row++)
+        {
+            isEntrenched = false;
+            for (let col = 0; col < this.Trench[row].length; col++)
+            {
+                if (this.Trench[row][col] === "#")
+                {
+                    if (col > 0 && this.Trench[row][col-1] === "#")
+                    {
+                        if (col < this.Trench[row].length - 1 && this.Trench[row][col+1] ==="#")
+                        {
+                            // do nothing
+                        }
+                        else
+                        {
+                            isEntrenched = !isEntrenched;
+                            console.log(`toggling isEntrenched to ${isEntrenched}`);
+                        }
+                    }
+                    else
+                    {
+                        isEntrenched = !isEntrenched;
+                        console.log(`toggling isEntrenched to ${isEntrenched}`);
+                    }
+                }
+                if (this.Trench[row][col] === "." && isEntrenched)
+                {
+                    this.Trench[row][col] = "*";
+                    console.log("Writing *");
+                }
+                // if the value is #:
+                //      if the value left of that is #:
+                //          if the value to the right of that is #:
+                //              do nothing
+                //          else:
+                //              toggle isEntrenched
+                //      else:
+                //          toggle isEntrenched
+                // if the value is . && isEntrenched:
+                //  set that value to *
+            }
+        }
+    }
 
     Print()
     {
