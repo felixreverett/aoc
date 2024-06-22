@@ -69,49 +69,32 @@ class Trench
 
     Fill()
     {
-        let isEntrenched;
+        // use recursive "floodfill" to fill outsides of the loop
+        // 1a. Flood-fill from the top and bottom edges
+        for (let col = 0; col < this.Trench[0].length; col++)
+        {
+            this.FloodFill(0, col, 0, "top edge");
+            this.FloodFill(this.Trench.length - 1, col, 0, "bottom edge");
+        }
+        // 1b. Flood fill from the left and right edges
         for (let row = 0; row < this.Trench.length; row++)
         {
-            isEntrenched = false;
-            for (let col = 0; col < this.Trench[row].length; col++)
-            {
-                if (this.Trench[row][col] === "#")
-                {
-                    if (col > 0 && this.Trench[row][col-1] === "#")
-                    {
-                        if (col < this.Trench[row].length - 1 && this.Trench[row][col+1] ==="#")
-                        {
-                            // do nothing
-                        }
-                        else
-                        {
-                            isEntrenched = !isEntrenched;
-                            console.log(`toggling isEntrenched to ${isEntrenched}`);
-                        }
-                    }
-                    else
-                    {
-                        isEntrenched = !isEntrenched;
-                        console.log(`toggling isEntrenched to ${isEntrenched}`);
-                    }
-                }
-                if (this.Trench[row][col] === "." && isEntrenched)
-                {
-                    this.Trench[row][col] = "*";
-                    console.log("Writing *");
-                }
-                // if the value is #:
-                //      if the value left of that is #:
-                //          if the value to the right of that is #:
-                //              do nothing
-                //          else:
-                //              toggle isEntrenched
-                //      else:
-                //          toggle isEntrenched
-                // if the value is . && isEntrenched:
-                //  set that value to *
-            }
+            this.FloodFill(row, 0, 0, "left edge");
+            this.FloodFill(row, this.Trench[0].length - 1, 0, "right edge");
         }
+    }
+
+    FloodFill(row, col, recursionDepth, startEdge)
+    {
+        recursionDepth++; console.log(`The recursive depth of ${startEdge} is ${recursionDepth}`);
+        if (row < 0 || row > this.Trench.length - 1 || col < 0 || col > this.Trench[row].length - 1) { return; }
+        if (this.Trench[row][col] !== ".") { return; }
+        this.Trench[row][col] = "o";
+
+        this.FloodFill(row + 1, col, recursionDepth, startEdge);
+        this.FloodFill(row - 1, col, recursionDepth, startEdge);
+        this.FloodFill(row, col + 1, recursionDepth, startEdge);
+        this.FloodFill(row, col - 1, recursionDepth, startEdge);
     }
 
     Print()

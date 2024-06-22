@@ -11,7 +11,7 @@ const Trench = require("./Trench.js");
 function DayEighteen()
 {
   // 1. Parse input
-  let lines = fs.readFileSync("day-X8/sample-input-2023-18.txt", "utf-8")
+  let lines = fs.readFileSync("day-X8/input-2023-18.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n");
 
