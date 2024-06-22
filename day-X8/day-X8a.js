@@ -90,9 +90,11 @@ function DayEighteen()
   trench.Dig(trenchX, trenchY, instructionsList);
   trench.Print();  
 
-  // 6. Fill in middle of trench array
-  trench.Fill();
+  // 6. Fill edges of array to find "outsides"
+  trench.FillFromEdges();
   trench.Print();
+
+  trench.CountTotalValidCells(["#", "."]);
 }
 
 DayEighteen();

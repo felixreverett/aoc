@@ -67,47 +67,70 @@ class Trench
       }
     }
 
-    Fill()
+    FillFromEdges()
     {
-        // use recursive "floodfill" to fill outsides of the loop
-        // 1a. Flood-fill from the top and bottom edges
         for (let col = 0; col < this.Trench[0].length; col++)
         {
-            this.FloodFill(0, col, 0, "top edge");
-            this.FloodFill(this.Trench.length - 1, col, 0, "bottom edge");
+            this.FloodFillWithStack(0, col);
+            this.FloodFillWithStack(this.Trench.length - 1, col);
         }
-        // 1b. Flood fill from the left and right edges
+        
         for (let row = 0; row < this.Trench.length; row++)
         {
-            this.FloodFill(row, 0, 0, "left edge");
-            this.FloodFill(row, this.Trench[0].length - 1, 0, "right edge");
+            this.FloodFillWithStack(row, 0);
+            this.FloodFillWithStack(row, this.Trench[0].length - 1);
         }
     }
 
-    FloodFill(row, col, recursionDepth, startEdge)
+    FloodFillWithStack(row, col)
     {
-        recursionDepth++; console.log(`The recursive depth of ${startEdge} is ${recursionDepth}`);
-        if (row < 0 || row > this.Trench.length - 1 || col < 0 || col > this.Trench[row].length - 1) { return; }
-        if (this.Trench[row][col] !== ".") { return; }
-        this.Trench[row][col] = "o";
+        var fillStack = [];
+        fillStack.push([row, col]);
 
-        this.FloodFill(row + 1, col, recursionDepth, startEdge);
-        this.FloodFill(row - 1, col, recursionDepth, startEdge);
-        this.FloodFill(row, col + 1, recursionDepth, startEdge);
-        this.FloodFill(row, col - 1, recursionDepth, startEdge);
+        while (fillStack.length > 0)
+        {
+            var [row, col] = fillStack.pop();
+
+            if (row < 0 || row > this.Trench.length - 1 || col < 0 || col > this.Trench[row].length - 1) { continue; }
+            if (this.Trench[row][col] !== ".") { continue; }
+
+            this.Trench[row][col] = "o";
+
+            fillStack.push([row + 1, col]);
+            fillStack.push([row - 1, col]);
+            fillStack.push([row, col + 1]);
+            fillStack.push([row, col - 1]);
+        }
+    }
+
+    CountTotalValidCells(validCells)
+    {
+        let totalValidCells = 0;
+        for (let row = 0; row < this.Trench.length; row++)
+        {
+            for (let col = 0; col < this.Trench[row].length; col++)
+            {
+                if (validCells.includes(this.Trench[row][col]))
+                {
+                    totalValidCells++;
+                }
+            }
+        }
+        
+        console.log(`The total number of valid cells is ${totalValidCells}`);
     }
 
     Print()
     {
         console.log("=== Printing Trench ===");
-        for (let col = 0; col < this.Trench.length; col++)
+        for (let row = 0; row < this.Trench.length; row++)
         {
-            let currentColumnToPrint = "";
-            for (let row = 0; row < this.Trench[col].length; row++)
+            let currentRowToPrint = "";
+            for (let col = 0; col < this.Trench[row].length; col++)
             {
-                currentColumnToPrint += this.Trench[col][row];
+                currentRowToPrint += this.Trench[row][col];
             }
-            console.log(currentColumnToPrint);
+            console.log(currentRowToPrint);
         }
     }
     
