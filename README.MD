@@ -14,4 +14,5 @@
 - **destructuring assignment** (day 18a) > concise assignment of multiple variables
 - **flood fills** (day 18a)
 - **stacks** (day 18a)
+- **Shoelace formula (Gauss' Area Formula)** (day 18b)
 
