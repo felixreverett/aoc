@@ -9,7 +9,7 @@ const InstructionB = require("./InstructionB.js");
 function DayEighteenB()
 {
   // 1. Parse input
-  let lines = fs.readFileSync("day-X8/sample-input-2023-18.txt", "utf-8")
+  let lines = fs.readFileSync("day-X8/input-2023-18.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n");
 
@@ -87,6 +87,15 @@ function DayEighteenB()
 
   let area = Math.abs(sum) / 2;
   console.log(area);
+
+  // 4a. add half of perimeter + 1 to account for the edges of the enclosed area.
+  let perimeter = 0;
+  for (let i = 0; i < instructionsList.length; i++)
+  {
+    perimeter += instructionsList[i].distance;
+  }
+  let halfPerimeter = perimeter / 2 + 1;
+  console.log(area + halfPerimeter);
   
 }
 
