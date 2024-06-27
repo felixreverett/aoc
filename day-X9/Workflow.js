@@ -17,8 +17,8 @@ class Workflow
         {
             let letter = conditionsList[c][0]; // letter
             let operator = conditionsList[c][1]; // < or >
-            let result = conditionsList[c].substring(2);
-            Conditions.push(new Condition(letter, operator, result));
+            let [value, result] = conditionsList[c].substring(2).split(":");
+            Conditions.push(new Condition(letter, operator, value, result));
         }
         Conditions.push(new DefaultCondition(conditionsList[conditionsList.length - 1]));
         return Conditions;

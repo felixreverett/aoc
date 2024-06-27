@@ -17,8 +17,8 @@ function DayNineteen()
   .split("\n\n")
   .map(i => i.split("\n"));
 
-  console.log(WorkflowsInput);
-  console.log(PartsInput);
+  //console.log(WorkflowsInput);
+  //console.log(PartsInput);
 
   // 2. Create list of Workflows
   let Workflows = [];
@@ -28,7 +28,7 @@ function DayNineteen()
     Workflows.push(new Workflow(name, conditions));
   }
 
-  console.log(Workflows);
+  // console.log(Workflows);
 
   // 3. Create list of Parts
   let Parts = [];
@@ -38,8 +38,168 @@ function DayNineteen()
     Parts.push(new Part(x, m, a, s));
   }
 
-  console.log(Parts);
+  //console.log(Parts);
 
+  // 4. Iterate through each part.
+  for (let p = 0; p < Parts.length; p++)
+  {
+    let endOfWorkflowFound = false; let nextWorkflowName = "in";
+    // go through each workflow
+    while (!endOfWorkflowFound)
+    {
+      let currentWorkflow = Workflows.find(w => w.Name === nextWorkflowName);
+      // go through each condition of the workflow
+      for (let c = 0; c < currentWorkflow.Conditions.length; c++) // for each condition
+      {
+        let currentCondition = currentWorkflow.Conditions[c];
+        // if DefaultCondition is reached
+        if (c === currentWorkflow.Conditions.length - 1)
+        {
+          switch (currentCondition.Result)
+          {
+            case "R": { Parts[p].IsAccepted = false; break; }
+            case "A": { Parts[p].IsAccepted = true; break; }
+            default: { nextWorkflowName = currentCondition.Result; break; }
+          }
+          endOfWorkflowFound = true;
+        }
+        // applicable code for all other Conditions { Letter, Operator, Value, Result }
+        else
+        {
+          // 
+          switch (currentCondition.Operator)
+          {
+            case ">":
+            {
+              switch (currentCondition.Letter)
+              {
+                case "X":
+                {
+                  if (Parts[p].X > currentCondition.Value)
+                  {
+                    // operate on result
+                    switch (currentCondition.Result)
+                    {
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      default: { nextWorkflowName = currentCondition.Result; break; }
+                    }
+                  }
+                  break;
+                }
+                case "M":
+                {
+                  if (Parts[p].M > currentCondition.Value)
+                  {
+                    // operate on result
+                    switch (currentCondition.Result)
+                    {
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      default: { nextWorkflowName = currentCondition.Result; break; }
+                    }
+                  }
+                  break;
+                }
+                case "A":
+                {
+                  if (Parts[p].A > currentCondition.Value)
+                  {
+                    // operate on result
+                    switch (currentCondition.Result)
+                    {
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      default: { nextWorkflowName = currentCondition.Result; break; }
+                    }
+                  }
+                  break;
+                }
+                case "S":
+                {
+                  if (Parts[p].S > currentCondition.Value)
+                  {
+                    // operate on result
+                    switch (currentCondition.Result)
+                    {
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      default: { nextWorkflowName = currentCondition.Result; break; }
+                    }
+                  }
+                  break;
+                }
+              }
+            }
+            case "<":
+            {
+              switch (currentCondition.Letter)
+              {
+                case "X":
+                {
+                  if (Parts[p].X < currentCondition.Value)
+                    {
+                      // operate on result
+                      switch (currentCondition.Result)
+                      {
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        default: { nextWorkflowName = currentCondition.Result; break; }
+                      }
+                    }
+                  break;
+                }
+                case "M":
+                {
+                  if (Parts[p].M < currentCondition.Value)
+                    {
+                      // operate on result
+                      switch (currentCondition.Result)
+                      {
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        default: { nextWorkflowName = currentCondition.Result; break; }
+                      }
+                    }
+                  break;
+                }
+                case "A":
+                {
+                  if (Parts[p].A < currentCondition.Value)
+                    {
+                      // operate on result
+                      switch (currentCondition.Result)
+                      {
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        default: { nextWorkflowName = currentCondition.Result; break; }
+                      }
+                    }
+                  break;
+                }
+                case "S":
+                {
+                  if (Parts[p].S < currentCondition.Value)
+                    {
+                      // operate on result
+                      switch (currentCondition.Result)
+                      {
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        default: { nextWorkflowName = currentCondition.Result; break; }
+                      }
+                    }
+                  break;
+                }
+              }
+            }
+          }
+        }
+
+      }
+    }
+  }
+  console.log(Parts);
   
 }
 
