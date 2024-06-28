@@ -28,7 +28,11 @@ function DayNineteen()
     Workflows.push(new Workflow(name, conditions));
   }
 
-  // console.log(Workflows);
+  /* console.log(Workflows);
+  for (let c = 0 ; c < Workflows.length; c++)
+  {
+    console.log(Workflows[c]);
+  }*/
 
   // 3. Create list of Parts
   let Parts = [];
@@ -45,20 +49,24 @@ function DayNineteen()
   {
     let endOfWorkflowFound = false; let nextWorkflowName = "in";
     // go through each workflow
+    console.log(`Processing Part ${p}...`); //debug 1
     while (!endOfWorkflowFound)
     {
       let currentWorkflow = Workflows.find(w => w.Name === nextWorkflowName);
+      
       // go through each condition of the workflow
       for (let c = 0; c < currentWorkflow.Conditions.length; c++) // for each condition
       {
+        console.log(`> Checking workflow "${nextWorkflowName}" condition "${c}" for Part ${p}: ${currentWorkflow.Conditions[c].Letter} must be ${currentWorkflow.Conditions[c].Operator} than ${currentWorkflow.Conditions[c].Value}`); //debug 3
         let currentCondition = currentWorkflow.Conditions[c];
         // if DefaultCondition is reached
         if (c === currentWorkflow.Conditions.length - 1)
         {
+          console.log(`> > Default condition found for condition ${c}`);
           switch (currentCondition.Result)
           {
-            case "R": { Parts[p].IsAccepted = false; break; }
-            case "A": { Parts[p].IsAccepted = true; break; }
+            case "R": { Parts[p].IsAccepted = false; console.log("case reached"); break; }
+            case "A": { Parts[p].IsAccepted = true; console.log("case reached"); break; }
             default: { nextWorkflowName = currentCondition.Result; break; }
           }
           endOfWorkflowFound = true;
@@ -66,64 +74,69 @@ function DayNineteen()
         // applicable code for all other Conditions { Letter, Operator, Value, Result }
         else
         {
-          // 
+          console.log("> > > Else case");
           switch (currentCondition.Operator)
           {
             case ">":
             {
-              switch (currentCondition.Letter)
+              console.log(`> > > The Operator for condition ${c} was ${currentCondition.Operator}. Letter is ${currentCondition.Letter}`);
+              switch (currentCondition.Letter.toLowerCase())
               {
-                case "X":
+                case "x":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].X > currentCondition.Value)
                   {
                     // operate on result
                     switch (currentCondition.Result)
                     {
-                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                       default: { nextWorkflowName = currentCondition.Result; break; }
                     }
                   }
                   break;
                 }
-                case "M":
+                case "m":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].M > currentCondition.Value)
                   {
                     // operate on result
                     switch (currentCondition.Result)
                     {
-                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                       default: { nextWorkflowName = currentCondition.Result; break; }
                     }
                   }
                   break;
                 }
-                case "A":
+                case "a":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].A > currentCondition.Value)
                   {
                     // operate on result
                     switch (currentCondition.Result)
                     {
-                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                       default: { nextWorkflowName = currentCondition.Result; break; }
                     }
                   }
                   break;
                 }
-                case "S":
+                case "s":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].S > currentCondition.Value)
                   {
                     // operate on result
                     switch (currentCondition.Result)
                     {
-                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                      case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                      case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                       default: { nextWorkflowName = currentCondition.Result; break; }
                     }
                   }
@@ -133,59 +146,64 @@ function DayNineteen()
             }
             case "<":
             {
+              console.log(`> > > The Operator for condition ${c} was ${currentCondition.Operator}. Letter is ${currentCondition.Letter}`);
               switch (currentCondition.Letter)
               {
-                case "X":
+                case "x":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].X < currentCondition.Value)
                     {
                       // operate on result
                       switch (currentCondition.Result)
                       {
-                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                         default: { nextWorkflowName = currentCondition.Result; break; }
                       }
                     }
                   break;
                 }
-                case "M":
+                case "m":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].M < currentCondition.Value)
                     {
                       // operate on result
                       switch (currentCondition.Result)
                       {
-                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                         default: { nextWorkflowName = currentCondition.Result; break; }
                       }
                     }
                   break;
                 }
-                case "A":
+                case "a":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].A < currentCondition.Value)
                     {
                       // operate on result
                       switch (currentCondition.Result)
                       {
-                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                         default: { nextWorkflowName = currentCondition.Result; break; }
                       }
                     }
                   break;
                 }
-                case "S":
+                case "s":
                 {
+                  console.log(`> > > > The letter was ${currentCondition.Letter}`);
                   if (Parts[p].S < currentCondition.Value)
                     {
                       // operate on result
                       switch (currentCondition.Result)
                       {
-                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; break; }
-                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; break; }
+                        case "R": { Parts[p].IsAccepted = false; endOfWorkflowFound = true; console.log("case reached"); break; }
+                        case "A": { Parts[p].IsAccepted = true; endOfWorkflowFound = true; console.log("case reached"); break; }
                         default: { nextWorkflowName = currentCondition.Result; break; }
                       }
                     }
