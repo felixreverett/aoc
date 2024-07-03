@@ -53,9 +53,10 @@ function ProcessCondition(currentWorkflowName, xl, xu, ml, mu, al, au, sl, su, w
       switch(result)
       {
         case "R":
+          console.log("> Reject result found");
           return runningTotal;
         case "A":
-          console.log(`Accepted amount here ${routesToThisPoint}`);
+          console.log(`> Accepted result found ${routesToThisPoint}`);
           return runningTotal + routesToThisPoint;  
         default:
           return runningTotal + ProcessCondition(result, xl, xu, ml, mu, al, au, sl, su, workflows);
@@ -66,18 +67,21 @@ function ProcessCondition(currentWorkflowName, xl, xu, ml, mu, al, au, sl, su, w
     let letter = currentWorkflow.Conditions[c].Letter;
     let operator = currentWorkflow.Conditions[c].Operator;
     let value = currentWorkflow.Conditions[c].Value;
-    let newRanges = getNewRanges(xl, xu, ml, mu, al, au, sl, su, letter, operator, value);
+    let [trueConditionRanges, falseConditionRanges] = getConditionRanges(xl, xu, ml, mu, al, au, sl, su, letter, operator, value);
+    [xl, xu, ml, mu, al, au, sl, su] = falseConditionRanges;
 
+    // process the true outcome
     switch (result)
     {
       case "R":
+        console.log("> Reject result found");
         break;
       case "A":
-        console.log(`Accepted amount here ${routesToThisPoint}`);
+        console.log(`> Accepted result found ${routesToThisPoint}`);
         runningTotal += routesToThisPoint;
         break;
       default:
-        runningTotal += ProcessCondition(result, ...newRanges, workflows);
+        runningTotal += ProcessCondition(result, ...trueConditionRanges, workflows);
         break;
     }
   }
@@ -85,18 +89,26 @@ function ProcessCondition(currentWorkflowName, xl, xu, ml, mu, al, au, sl, su, w
   return runningTotal;
 }
 
-function getNewRanges(xl, xu, ml, mu, al, au, sl, su, letter, operator, value)
+function getConditionRanges(xl, xu, ml, mu, al, au, sl, su, letter, operator, value)
 {
   switch (letter.toLowerCase())
   {
     case "x":
-      return operator === ">" ? [value + 1, xu, ml, mu, al, au, sl, su] : [xl, value - 1, ml, mu, al, au, sl, su];
+      return operator === ">"
+      ? [ [value + 1, xu, ml, mu, al, au, sl, su], [xl, value, ml, mu, al, au, sl, su] ]
+      : [ [xl, value - 1, ml, mu, al, au, sl, su], [value, xu, ml, mu, al, au, sl, su] ];
     case "m":
-      return operator === ">" ? [xl, xu, value + 1, mu, al, au, sl, su] : [xl, xu, ml, value - 1, al, au, sl, su];
+      return operator === ">"
+      ? [ [xl, xu, value + 1, mu, al, au, sl, su], [xl, xu, ml, value, al, au, sl, su] ]
+      : [ [xl, xu, ml, value - 1, al, au, sl, su], [xl, xu, value, mu, al, au, sl, su] ];
     case "a":
-      return operator === ">" ? [xl, xu, ml, mu, value + 1, au, sl, su] : [xl, xu, ml, mu, al, value - 1, sl, su];
+      return operator === ">"
+      ? [ [xl, xu, ml, mu, value + 1, au, sl, su], [xl, xu, ml, mu, al, value, sl, su] ]
+      : [ [xl, xu, ml, mu, al, value - 1, sl, su], [xl, xu, ml, mu, value, au, sl, su] ];
     case "s":
-      return operator === ">" ? [xl, xu, ml, mu, al, au, value + 1, su] : [xl, xu, ml, mu, al, au, sl, value - 1];
+      return operator === ">"
+      ? [ [xl, xu, ml, mu, al, au, value + 1, su], [xl, xu, ml, mu, al, au, sl, value] ]
+      : [ [xl, xu, ml, mu, al, au, sl, value - 1], [xl, xu, ml, mu, al, au, value, su] ];
     default:
       throw new Error(`Unknown letter: ${letter}`);
   }
