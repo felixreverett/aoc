@@ -13,11 +13,12 @@
 
 var fs = require("fs"); // imports fs
 const Workflow = require("./Workflow.js");
+var grandTotal = 0;
 
 function DayNineteenB()
 {
   // 1. Parse input
-  let [WorkflowsInput, PartsInput] = fs.readFileSync("day-X9/sample-input-2023-19.txt", "utf-8")
+  let [WorkflowsInput, PartsInput] = fs.readFileSync("day-X9/input-2023-19.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n\n")
   .map(i => i.split("\n"));
@@ -30,7 +31,7 @@ function DayNineteenB()
     workflows.push(new Workflow(name, conditions));
   }
 
-  let grandTotal = ProcessCondition("in", 1, 4000, 1, 4000, 1, 4000, 1, 4000, workflows);
+  ProcessCondition("in", 1, 4000, 1, 4000, 1, 4000, 1, 4000, workflows);
   console.log(grandTotal);
 }
 
@@ -38,9 +39,6 @@ function ProcessCondition(currentWorkflowName, xl, xu, ml, mu, al, au, sl, su, w
 {
   let currentWorkflow = workflows.find(w => w.Name === currentWorkflowName);
   console.log(`New workflow found: ${currentWorkflow.Name}`);
-  let routesToThisPoint = (xu - xl + 1) * (mu - ml + 1) * (au - al + 1) * (su - sl + 1);
-
-  let runningTotal = 0;
 
   for (let c = 0; c < currentWorkflow.Conditions.length; c++)
   {
@@ -54,12 +52,15 @@ function ProcessCondition(currentWorkflowName, xl, xu, ml, mu, al, au, sl, su, w
       {
         case "R":
           console.log("> Reject result found");
-          return runningTotal;
+          return;
         case "A":
+          let routesToThisPoint = (xu - xl + 1) * (mu - ml + 1) * (au - al + 1) * (su - sl + 1);
           console.log(`> Accepted result found ${routesToThisPoint}`);
-          return runningTotal + routesToThisPoint;  
+          grandTotal += routesToThisPoint;
+          return;  
         default:
-          return runningTotal + ProcessCondition(result, xl, xu, ml, mu, al, au, sl, su, workflows);
+          ProcessCondition(result, xl, xu, ml, mu, al, au, sl, su, workflows);
+          return;
       }
     }
     
@@ -68,25 +69,26 @@ function ProcessCondition(currentWorkflowName, xl, xu, ml, mu, al, au, sl, su, w
     let operator = currentWorkflow.Conditions[c].Operator;
     let value = currentWorkflow.Conditions[c].Value;
     let [trueConditionRanges, falseConditionRanges] = getConditionRanges(xl, xu, ml, mu, al, au, sl, su, letter, operator, value);
-    [xl, xu, ml, mu, al, au, sl, su] = falseConditionRanges;
+    [xl, xu, ml, mu, al, au, sl, su] = trueConditionRanges;
 
-    // process the true outcome
+    // process the true outcome. the "false" outcome is simply the next c in the loop
     switch (result)
     {
       case "R":
         console.log("> Reject result found");
         break;
       case "A":
+        let routesToThisPoint = (xu - xl + 1) * (mu - ml + 1) * (au - al + 1) * (su - sl + 1);
         console.log(`> Accepted result found ${routesToThisPoint}`);
-        runningTotal += routesToThisPoint;
+        grandTotal += routesToThisPoint;
         break;
       default:
-        runningTotal += ProcessCondition(result, ...trueConditionRanges, workflows);
+        ProcessCondition(result, ...trueConditionRanges, workflows);
         break;
     }
+
+    [xl, xu, ml, mu, al, au, sl, su] = falseConditionRanges;
   }
-  
-  return runningTotal;
 }
 
 function getConditionRanges(xl, xu, ml, mu, al, au, sl, su, letter, operator, value)

@@ -15,4 +15,5 @@
 - **flood fills** (day 18a)
 - **stacks** (day 18a)
 - **Shoelace formula (Gauss' Area Formula)** (day 18b)
+- **let, var, const** (day 19b) > Found practical application of let vs var being scope.
 
