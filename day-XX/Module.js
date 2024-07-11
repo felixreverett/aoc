@@ -33,7 +33,7 @@ class Module
                     if (this.ConnectedSources[cs][1] === "Low") { anyLowPulsesInConnectedSources = true; }
                 }
                 
-                let outSignal = anyLowPulsesInConnectedSources ? : ;
+                let outSignal = anyLowPulsesInConnectedSources ? "High" : "Low" ;
 
                 break;
             }
