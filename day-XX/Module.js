@@ -11,25 +11,27 @@ class Module
 
     ReceivePulse(source, inSignal)
     {
-        console.log(`Module "${this.Name}" received signal "${inSignal}" from "${source}"`); //debug
-        let outSignal;
+        console.log(`> Module "${this.Name}" received signal "${inSignal}" from "${source}"`); //debug
+        let outSignal = inSignal;
         switch (this.Type)
         {
-            case "Flip-flop":
+            case "Flip-flop": // %
             {
                 if (inSignal === "Low")
                 {
                     this.FlipFlop = !this.FlipFlop;
                     outSignal = this.FlipFlop ? "High" : "Low";
-                    this.SendPulse(outSignal);
                 }
                 break;
             }
-            case "Conjunction":
+            case "Conjunction": // &
             {
-                this.ConnectedSources.filter(i => i[0] === source)[1] = inSignal;
+                let connectedSource = this.ConnectedSources.find(i => i[0] === source);
+                if (connectedSource === null) { throw new Error("Error: no connected source found."); }
+                connectedSource[1] = inSignal;
 
                 let anyLowPulsesInConnectedSources = false;
+                
                 for (let cs = 0; cs < this.ConnectedSources.length; cs++)
                 {
                     if (this.ConnectedSources[cs][1] === "Low") { anyLowPulsesInConnectedSources = true; }
@@ -52,7 +54,7 @@ class Module
     SendPulse(outSignal)
     {
         // A list of 'pulses' to be processed in the next cycle
-        console.log(`Module "${this.Name}" transmitting signal of "${outSignal}" to ${this.Destinations.length} destinations`); //debug
+        console.log(`> Module "${this.Name}" transmitting signal of "${outSignal}" to n = ${this.Destinations.length} destinations`); //debug
         
         let outPulses = [];
 

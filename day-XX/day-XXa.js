@@ -29,7 +29,7 @@ function DayTwenty()
 
   let modulesManager = new ModulesList(mList);
 
-  for (let i = 0; i < 20; i++)
+  for (let i = 0; i < 5; i++)
   {
     modulesManager.PushButton();
   }

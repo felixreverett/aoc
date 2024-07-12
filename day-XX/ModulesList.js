@@ -31,7 +31,7 @@ class ModulesManager
 
     PushButton()
     {
-        let thisCyclePulses = [["button", "Low", "broadcaster"]];
+        let thisCyclePulses = []; thisCyclePulses.push(["button", "Low", "broadcaster"]);
         
         while (thisCyclePulses.length > 0)
         {
@@ -42,11 +42,14 @@ class ModulesManager
             {
                 let currentPulse = thisCyclePulses[signal];
                 let module = this.List.find(i => i.Name === currentPulse[2]);
-                console.log(`Signal ${thisCyclePulses[signal][1]} sent to module ${module.Name}`); //debug
-                nextCyclePulses = module.SendPulse(module.ReceivePulse(currentPulse[0], currentPulse[1]));
-                console.log(nextCyclePulses);
+                if (module != null)
+                {
+                    console.log(`> Sending signal "${thisCyclePulses[signal][1]}" to module "${module.Name}"`); //debug
+                    nextCyclePulses = nextCyclePulses.concat(module.SendPulse(module.ReceivePulse(currentPulse[0], currentPulse[1])));
+                }
             }
-
+            console.log(nextCyclePulses);
+            
             thisCyclePulses = nextCyclePulses;
         }
 
