@@ -26,12 +26,13 @@ function DayTwenty()
   {
     mList.push(new Module(parsedInput[m]));
   }
-  let modulesList = new ModulesList(mList);
-  for (let m = 0; m < modulesList.List.length; m++)
-  {
-    console.log(modulesList.List[m]);
-  }
 
+  let modulesManager = new ModulesList(mList);
+
+  for (let i = 0; i < 20; i++)
+  {
+    modulesManager.PushButton();
+  }
 }
 
 DayTwenty();
