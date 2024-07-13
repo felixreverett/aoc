@@ -5,6 +5,10 @@ class ModulesManager
     constructor(list)
     {
         this.List = list;
+        this.States = [];
+        this.CycleNumber;
+        this.LoopFound = false;
+        this.LoopStart; this.LoopEnd;
         this.PopulateModuleConnectedSources();
     }
 
@@ -29,13 +33,14 @@ class ModulesManager
         }
     }
 
-    PushButton()
+    PushButton(cycleNumber)
     {
         let thisCyclePulses = []; thisCyclePulses.push(["button", "Low", "broadcaster"]);
+        let lowCount = 1; let highCount = 0;
         
         while (thisCyclePulses.length > 0)
         {
-            console.log(`This cycle's pulses is: ${thisCyclePulses}`); //debug
+            //console.log(`This cycle's pulses is: ${thisCyclePulses}`); //debug
             let nextCyclePulses = [];
 
             for (let signal = 0; signal < thisCyclePulses.length; signal++)
@@ -44,17 +49,42 @@ class ModulesManager
                 let module = this.List.find(i => i.Name === currentPulse[2]);
                 if (module != null)
                 {
-                    console.log(`> Sending signal "${thisCyclePulses[signal][1]}" to module "${module.Name}"`); //debug
+                    //console.log(`> Sending signal "${thisCyclePulses[signal][1]}" to module "${module.Name}"`); //debug
                     nextCyclePulses = nextCyclePulses.concat(module.SendPulse(module.ReceivePulse(currentPulse[0], currentPulse[1])));
                 }
             }
-            console.log(nextCyclePulses);
+            //console.log(nextCyclePulses);
+
+            // count up all low and high pulses for the next cycle
+            for (let p = 0; p < nextCyclePulses.length; p++)
+            {
+                let pulseType = nextCyclePulses[p][1];
+                if (pulseType === "Low") { lowCount++; }
+                else if (pulseType === "High") { highCount++; }
+                else { throw new Error("Error: Pulse was neither Low or High"); }
+            }
             
             thisCyclePulses = nextCyclePulses;
         }
 
-        console.log("One button Cycle complete");
-        console.log(`The state is: ${this.GetStateAsHash()}`);
+        let state = this.GetStateAsHash();
+
+        let matchingState = this.States.find(i => i[0] === state);
+
+        if (matchingState === undefined)
+        {
+            //console.log("no state found"); //debug
+            this.States.push( [state, cycleNumber, lowCount, highCount] );
+        }
+        else
+        {
+            this.LoopFound = true; this.LoopStart = matchingState[1]; this.LoopEnd = cycleNumber;
+            //console.log(`Loop found between states ${this.LoopStart} and ${this.LoopEnd}`);
+        }
+
+        //console.log("[!] One button Cycle complete");
+        //console.log(`[!] The state is: ${this.GetStateAsHash()}`);
+        //console.log(`[!] Low pulses sent: ${lowCount} | High pulses sent ${highCount}`)
     }
 
     GetStateAsHash()
@@ -65,6 +95,94 @@ class ModulesManager
             state.push(this.List[m].GetState());
         }
         return crypto.createHash('sha256').update(state.join()).digest('hex');
+    }
+
+
+    GetTotalLowAndHighPulses()
+    {
+        let totalLow = 0;
+        let totalHigh = 0;
+        
+        for (let s = 0; s < this.States.length; s++)
+        {
+            totalLow += this.States[s][2];
+            totalHigh += this.States[s][3];
+        }
+
+        return [ totalLow, totalHigh ];
+    }
+
+    GetTotalLowAndHighPulsesInLoop()
+    {
+        let totalLow = 0;
+        let totalHigh = 0;
+        
+        for (let s = this.LoopStart; s < this.States.length; s++)
+        {
+            totalLow += this.States[s][2];
+            totalHigh += this.States[s][3];
+        }
+
+        return [ totalLow, totalHigh ];
+    }
+
+    GetTotalLowAndHighPulsesBeforeLoop()
+    {
+        let totalLow = 0;
+        let totalHigh = 0;
+        
+        for (let s = 0; s < this.LoopStart; s++)
+        {
+            totalLow += this.States[s][2];
+            totalHigh += this.States[s][3];
+        }
+
+        return [ totalLow, totalHigh ];
+    }
+
+    GetTotalLowAndHighPulsesAfterLoop(endIndex)
+    {
+        let totalLow = 0;
+        let totalHigh = 0;
+        
+        for (let s = 0; s < endIndex; s++)
+        {
+            totalLow += this.States[s][2];
+            totalHigh += this.States[s][3];
+        }
+
+        return [ totalLow, totalHigh ];
+    }
+
+    GetAnswer(buttonPresses)
+    {
+        // get totalLow and totalHigh pulses between loop start and loop end
+        let [ totalLow, totalHigh ] = this.GetTotalLowAndHighPulsesInLoop();
+        
+        // get all other Low and High pulses prior to the loop start
+        let [ extraLowBefore, extraHighBefore ] = this.GetTotalLowAndHighPulsesBeforeLoop();
+
+        // number of loops found
+        let loopLength = this.LoopEnd - this.LoopStart;
+        let numberOfLoops = (buttonPresses - this.LoopStart) / loopLength;
+
+        // get all other Low and High pulses after the last full loop cycle completes
+        let fractionOfLoopAfterLastFullLoop = numberOfLoops - Math.floor(numberOfLoops);
+        let endIndexOfPartialLoop = parseInt(fractionOfLoopAfterLastFullLoop * loopLength);
+        let [ extraLowAfter, extraHighAfter ] = this.GetTotalLowAndHighPulsesAfterLoop(endIndexOfPartialLoop);
+
+        // get final total low and high pulses sent
+        let grandTotalLow = totalLow * numberOfLoops + extraLowBefore + extraLowAfter;
+        let grandTotalHigh = totalHigh * numberOfLoops + extraHighBefore + extraHighAfter;
+
+        // Multiply final low and high pulses
+        let answer = grandTotalLow * grandTotalHigh;
+        console.log(`Loop length: ${loopLength}`);
+        console.log(`Number of loops: ${numberOfLoops}`);
+        console.log(`Fraction of loop after last full loop: ${fractionOfLoopAfterLastFullLoop}`);
+        console.log(`Loop start and end points: ${this.LoopStart} | ${this.LoopEnd}`);
+        console.log(`Answer: ${answer}`);
+        return answer;
     }
 }
 

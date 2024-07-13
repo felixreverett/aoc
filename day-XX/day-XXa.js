@@ -16,7 +16,7 @@ const ModulesList = require("./ModulesList.js");
 function DayTwenty()
 {
   // 1. Parse input
-  let parsedInput = fs.readFileSync("day-XX/sample-input-2023-20.txt", "utf-8")
+  let parsedInput = fs.readFileSync("day-XX/input-2023-20.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n")
   .map(i => i.split(" -> "));
@@ -29,9 +29,23 @@ function DayTwenty()
 
   let modulesManager = new ModulesList(mList);
 
-  for (let i = 0; i < 5; i++)
+  let buttonPresses = 1000;
+
+  for (let i = 0; i < buttonPresses; i++)
   {
-    modulesManager.PushButton();
+    modulesManager.PushButton(i);
+    if (modulesManager.LoopFound)
+    {
+      let answer = modulesManager.GetAnswer(buttonPresses);
+      break;
+    }
+  }
+
+  if (!modulesManager.LoopFound)
+  {
+    let [ totalLow, totalHigh ] = modulesManager.GetTotalLowAndHighPulses();
+    let answer = totalLow * totalHigh;
+    console.log(answer);
   }
 }
 

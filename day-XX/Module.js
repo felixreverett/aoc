@@ -11,7 +11,7 @@ class Module
 
     ReceivePulse(source, inSignal)
     {
-        console.log(`> Module "${this.Name}" received signal "${inSignal}" from "${source}"`); //debug
+        //console.log(`> Module "${this.Name}" received signal "${inSignal}" from "${source}"`); //debug
         let outSignal = inSignal;
         switch (this.Type)
         {
@@ -21,6 +21,10 @@ class Module
                 {
                     this.FlipFlop = !this.FlipFlop;
                     outSignal = this.FlipFlop ? "High" : "Low";
+                }
+                else
+                {
+                    outSignal = null;
                 }
                 break;
             }
@@ -54,13 +58,16 @@ class Module
     SendPulse(outSignal)
     {
         // A list of 'pulses' to be processed in the next cycle
-        console.log(`> Module "${this.Name}" transmitting signal of "${outSignal}" to n = ${this.Destinations.length} destinations`); //debug
+        //console.log(`> Module "${this.Name}" transmitting signal of "${outSignal}" to n = ${this.Destinations.length} destinations`); //debug
         
         let outPulses = [];
 
-        for (let d = 0; d < this.Destinations.length; d++)
+        if (outSignal != null)
         {
-            outPulses.push([this.Name, outSignal, this.Destinations[d]]);
+            for (let d = 0; d < this.Destinations.length; d++)
+            {
+                outPulses.push([this.Name, outSignal, this.Destinations[d]]);
+            }
         }
 
         return outPulses;
