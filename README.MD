@@ -10,9 +10,10 @@
 
 ## Some practices I've learnt:
 - **maps** (day 7)
-- **memoization** (day 14b)
+- **memoization** (day 14b, day 20a)
 - **destructuring assignment** (day 18a) > concise assignment of multiple variables
 - **flood fills** (day 18a)
+- **hashes** (day 20a)
 - **stacks** (day 18a)
 - **Shoelace formula (Gauss' Area Formula)** (day 18b)
 - **let, var, const** (day 19b) > Found practical application of let vs var being scope.
