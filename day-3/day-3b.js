@@ -133,10 +133,34 @@ DayThree();
 function MultiplyAdjacentNumbers(r, c, lines)
 {
     let numbers = [];
-    let numbersFound = 0;
+    
     let numberRegex = /[0-9]/;
 
-    while (numbersFound < 2)
+    // NNN
+    // N*N
+    // NNN
+    let surroundingCells = [];
+    for (let i = 0; i < 3; i ++)
+    {
+        surroundingCells.push([".",".","."])
+    }
+
+    // test the surrounding cells to find the numbers
+    for (let adjr = 0; adjr < surroundingCells.length; adjr++)
+    {
+        for (let adjc = 0; adjc < surroundingCells[adjr].length; adjc++)
+        {
+            if (numberRegex.test(lines[r - 1 + adjr][c - 1 + adjc]))
+            {
+                surroundingCells[adjr][adjc] = "N";
+            }
+        }
+    }
+
+    console.log(surroundingCells);
+
+    /*
+    while (number.length < 2)
     {
         // NNNNNNN
         // NNN*NNN
@@ -154,8 +178,9 @@ function MultiplyAdjacentNumbers(r, c, lines)
                     {
                         currentNumber = currentNumber * 10 + lines[r-1][c - 3 + a];
                     }
+                    numbers.push(currentNumber);
                 }
             }
         }
-    }
+    }*/
 }
