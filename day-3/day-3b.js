@@ -130,7 +130,6 @@ function DayThree()
                     currentNumber = parseInt(lines[row][col]);
                     currentlyANumber = true;
                 }
-                
                 indicesToUpdate.push([row, col]);
             }
 
@@ -138,28 +137,14 @@ function DayThree()
             // then fill in every indexed cell of validatorArray with that number
             if ((!numberIsInt || col >= lines[row].length - 1) && currentlyANumber)
             {
-                //console.log("Updating these indices:"); //debug
-                //console.log(indicesToUpdate); //debug
-                //console.log(`With this number: ${currentNumber}`); //debug
                 for (let i = 0; i < indicesToUpdate.length; i++)
                 {
                     validatorArray[indicesToUpdate[i][0]][indicesToUpdate[i][1]] = currentNumber;
                 }
-
                 currentlyANumber = false;
                 indicesToUpdate = [];
             }
         }
-    }
-
-    for (let i = 0; i < validatorArray.length; i++)
-    {
-        let row = "";
-        for (let j = 0; j < validatorArray[0].length; j++)
-        {
-            row += validatorArray[i][j];
-        }
-        //console.log(row);
     }
 
     // 4
@@ -203,63 +188,46 @@ function MultiplyAdjacentNumbers(r, c, lines, validatorArray)
 
     // multiply numbers based on patterns
     let foundNumbers = [];
-
     for (let adjr = 0; adjr < surroundingCells.length; adjr++)
     {
         let currentRow = surroundingCells[adjr].join("");
-        //console.log(`The current Row is ${currentRow}`);
-
         switch (currentRow)
         {
             case "...":
             {
                 break;
             }
-
             case "NNN":
             case "NN.":
             case "N..":
             case "N*.":
             {
-                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c - 1}`);
                 let newNumber = validatorArray[r + adjr - 1][c - 1];
-                //console.log(`Adding new number: ${newNumber}`);
                 foundNumbers.push(newNumber);
                 break;
             }
-
             case ".NN":
             case "..N":
             case ".*N":
             {
-                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c + 1}`);
                 let newNumber = validatorArray[r + adjr - 1][c + 1];
-                //console.log(`Adding new number: ${newNumber}`);
                 foundNumbers.push(newNumber);
                 break;
             }
-            
             case "N.N":
             case "N*N":
             {
-                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c - 1}`);
                 let newNumber = validatorArray[r + adjr - 1][c - 1];
-                //console.log(`Adding new number: ${newNumber}`);
                 foundNumbers.push(newNumber);
-
-                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c + 1}`);
                 newNumber = validatorArray[r + adjr - 1][c + 1];
-                //console.log(`Adding new number: ${newNumber}`);
                 foundNumbers.push(newNumber);
                 break;
             }
-
             case ".N.":
             {
                 let newNumber = validatorArray[r + adjr - 1][c];
                 foundNumbers.push(newNumber);
             }
-
             default:
             {
                 console.log(`error: you didn't account for this case ${currentRow}`);
@@ -267,9 +235,7 @@ function MultiplyAdjacentNumbers(r, c, lines, validatorArray)
             }
         }
     }
-
     console.log("These are the found numbers:");
     console.log(foundNumbers);
-
     return foundNumbers[0] * foundNumbers[1];
 }
