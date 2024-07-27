@@ -19,11 +19,12 @@ function DayTwentyB()
 
   let modulesManager = new ModulesListB(mList);
 
-  let buttonPresses = 1000; // it is >100,000
+  let buttonPresses = 1000000; // it is >600,000
 
   for (let i = 0; i < buttonPresses; i++)
   {
     modulesManager.PushButton(i);
+    if (i % 100000 === 0) { console.log(i); }
     if (modulesManager.LowPulseSentToRX)
     {
       console.log(`A low pulse was sent to RX on press ${i}`);

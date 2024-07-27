@@ -6,13 +6,13 @@ function DayThree()
 {
     // 1) first identify all symbols and mark around them in an array the same size as the input
     
-    let lines = fs.readFileSync("day-3/sample-input-2023-3.txt", "utf-8")
+    let lines = fs.readFileSync("day-3/input-2023-3.txt", "utf-8")
         .replace(/\r/gm, "")
         .split("\n")
         .map(i => i.split(""));
 
     // create valid gears array "mirror" structure
-    let validGearsArray = [];
+    let validatorArray = [];
     
     for (let r = 0; r < lines.length; r++)
     {
@@ -21,7 +21,7 @@ function DayThree()
         {
             newRow.push(".");
         }
-        validGearsArray.push(newRow);
+        validatorArray.push(newRow);
     }
 
     // 3) Iterate through Lines to identify all "gears" *
@@ -98,51 +98,95 @@ function DayThree()
                 // Find and multiply the numbers if exactly 2 were found and add to total
                 if (adjacentNumbers === 2)
                 {
-                    validGearsArray[row][col] = "*";
+                    validatorArray[row][col] = "*";
                 }
             }
         }
     }
 
-    for (let i = 0; i < validGearsArray.length; i++)
+    // 3b) populate each "number" of the validatorArray with
+    let currentlyANumber;
+    let indicesToUpdate;
+    let currentNumber;
+
+    for (let row = 0; row < lines.length; row++)
+    {
+        currentlyANumber = false;
+        indicesToUpdate = [];
+
+        for (let col = 0; col < lines[row].length; col++)
+        {
+            let numberIsInt = numberRegex.test(lines[row][col]);
+            if (numberIsInt)
+            {
+                // an ongoing number being built
+                if (currentlyANumber)
+                {
+                    currentNumber = currentNumber * 10 + parseInt(lines[row][col]);
+                }
+                // a new number starting
+                else
+                {
+                    currentNumber = parseInt(lines[row][col]);
+                    currentlyANumber = true;
+                }
+                
+                indicesToUpdate.push([row, col]);
+            }
+
+            // if current number is not an int or is the last in the row, and currentlyANumber is true
+            // then fill in every indexed cell of validatorArray with that number
+            if ((!numberIsInt || col >= lines[row].length - 1) && currentlyANumber)
+            {
+                //console.log("Updating these indices:"); //debug
+                //console.log(indicesToUpdate); //debug
+                //console.log(`With this number: ${currentNumber}`); //debug
+                for (let i = 0; i < indicesToUpdate.length; i++)
+                {
+                    validatorArray[indicesToUpdate[i][0]][indicesToUpdate[i][1]] = currentNumber;
+                }
+
+                currentlyANumber = false;
+                indicesToUpdate = [];
+            }
+        }
+    }
+
+    for (let i = 0; i < validatorArray.length; i++)
     {
         let row = "";
-        for (let j = 0; j < validGearsArray[0].length; j++)
+        for (let j = 0; j < validatorArray[0].length; j++)
         {
-            row += validGearsArray[i][j];
+            row += validatorArray[i][j];
         }
-        console.log(row);
+        //console.log(row);
     }
 
     // 4
     let total = 0;
-    for (let r = 0; r < validGearsArray.length; r++)
+    for (let r = 0; r < validatorArray.length; r++)
     {
-        for (let c = 0; c < validGearsArray[r].length; c++)
+        for (let c = 0; c < validatorArray[r].length; c++)
         {
-            if (validGearsArray[r][c] === "*")
+            if (validatorArray[r][c] === "*")
             {
-                total += MultiplyAdjacentNumbers(r, c, lines);
+                total += MultiplyAdjacentNumbers(r, c, lines, validatorArray);
             }
         }
     }
+
+    console.log(`The grand total for day 3b is: ${total}`);
 }
 
 DayThree();
 
-function MultiplyAdjacentNumbers(r, c, lines)
+function MultiplyAdjacentNumbers(r, c, lines, validatorArray)
 {
-    let numbers = [];
-    
     let numberRegex = /[0-9]/;
-
-    // NNN
-    // N*N
-    // NNN
     let surroundingCells = [];
     for (let i = 0; i < 3; i ++)
     {
-        surroundingCells.push([".",".","."])
+        surroundingCells.push([".",".","."]);
     }
 
     // test the surrounding cells to find the numbers
@@ -157,30 +201,75 @@ function MultiplyAdjacentNumbers(r, c, lines)
         }
     }
 
-    console.log(surroundingCells);
+    // multiply numbers based on patterns
+    let foundNumbers = [];
 
-    /*
-    while (number.length < 2)
+    for (let adjr = 0; adjr < surroundingCells.length; adjr++)
     {
-        // NNNNNNN
-        // NNN*NNN
-        // NNNNNNN
-        // look for numbers in row above
-        if (r > 0)
+        let currentRow = surroundingCells[adjr].join("");
+        //console.log(`The current Row is ${currentRow}`);
+
+        switch (currentRow)
         {
-            if (c - 2 > 0)
+            case "...":
             {
-                if (numberRegex.test(lines[r - 1][c - 3]))
-                {
-                    let currentNumber = lines[r - 1][c - 3];
-                    let a = 1;
-                    while (numberRegex.test(lines[r - 1][c - 3 + a]))
-                    {
-                        currentNumber = currentNumber * 10 + lines[r-1][c - 3 + a];
-                    }
-                    numbers.push(currentNumber);
-                }
+                break;
+            }
+
+            case "NNN":
+            case "NN.":
+            case "N..":
+            case "N*.":
+            {
+                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c - 1}`);
+                let newNumber = validatorArray[r + adjr - 1][c - 1];
+                //console.log(`Adding new number: ${newNumber}`);
+                foundNumbers.push(newNumber);
+                break;
+            }
+
+            case ".NN":
+            case "..N":
+            case ".*N":
+            {
+                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c + 1}`);
+                let newNumber = validatorArray[r + adjr - 1][c + 1];
+                //console.log(`Adding new number: ${newNumber}`);
+                foundNumbers.push(newNumber);
+                break;
+            }
+            
+            case "N.N":
+            case "N*N":
+            {
+                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c - 1}`);
+                let newNumber = validatorArray[r + adjr - 1][c - 1];
+                //console.log(`Adding new number: ${newNumber}`);
+                foundNumbers.push(newNumber);
+
+                //console.log(`Accessing validatorArray index ${r + adjr - 1}, ${c + 1}`);
+                newNumber = validatorArray[r + adjr - 1][c + 1];
+                //console.log(`Adding new number: ${newNumber}`);
+                foundNumbers.push(newNumber);
+                break;
+            }
+
+            case ".N.":
+            {
+                let newNumber = validatorArray[r + adjr - 1][c];
+                foundNumbers.push(newNumber);
+            }
+
+            default:
+            {
+                console.log(`error: you didn't account for this case ${currentRow}`);
+                break;
             }
         }
-    }*/
+    }
+
+    console.log("These are the found numbers:");
+    console.log(foundNumbers);
+
+    return foundNumbers[0] * foundNumbers[1];
 }
