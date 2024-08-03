@@ -1,6 +1,6 @@
 //day 5b
 var fs = require("fs"); // imports fs
-const Map = require("./Map.js");
+const MapB = require("./MapB.js");
 
 function DayFiveB()
 {
@@ -10,55 +10,45 @@ function DayFiveB()
         .split("\n")
         .filter(line => line.trim() !== "")
 
-    // 2a. A list of all "maps"
-    let mapList = [];
-
-    // 2b. Generate array of seed lower and upper bounds based on their ranges
-    let seedsListIndex = lines.findIndex(i => i.match(/seeds:.*/));
-    let seedsList = lines[seedsListIndex].replace("\r", "").split(" ").filter(value => value.trim() !== "seeds:").map(Number);
-    let seedRanges = [];
-    for (let s = 0; s < seedsList.length / 2; s++)
-    {
-        seedRanges.push([seedsList[s], seedsList[s] + seedsList[s + 1]]);
-    }
+    // 2. Generate Map Objects
+    let Maps = [];
     
-    // 3. Generate maps
-    // For every line that is a a-to-b map
-    // Set the source and destination names to current map
-    // For every next line, if it starts with decimal, add to mapData
-    // Sort the mapData
-    // Add mapData to current map
     for (let line = 0; line < lines.length; line++)
     {
         if (lines[line].match(/[a-z]*-to-[a-z]* map:/))
         {
-            let mapData = [];
-            let mapSrc = lines[line].split("-to-")[0];
-            let mapDest = lines[line].split("-to-")[1].split(" map:")[0];
+            let mapInput = [];
+            let mapSource = lines[line].split("-to-")[0];
+            let mapDestination = lines[line].split("-to-")[1].split(" map:")[0];
 
             let pointer = 1;
             while (line + pointer < lines.length && lines[line + pointer][0].match(/\d/))
             {
-                mapData.push(lines[line + pointer].replace("\r", "").split(" ").map(Number));
+                mapInput.push(lines[line + pointer].replace("\r", "").split(" ").map(Number));
                 pointer++;
             }
-
-            mapData.sort((a,b) => b[1] - a[1]);
-
-            //console.log(`Source: "${mapSrc}"`);
-            //console.log(`Destination: "${mapDest}"`);
-            //console.log(mapData[0]);
-            mapList.push(new Map(mapSrc, mapDest, mapData));
+            Maps.push(new MapB(mapSource, mapDestination, mapInput));
         }
     }
 
-    // 4. Process every seed range
-    finalValuesList = [];
+    // 3. Generate Ranges of type "Seed" => ["Seed", lowerBound, upperBound]
+    let seedsListIndex = lines.findIndex(i => i.match(/seeds:.*/));
+    let seedsList = lines[seedsListIndex].replace("\r", "").split(" ").filter(value => value.trim() !== "seeds:").map(Number);
+    let Ranges = [];
 
-    for (let s = 0; s < seedRanges.length; s++)
+    for (let s = 0; s < seedsList.length / 2; s++)
     {
-
+        Ranges.push(["seed", seedsList[s], seedsList[s] + seedsList[s + 1]]);
     }
+
+    // 4. Process Ranges into LocationRanges
+    let LocationRanges = [];
+    for (let r = 0; r < Ranges.length; r++)
+    {
+        LocationRanges.push(ProcessRange(Ranges[r]));
+    }
+
+    // 5. Get lowest bound of all location ranges
 
     for (let s = 0; s < seedsList.length; s++)
     {
@@ -67,11 +57,11 @@ function DayFiveB()
 
         while (mapSource !== "location")
         {
-            mapIndex = mapList.findIndex(obj => obj.mapSrc === mapSource);
+            mapIndex = mapList.findIndex(obj => obj.mapSource === mapSource);
             //console.log(mapSource);
             //console.log(mapIndex);
             theValue = MapAValue(mapList[mapIndex].mapData, theValue);
-            mapSource = mapList[mapIndex].mapDest;
+            mapSource = mapList[mapIndex].mapDestination;
         }
 
         finalValuesList.push(theValue);
@@ -82,26 +72,11 @@ function DayFiveB()
     
 }
 
-/// returns an integer value using a sorted map (descending)
-function MapAValue(mapData, value)
-    {
-        value = parseInt(value);
-        //console.log("Your current map data is:");
-        //console.log(mapData);
-        for (let i = 0; i < mapData.length; i++)
-        {
-            if (value >= mapData[i][1] && value < mapData[i][1] + mapData[i][2])
-            {
-                //console.log(`a map was found for value ${value} at mapSource ${mapData[i][1]}`);
-                //console.log(mapData[i][0]);
-                value = mapData[i][0] + (value - mapData[i][1]);
-                //console.log(value);
-                return value;
-            }
-        }
+function ProcessRange(range)
+{
+    //
+}
 
-        //console.log(`no match was found for value ${value}`);
-        return value; // no map was found
-    }
+
 
 DayFiveB();
