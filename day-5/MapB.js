@@ -12,7 +12,7 @@ class MapB
 
     GenerateMaps(mapInput)
     {
-        mapInput.sort((a,b) => a[0] - b[0]);
+        mapInput.sort((a,b) => a[1] - b[1]);
         return mapInput;
     }
 }

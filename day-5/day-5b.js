@@ -5,7 +5,7 @@ const MapB = require("./MapB.js");
 function DayFiveB()
 {
     // 1. Parse data into lines
-    let lines = fs.readFileSync("day-5/sample-input-2023-5.txt", "utf-8")
+    let lines = fs.readFileSync("day-5/input-2023-5.txt", "utf-8")
         .replace("\r\r", "")
         .split("\n")
         .filter(line => line.trim() !== "")
@@ -38,7 +38,7 @@ function DayFiveB()
 
     for (let s = 0; s < seedsList.length / 2; s++)
     {
-        Ranges.push(["seed", seedsList[s * 2], seedsList[s * 2] + seedsList[s * 2 + 1]]);
+        Ranges.push(["seed", seedsList[s * 2], seedsList[s * 2] + seedsList[s * 2 + 1] - 1]);
     }
 
     // 4. Process all Ranges into LocationRanges
@@ -47,9 +47,15 @@ function DayFiveB()
     {
         LocationRanges = LocationRanges.concat(ProcessRange(Ranges[r], Maps));
     }
+    let SortedLocationRanges = [];
+    for (let r = 0; r < LocationRanges.length / 3; r++)
+    {
+        SortedLocationRanges.push([LocationRanges[r * 3], LocationRanges[r * 3 + 1], LocationRanges[r * 3 + 2]]);
+    }
     
+    SortedLocationRanges.sort((a, b) => a[1] - b[1]);
     console.log("Here are all location ranges:");
-    console.log(LocationRanges);
+    console.log(SortedLocationRanges);
     
 }
 
@@ -79,16 +85,23 @@ function ProcessRange(range, Maps)
 
     for (let m = 0; m < myMapB.Maps.length; m++)
     {
-        let currentMapLowerBound = myMapB.Maps[m][0];
+        let currentMapLowerBound = myMapB.Maps[m][1];
         let currentMapUpperBound = currentMapLowerBound + myMapB.Maps[m][2] - 1;
-        let currentMapDifferential = myMapB.Maps[m][1] - currentMapLowerBound;
+        let currentMapDifferential = myMapB.Maps[m][0] - currentMapLowerBound;
 
         // if our range is below the current map's lower bound
         // then we need to process all of this subrange first
         if (inputLowerBound < currentMapLowerBound)
         {
-            nextRanges.push([myMapB.MapDestination, inputLowerBound, currentMapLowerBound - 1]);
-            inputLowerBound = currentMapLowerBound;
+            let newUpperBound = Math.min(currentMapUpperBound, inputUpperBound);
+            nextRanges.push([myMapB.MapDestination, inputLowerBound, newUpperBound]);
+            inputLowerBound = newUpperBound + 1;
+
+            // exit the loop if we've processed all ranges
+            if (inputLowerBound > inputUpperBound)
+            {
+                break;
+            }
         }
 
         // The lowest our inputLowerBound can be is the lower bound of the current map.
