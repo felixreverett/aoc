@@ -10,6 +10,7 @@ class ModulesManagerB
         this.LoopFound = false;
         this.LoopStart; this.LoopEnd;
         this.LowPulseSentToRX = false;
+        this.LowPulseSentToTarget = false; //dc, rv, vp, cq all need to receive low pulse (thus output high pulse) in the same cycle
         this.PopulateModuleConnectedSources();
     }
 
@@ -52,9 +53,10 @@ class ModulesManagerB
                 {
                     //console.log(`> Sending signal "${thisCyclePulses[signal][1]}" to module "${module.Name}"`); //debug
                     let sentPulses = module.SendPulse(module.ReceivePulse(currentPulse[0], currentPulse[1]));
-                    if (sentPulses.some(pulse => pulse[2] === "rx" && pulse[1] === "Low"))
+                    if (sentPulses.some(pulse => pulse[2] === "cq" && pulse[1] === "Low"))
                     {
-                        this.LowPulseSentToRX = true;
+                        //this.LowPulseSentToRX = true;
+                        this.LowPulseSentToTarget = true; //dc (3796 +1), rv (4050 +1), vp (3846 +1), cq (3876 +1) LCM = 229,414,480,926,893
                     }
                     nextCyclePulses = nextCyclePulses.concat(sentPulses);
                 }
