@@ -11,27 +11,29 @@ var fs = require("fs"); // imports fs
 function DayTwentyOne()
 {
   // 1. Parse input
-  let currentStepArray = fs.readFileSync("day-XX1/sample-input-2023-21.txt", "utf-8")
+  let currentStepArray = fs.readFileSync("day-XX1/input-2023-21.txt", "utf-8")
   .replace(/\r/gm, "")
   .split("\n")
   .map(i => i.split(""));
 
   let templateStepArray = GenerateTemplateStepArray(currentStepArray);
 
-  PrintStepArray(currentStepArray);
+  let numberOfSteps = 64;
 
-  for (let s = 0; s < 64; s++)
+  for (let s = 0; s < numberOfSteps; s++)
   {
     currentStepArray = TakeAStep(currentStepArray, templateStepArray);
-
-    PrintStepArray(currentStepArray);
+    //console.log(`${s} Steps Taken:`);
+    //PrintStepArray(currentStepArray);
   }
+
+  console.log(`After ${numberOfSteps} steps, the Elf can reach any of ${CountO(currentStepArray)} garden plots.`);
 
 }
 
 function TakeAStep(currentStepArray, templateStepArray)
 {
-  let nextStepArray = templateStepArray;
+  let nextStepArray = templateStepArray.map(row => [...row]);
 
   for (let r = 0; r < currentStepArray.length; r++)
   {
@@ -40,22 +42,22 @@ function TakeAStep(currentStepArray, templateStepArray)
       if (currentStepArray[r][c] === "O" || currentStepArray[r][c] === "S")
       {
         // Flip the bits of all cells surrounding O in the templateStepArray (todo: as long as they don't contain #)
-        if (r > 0) //N
+        if (r > 0 && nextStepArray[r - 1][c] !== "#") //N
         {
           nextStepArray[r - 1][c] = "O";
         }
 
-        if (c < currentStepArray[r].length - 1) //E
+        if (c < currentStepArray[r].length - 1 && nextStepArray[r][c + 1] !== "#") //E
         {
           nextStepArray[r][c + 1] = "O";
         }
 
-        if (r < currentStepArray.length - 1) //S
+        if (r < currentStepArray.length - 1 && nextStepArray[r + 1][c] !== "#") //S
         {
           nextStepArray[r + 1][c] = "O";
         }
 
-        if (c > 0) //W
+        if (c > 0 && nextStepArray[r][c - 1] !== "#") //W
         {
           nextStepArray[r][c - 1] = "O";
         }
@@ -85,16 +87,31 @@ function GenerateTemplateStepArray(inputStepArray)
 
 function PrintStepArray(stepArray)
 {
-  console.log("Printing Step Array:");
   for (let r = 0; r < stepArray.length; r++)
+  {
+    let column = "";
+    for (let c = 0; c < stepArray[r].length; c++)
     {
-      let column = "";
-      for (let c = 0; c < stepArray[r].length; c++)
-      {
-        column += stepArray[r][c];
-      }
-      console.log(column);
+      column += stepArray[r][c];
     }
+    console.log(column);
+  }
+}
+
+function CountO(stepArray)
+{
+  let count = 0;
+  for (let r = 0; r < stepArray.length; r++)
+  {
+    for (let c = 0; c < stepArray[r].length; c++)
+    {
+      if (stepArray[r][c] === "O" || stepArray[r][c] === "S")
+      {
+        count++;
+      }
+    }
+  }
+  return count;
 }
 
 DayTwentyOne();
