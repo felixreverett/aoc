@@ -8,7 +8,7 @@
 
 var fs = require("fs"); // imports fs
 let heatMap;
-let visitedNodes = [];
+let visitedNodes = new Map();
 let nodesToVisit = [];
 
 function DaySeventeen()
@@ -20,18 +20,22 @@ function DaySeventeen()
 
   console.log(heatMap);
 
-  // Starting at 0,0 create node with values row, col, entryDirection, 
-  let shortestPathFound = false;
-
-  // right
   nodesToVisit.push([0, 0, "vertical", 0]);
   nodesToVisit.push([0, 0, "horizontal", 0]);
 
   while (nodesToVisit.length > 0)
   {
+    console.log(`> > There are ${nodesToVisit.length} Nodes to visit.`);
     let nextNode = nodesToVisit.shift();
     ProcessNode(nextNode);
+
+    if (visitedNodes.has(`x${heatMap[0].length - 1}y${heatMap.length - 1}dVertical`) || visitedNodes.has(`x${heatMap[0].length - 1}y${heatMap.length - 1}dHorizontal`))
+    {
+      console.log("Reached the destination with minimal heat.");
+      break;
+    }
   }
+
   console.log("All nodes have been visited. The shortest path is ...");
 }
 
@@ -40,20 +44,23 @@ function ProcessNode([x, y, entryDirection, totalHeat])
 {
   // 1. Check if node already visited from direction
   let nodeID = `x${x}y${y}d${entryDirection}`;
-  let index = visitedNodes.findIndex(a => a[0] === nodeID)
-  if (index !== -1)
+
+  console.log(`Processing node ${nodeID}`);
+
+  // Check if already visited with a lower or equal totalHeat
+  if (visitedNodes.has(nodeID) && visitedNodes.get(nodeID) <= totalHeat)
   {
-    if (totalHeat >= visitedNodes[index][1])
-    {
-      return;
-    }
+    console.log("> Node already visited with a lower heat.");
+    return;
   }
+
+  visitedNodes.set(nodeID, totalHeat);
+
   // 2. Queue up next nodes depending on whether
 
   if (entryDirection === "vertical")
   {
-    let leftHeat = totalHeat;
-    let rightHeat = totalHeat;
+    let leftHeat, rightHeat;
 
     // < 1 >
     if (x > 0)
@@ -62,7 +69,7 @@ function ProcessNode([x, y, entryDirection, totalHeat])
       nodesToVisit.push([x - 1, y, "horizontal", leftHeat]);
     }
 
-    if (x < heatMap.length - 1)
+    if (x < heatMap[0].length - 1)
     {
       rightHeat = totalHeat + heatMap[y][x + 1];
       nodesToVisit.push([x + 1, y, "horizontal", rightHeat]);
@@ -71,79 +78,75 @@ function ProcessNode([x, y, entryDirection, totalHeat])
     // < 2 >
     if (x > 1)
     {
-      leftHeat = totalHeat + heatMap[y][x - 2];
+      leftHeat = totalHeat + heatMap[y][x - 2] + heatMap[y][x - 1];
       nodesToVisit.push([x - 2, y, "horizontal", leftHeat]);
     }
 
-    if (x < heatMap.length - 2)
+    if (x < heatMap[0].length - 2)
     {
-      rightHeat = totalHeat + heatMap[y][x + 2];
+      rightHeat = totalHeat + heatMap[y][x + 2] + heatMap[y][x + 1];
       nodesToVisit.push([x + 2, y, "horizontal", rightHeat]);
     }
 
     // < 3 >
     if (x > 2)
     {
-      leftHeat = totalHeat + heatMap[y][x - 3];
+      leftHeat = totalHeat + heatMap[y][x - 3] + heatMap[y][x - 2] + heatMap[y][x - 1];
       nodesToVisit.push([x - 3, y, "horizontal", leftHeat]);
     }
 
-    if (x < heatMap.length - 3)
+    if (x < heatMap[0].length - 3)
     {
-      rightHeat = totalHeat + heatMap[y][x + 3];
+      rightHeat = totalHeat + heatMap[y][x + 3] + heatMap[y][x + 2] + heatMap[y][x + 1];
       nodesToVisit.push([x + 3, y, "horizontal", rightHeat]);
     }
   }
 
   if (entryDirection === "horizontal")
   {
-    let upHeat = totalHeat;
-    let downHeat = totalHeat;
+    let upHeat, downHeat;
 
-    // < 1 >
-    if (x > 0)
+    // ^ 1 v
+    if (y > 0)
     {
-      leftHeat = totalHeat + heatMap[y][x - 1];
-      nodesToVisit.push([x - 1, y, "horizontal", upHeat]);
+      upHeat = totalHeat + heatMap[y - 1][x];
+      nodesToVisit.push([x, y - 1, "vertical", upHeat]);
     }
 
-    if (x < heatMap.length - 1)
+    if (y < heatMap.length - 1)
     {
-      rightHeat = totalHeat + heatMap[y][x + 1];
-      nodesToVisit.push([x + 1, y, "horizontal", downHeat]);
+      downHeat = totalHeat + heatMap[y + 1][x];
+      nodesToVisit.push([x, y + 1, "vertical", downHeat]);
     }
 
-    // < 2 >
-    if (x > 1)
+    // ^ 2 v
+    if (y > 1)
     {
-      leftHeat = totalHeat + heatMap[y][x - 2];
-      nodesToVisit.push([x - 2, y, "horizontal", upHeat]);
+      upHeat = totalHeat + heatMap[y - 2][x] + heatMap[y - 1][x];
+      nodesToVisit.push([x, y - 2, "vertical", upHeat]);
     }
 
-    if (x < heatMap.length - 2)
+    if (y < heatMap.length - 2)
     {
-      rightHeat = totalHeat + heatMap[y][x + 2];
-      nodesToVisit.push([x + 2, y, "horizontal", downHeat]);
+      downHeat = totalHeat + heatMap[y + 2][x] + heatMap[y + 1][x];
+      nodesToVisit.push([x, y + 2, "vertical", downHeat]);
     }
 
-    // < 3 >
-    if (x > 2)
+    // ^ 3 v
+    if (y > 2)
     {
-      leftHeat = totalHeat + heatMap[y][x - 3];
-      nodesToVisit.push([x - 3, y, "horizontal", upHeat]);
+      upHeat = totalHeat + heatMap[y - 3][x] + heatMap[y - 2][x] + heatMap[y - 1][x];
+      nodesToVisit.push([x, y - 3, "vertical", upHeat]);
     }
 
-    if (x < heatMap.length - 3)
+    if (y < heatMap.length - 3)
     {
-      rightHeat = totalHeat + heatMap[y][x + 3];
-      nodesToVisit.push([x + 3, y, "horizontal", downHeat]);
+      downHeat = totalHeat + heatMap[y + 3][x] + heatMap[y + 2][x] + heatMap[y + 1][x];
+      nodesToVisit.push([x, y + 3, "vertical", downHeat]);
     }
   }
-}
 
-AddNode()
-{
-
+  return;
 }
 
 DaySeventeen();
