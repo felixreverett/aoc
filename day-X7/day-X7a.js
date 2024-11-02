@@ -8,17 +8,32 @@
 
 var fs = require("fs"); // imports fs
 let heatMap;
-let visitedNodes = new Map();
+let visitedNodes = new Map(); // todo: deprecate
+let shortestPaths = [];
 let nodesToVisit = [];
 
 function DaySeventeen()
 {
   // 1. Parse input
-  heatMap = fs.readFileSync("day-X7/sample-input-2023-17.txt", "utf-8")
+  heatMap = fs.readFileSync("day-X7/input-2023-17.txt", "utf-8")
   .replace(/\r/gm, "")
-  .split("\n").map(i => i.split(""));
+  .split("\n").map(i => i.split("").map(value => parseInt(value, 10)));
 
   console.log(heatMap);
+
+  // 2. [NEW] Create data structure to store shortest path to every node
+  for (let row = 0; row < heatMap.length; row++)
+  {
+    let newRow = [];
+    for (let col = 0; col < heatMap[0].length; col++)
+    {
+      //vertical and horizontal
+      newRow.push([Infinity, Infinity]);
+    }
+    shortestPaths.push(newRow);
+  }
+
+  console.log(shortestPaths[12][1][1]);
 
   nodesToVisit.push([0, 0, "vertical", 0]);
   nodesToVisit.push([0, 0, "horizontal", 0]);
@@ -29,120 +44,141 @@ function DaySeventeen()
     let nextNode = nodesToVisit.shift();
     ProcessNode(nextNode);
 
-    if (visitedNodes.has(`x${heatMap[0].length - 1}y${heatMap.length - 1}dVertical`) || visitedNodes.has(`x${heatMap[0].length - 1}y${heatMap.length - 1}dHorizontal`))
+    /*
+    if (visitedNodes.has(`x${heatMap[0].length - 1}y${heatMap.length - 1}dvertical`) || visitedNodes.has(`x${heatMap[0].length - 1}y${heatMap.length - 1}dhorizontal`))
     {
       console.log("Reached the destination with minimal heat.");
       break;
     }
+    */
   }
 
-  console.log("All nodes have been visited. The shortest path is ...");
+  let lowestHeat = Math.min(shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][0], shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][1]);
+  console.log(`All nodes have been visited. The shortest path to the bottom-right is ${lowestHeat}`);
 }
 
 // Process a node by "visiting" it
-function ProcessNode([x, y, entryDirection, totalHeat])
+// Arrive at a new node having already included the heat of that node.
+function ProcessNode([col, row, entryDirection, arrivalHeat])
 {
   // 1. Check if node already visited from direction
-  let nodeID = `x${x}y${y}d${entryDirection}`;
-
-  console.log(`Processing node ${nodeID}`);
-
-  // Check if already visited with a lower or equal totalHeat
-  if (visitedNodes.has(nodeID) && visitedNodes.get(nodeID) <= totalHeat)
-  {
-    console.log("> Node already visited with a lower heat.");
-    return;
-  }
-
-  visitedNodes.set(nodeID, totalHeat);
-
-  // 2. Queue up next nodes depending on whether
+  console.log(`Processing node row: ${row}, col: ${col}, direction: ${entryDirection}, arrival heat: ${arrivalHeat}.`);
 
   if (entryDirection === "vertical")
   {
-    let leftHeat, rightHeat;
-
-    // < 1 >
-    if (x > 0)
+    if (arrivalHeat >= shortestPaths[row][col][0])
     {
-      leftHeat = totalHeat + heatMap[y][x - 1];
-      nodesToVisit.push([x - 1, y, "horizontal", leftHeat]);
+      console.log("Lower router already found to destination");
+      return;
+    }
+    else
+    {
+      shortestPaths[row][col][0] = arrivalHeat;
+    }
+  }
+  else if (entryDirection === "horizontal")
+  {
+    if (arrivalHeat >= shortestPaths[row][col][1])
+    {
+      console.log("Lower router already found to destination");
+      return;
+    }
+    else
+    {
+      shortestPaths[row][col][1] = arrivalHeat;
+    }
+  }
+  else
+  {
+    throw Error("ERROR: entry direction is neither horizontal nor vertical.");
+  }
+  
+
+  //visitedNodes.set(nodeID, arrivalHeat);
+
+  // 2. Queue up next nodes depending on entry direction
+
+  if (entryDirection === "vertical")
+  {
+    // < 1 >
+    if (col > 0)
+    {
+      let departureHeat = arrivalHeat + heatMap[row][col - 1];
+      nodesToVisit.push([col - 1, row, "horizontal", departureHeat]);
     }
 
-    if (x < heatMap[0].length - 1)
+    if (col < heatMap[0].length - 1)
     {
-      rightHeat = totalHeat + heatMap[y][x + 1];
-      nodesToVisit.push([x + 1, y, "horizontal", rightHeat]);
+      let departureHeat = arrivalHeat + heatMap[row][col + 1];
+      nodesToVisit.push([col + 1, row, "horizontal", departureHeat]);
     }
 
     // < 2 >
-    if (x > 1)
+    if (col > 1)
     {
-      leftHeat = totalHeat + heatMap[y][x - 2] + heatMap[y][x - 1];
-      nodesToVisit.push([x - 2, y, "horizontal", leftHeat]);
+      let departureHeat = arrivalHeat + heatMap[row][col - 2] + heatMap[row][col - 1];
+      nodesToVisit.push([col - 2, row, "horizontal", departureHeat]);
     }
 
-    if (x < heatMap[0].length - 2)
+    if (col < heatMap[0].length - 2)
     {
-      rightHeat = totalHeat + heatMap[y][x + 2] + heatMap[y][x + 1];
-      nodesToVisit.push([x + 2, y, "horizontal", rightHeat]);
+      let departureHeat = arrivalHeat + heatMap[row][col + 2] + heatMap[row][col + 1];
+      nodesToVisit.push([col + 2, row, "horizontal", departureHeat]);
     }
 
     // < 3 >
-    if (x > 2)
+    if (col > 2)
     {
-      leftHeat = totalHeat + heatMap[y][x - 3] + heatMap[y][x - 2] + heatMap[y][x - 1];
-      nodesToVisit.push([x - 3, y, "horizontal", leftHeat]);
+      let departureHeat = arrivalHeat + heatMap[row][col - 3] + heatMap[row][col - 2] + heatMap[row][col - 1];
+      nodesToVisit.push([col - 3, row, "horizontal", departureHeat]);
     }
 
-    if (x < heatMap[0].length - 3)
+    if (col < heatMap[0].length - 3)
     {
-      rightHeat = totalHeat + heatMap[y][x + 3] + heatMap[y][x + 2] + heatMap[y][x + 1];
-      nodesToVisit.push([x + 3, y, "horizontal", rightHeat]);
+      let departureHeat = arrivalHeat + heatMap[row][col + 3] + heatMap[row][col + 2] + heatMap[row][col + 1];
+      nodesToVisit.push([col + 3, row, "horizontal", departureHeat]);
     }
   }
 
   if (entryDirection === "horizontal")
   {
-    let upHeat, downHeat;
-
     // ^ 1 v
-    if (y > 0)
+    if (row > 0)
     {
-      upHeat = totalHeat + heatMap[y - 1][x];
-      nodesToVisit.push([x, y - 1, "vertical", upHeat]);
+      let departureHeat = arrivalHeat + heatMap[row - 1][col];
+      nodesToVisit.push([col, row - 1, "vertical", departureHeat]);
     }
 
-    if (y < heatMap.length - 1)
+    if (row < heatMap.length - 1)
     {
-      downHeat = totalHeat + heatMap[y + 1][x];
-      nodesToVisit.push([x, y + 1, "vertical", downHeat]);
+      let departureHeat = arrivalHeat + heatMap[row + 1][col];
+      nodesToVisit.push([col, row + 1, "vertical", departureHeat]);
     }
 
     // ^ 2 v
-    if (y > 1)
+    if (row > 1)
     {
-      upHeat = totalHeat + heatMap[y - 2][x] + heatMap[y - 1][x];
-      nodesToVisit.push([x, y - 2, "vertical", upHeat]);
+      let departureHeat = arrivalHeat + heatMap[row - 2][col] + heatMap[row - 1][col];
+      nodesToVisit.push([col, row - 2, "vertical", departureHeat]);
     }
 
-    if (y < heatMap.length - 2)
+    if (row < heatMap.length - 2)
     {
-      downHeat = totalHeat + heatMap[y + 2][x] + heatMap[y + 1][x];
-      nodesToVisit.push([x, y + 2, "vertical", downHeat]);
+      let departureHeat = arrivalHeat + heatMap[row + 2][col] + heatMap[row + 1][col];
+      nodesToVisit.push([col, row + 2, "vertical", departureHeat]);
     }
 
     // ^ 3 v
-    if (y > 2)
+    if (row > 2)
     {
-      upHeat = totalHeat + heatMap[y - 3][x] + heatMap[y - 2][x] + heatMap[y - 1][x];
-      nodesToVisit.push([x, y - 3, "vertical", upHeat]);
+      let departureHeat = arrivalHeat + heatMap[row - 3][col] + heatMap[row - 2][col] + heatMap[row - 1][col];
+      nodesToVisit.push([col, row - 3, "vertical", departureHeat]);
     }
 
-    if (y < heatMap.length - 3)
+    if (row < heatMap.length - 3)
     {
-      downHeat = totalHeat + heatMap[y + 3][x] + heatMap[y + 2][x] + heatMap[y + 1][x];
-      nodesToVisit.push([x, y + 3, "vertical", downHeat]);
+      let departureHeat = arrivalHeat + heatMap[row + 3][col] + heatMap[row + 2][col] + heatMap[row + 1][col];
+      nodesToVisit.push([col, row + 3, "vertical", departureHeat]);
     }
   }
 
