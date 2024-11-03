@@ -7,9 +7,11 @@
 //    - Input 1, 2, 3 steps forward
 
 var fs = require("fs"); // imports fs
+const { MinPriorityQueue } = require("@datastructures-js/priority-queue");
+
 let heatMap;
 let shortestPaths = [];
-let nodesToVisit = [];
+let nodesToVisit;
 
 function DaySeventeen()
 {
@@ -20,7 +22,7 @@ function DaySeventeen()
 
   console.log(heatMap);
 
-  // 2. [NEW] Create data structure to store shortest path to every node
+  // 2. Create data structure to store shortest path to every node
   for (let row = 0; row < heatMap.length; row++)
   {
     let newRow = [];
@@ -31,17 +33,24 @@ function DaySeventeen()
     shortestPaths.push(newRow);
   }
 
-  nodesToVisit.push([0, 0, "vertical", 0]);
-  nodesToVisit.push([0, 0, "horizontal", 0]);
+  nodesToVisit = new MinPriorityQueue({ priority: (element) => element[3] });
+  nodesToVisit.enqueue([0, 0, "vertical", 0]);
+  nodesToVisit.enqueue([0, 0, "horizontal", 0]);
 
-  while (nodesToVisit.length > 0)
+  while (!nodesToVisit.isEmpty())
   {
     if (nodesToVisit.length % 1000 === 0)
     {
       console.log(`> > There are ${nodesToVisit.length} Nodes to visit.`);
     }
-    let nextNode = nodesToVisit.shift();
+    let nextNode = nodesToVisit.dequeue();
+    
     ProcessNode(nextNode);
+
+    if (shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][0] < Infinity || shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][1] < Infinity)
+    {
+      //break;
+    }
   }
 
   let lowestHeat = Math.min(shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][0], shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][1]);
@@ -65,7 +74,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row][col - 1][1])
       {
         shortestPaths[row][col - 1][1] = departureHeat;
-        nodesToVisit.push([col - 1, row, "horizontal", departureHeat]);
+        nodesToVisit.enqueue([col - 1, row, "horizontal", departureHeat]);
       }
     }
 
@@ -75,7 +84,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row][col + 1][1])
       {
         shortestPaths[row][col + 1][1] = departureHeat;
-        nodesToVisit.push([col + 1, row, "horizontal", departureHeat]);
+        nodesToVisit.enqueue([col + 1, row, "horizontal", departureHeat]);
       }
     }
 
@@ -86,7 +95,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row][col - 2][1])
       {
         shortestPaths[row][col - 2][1] = departureHeat;
-        nodesToVisit.push([col - 2, row, "horizontal", departureHeat]);
+        nodesToVisit.enqueue([col - 2, row, "horizontal", departureHeat]);
       }
     }
 
@@ -96,7 +105,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row][col + 2][1])
       {
         shortestPaths[row][col + 2][1] = departureHeat;
-        nodesToVisit.push([col + 2, row, "horizontal", departureHeat]);
+        nodesToVisit.enqueue([col + 2, row, "horizontal", departureHeat]);
       }
     }
 
@@ -107,7 +116,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row][col - 3][1])
       {
         shortestPaths[row][col - 3][1] = departureHeat;
-        nodesToVisit.push([col - 3, row, "horizontal", departureHeat]);
+        nodesToVisit.enqueue([col - 3, row, "horizontal", departureHeat]);
       }
     }
 
@@ -117,7 +126,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row][col + 3][1])
       {
         shortestPaths[row][col + 3][1] = departureHeat;
-        nodesToVisit.push([col + 3, row, "horizontal", departureHeat]);
+        nodesToVisit.enqueue([col + 3, row, "horizontal", departureHeat]);
       }
     }
   }
@@ -131,7 +140,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row - 1][col][0])
       {
         shortestPaths[row - 1][col][0] = departureHeat;
-        nodesToVisit.push([col, row - 1, "vertical", departureHeat]);
+        nodesToVisit.enqueue([col, row - 1, "vertical", departureHeat]);
       }
     }
 
@@ -141,7 +150,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row + 1][col][0])
       {
         shortestPaths[row + 1][col][0] = departureHeat;
-        nodesToVisit.push([col, row + 1, "vertical", departureHeat]);
+        nodesToVisit.enqueue([col, row + 1, "vertical", departureHeat]);
       }
     }
 
@@ -152,7 +161,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row - 2][col][0])
       {
         shortestPaths[row - 2][col][0] = departureHeat;
-        nodesToVisit.push([col, row - 2, "vertical", departureHeat]);
+        nodesToVisit.enqueue([col, row - 2, "vertical", departureHeat]);
       }
     }
 
@@ -162,7 +171,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row + 2][col][0])
       {
         shortestPaths[row + 2][col][0] = departureHeat;
-        nodesToVisit.push([col, row + 2, "vertical", departureHeat]);
+        nodesToVisit.enqueue([col, row + 2, "vertical", departureHeat]);
       }
     }
 
@@ -173,7 +182,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row - 3][col][0])
       {
         shortestPaths[row - 3][col][0] = departureHeat;
-        nodesToVisit.push([col, row - 3, "vertical", departureHeat]);
+        nodesToVisit.enqueue([col, row - 3, "vertical", departureHeat]);
       }
     }
 
@@ -183,7 +192,7 @@ function ProcessNode([col, row, entryDirection, arrivalHeat])
       if (departureHeat < shortestPaths[row + 3][col][0])
       {
         shortestPaths[row + 3][col][0] = departureHeat;
-        nodesToVisit.push([col, row + 3, "vertical", departureHeat]);
+        nodesToVisit.enqueue([col, row + 3, "vertical", departureHeat]);
       }
     }
   }
