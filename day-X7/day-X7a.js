@@ -1,17 +1,21 @@
 // day X7a
-// start 0,0
-// end row - 1, col -1
-// 1. Parse input into the heatmap
-// 2. Create an object to store visited city blocks (X, Y, direction of entry, totalheatloss)
-// 3. Create algorithm to iterate through
-//    - Input 1, 2, 3 steps forward
 
 var fs = require("fs"); // imports fs
-const { MinPriorityQueue } = require("@datastructures-js/priority-queue");
+const { PriorityQueue } = require("@datastructures-js/priority-queue");
 
 let heatMap;
 let shortestPaths = [];
-let nodesToVisit;
+
+let nodesToVisit = new PriorityQueue((a, b) => {
+  if (a[3] > b[3])
+  {
+    return 1;
+  }
+  else
+  {
+    return -1;
+  }
+})
 
 function DaySeventeen()
 {
@@ -20,7 +24,7 @@ function DaySeventeen()
   .replace(/\r/gm, "")
   .split("\n").map(i => i.split("").map(value => parseInt(value, 10)));
 
-  console.log(heatMap);
+  //console.log(heatMap);
 
   // 2. Create data structure to store shortest path to every node
   for (let row = 0; row < heatMap.length; row++)
@@ -32,8 +36,7 @@ function DaySeventeen()
     }
     shortestPaths.push(newRow);
   }
-
-  nodesToVisit = new MinPriorityQueue({ priority: (element) => element[3] });
+  
   nodesToVisit.enqueue([0, 0, "vertical", 0]);
   nodesToVisit.enqueue([0, 0, "horizontal", 0]);
 
