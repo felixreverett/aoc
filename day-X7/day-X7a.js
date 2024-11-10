@@ -1,4 +1,10 @@
 // day X7a
+// 1) create a 2D array of all nodes by parsing the data
+// 2) create a 2D array to store shortest paths to all nodes
+// 3) use a priority queue to process "visits" to nodes
+//    - The "visits" contain the [row, col] of the node being visited, the arrival [direction], and the [total distance] to get there from 0,0
+// 4) process that "arrival" and branch out to all connected nodes only if the total distance to those nodes is lower
+// 5) iterate until priority queue is empty
 
 var fs = require("fs"); // imports fs
 const { PriorityQueue } = require("@datastructures-js/priority-queue");
@@ -19,14 +25,11 @@ let nodesToVisit = new PriorityQueue((a, b) => {
 
 function DaySeventeen()
 {
-  // 1. Parse input
   heatMap = fs.readFileSync("day-X7/input-2023-17.txt", "utf-8")
   .replace(/\r/gm, "")
-  .split("\n").map(i => i.split("").map(value => parseInt(value, 10)));
+  .split("\n")
+  .map(i => i.split("").map(value => parseInt(value, 10)));
 
-  //console.log(heatMap);
-
-  // 2. Create data structure to store shortest path to every node
   for (let row = 0; row < heatMap.length; row++)
   {
     let newRow = [];
@@ -40,6 +43,8 @@ function DaySeventeen()
   nodesToVisit.enqueue([0, 0, "vertical", 0]);
   nodesToVisit.enqueue([0, 0, "horizontal", 0]);
 
+  const startTime = Date.now();
+
   while (!nodesToVisit.isEmpty())
   {
     if (nodesToVisit.length % 1000 === 0)
@@ -49,25 +54,18 @@ function DaySeventeen()
     let nextNode = nodesToVisit.dequeue();
     
     ProcessNode(nextNode);
-
-    if (shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][0] < Infinity || shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][1] < Infinity)
-    {
-      //break;
-    }
   }
+
+  const endTime = Date.now();
+  console.log(`Algorithm complete in ${endTime - startTime} ms.`);
 
   let lowestHeat = Math.min(shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][0], shortestPaths[shortestPaths.length - 1][shortestPaths[0].length - 1][1]);
   console.log(`All nodes have been visited. The shortest path to the bottom-right is ${lowestHeat}`);
 }
 
-// Process a node by "visiting" it
-// Arrive at a new node having already included the heat of that node.
 function ProcessNode([col, row, entryDirection, arrivalHeat])
 {
-  // 1. Check if node already visited from direction
-  //console.log(`Processing node row: ${row}, col: ${col}, direction: ${entryDirection}, arrival heat: ${arrivalHeat}.`);
-  
-  // 2. Queue up next nodes
+  // Queue up next nodes
   if (entryDirection === "vertical")
   {
     // < 1 >
