@@ -3,11 +3,11 @@ var fs = require("fs"); // imports fs
 let input;
 let leftArray = [];
 let rightArray = [];
-let total = 0;
+let similarityScore = 0;
 
 function Solution()
 {
-  input = fs.readFileSync("01/sample-input.txt", "utf-8")
+  input = fs.readFileSync("01/input.txt", "utf-8")
     .replace(/\r/gm, "")
     .split("\n")
     .map(i => i.replace(/\s+/gm, ","))
@@ -16,13 +16,15 @@ function Solution()
   // separate out into two arrays
   for (let i = 0; i < input.length; i++)
   {
-    leftArray.push(parseInt(input[i][0]));
+    let leftValue = parseInt(input[i][0]);
     let rightValue = parseInt(input[i][1]);
-    let rightIndex = rightArray.indexOf(rightValue);
-    if (rightArray.some(i => i[0] === rightValue))
+
+    leftArray.push(leftValue);
+    
+    let rightIndex = rightArray.findIndex(i => i[0] === rightValue);
+    if (rightIndex !== -1)
     {
-      console.log(rightArray.indexOf(rightValue));
-      rightArray[rightArray.indexOf(rightValue)][1]++;
+      rightArray[rightIndex][1]++;
     }
     else
     {
@@ -30,12 +32,16 @@ function Solution()
     }
   }
 
-  leftArray.sort((a, b) => a - b);
-  rightArray.sort((a, b) => a[0] - b[0]);
+  for (let i = 0; i < leftArray.length; i++)
+  {
+    let rightIndex = rightArray.findIndex(a => a[0] === leftArray[i]);
+    if (rightIndex !== -1)
+    {
+      similarityScore += (leftArray[i] * rightArray[rightIndex][1]);
+    }
+  }
 
-  console.log(rightArray);
-
-  console.log(leftArray);
+  console.log(`Your similarity score is ${similarityScore}`);
 }
 
 Solution();
