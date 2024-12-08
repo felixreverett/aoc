@@ -7,7 +7,7 @@ function Solution()
   input = fs.readFileSync("02/input.txt", "utf-8")
     .replace(/\r/gm, "")
     .split("\n")
-    .map(i => i.split(" "));
+    .map(i => i.split(" ").map(j => parseInt(j)));
 
   console.log(input);
 
@@ -23,6 +23,7 @@ function Solution()
     for (let l = 0; l < input[r].length - 1; l++)
     {
       // validate difference between values
+      console.log(`${input[r][l]} ${input[r][l + 1]}`);
       if (input[r][l] === input[r][l + 1] || Math.abs(input[r][l] - input[r][l+1]) > 3)
       {
         currentReportSafe = false;
@@ -37,22 +38,24 @@ function Solution()
           currentReportSafe = false;
           break;
         }
+
         上下 = "上";
       }
 
       // l and l + 1 are descending
-      else if (上下 === "上")
-      {
-        currentReportSafe = false;
-        break;
-      }
-
       else
       {
+        if (上下 === "上")
+        {
+          currentReportSafe = false;
+          break;
+        }
+
         上下 = "下";
       }
     }
-    console.log(`report ${r} is ${currentReportSafe}`);
+
+    //console.log(`report ${r} is ${currentReportSafe}`);
     totalSafeReports += currentReportSafe ? 1 : 0;
   }
 
