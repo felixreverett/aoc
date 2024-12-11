@@ -4,19 +4,16 @@ let input;
 
 function Solution()
 {
-  input = fs.readFileSync("02/sample-input.txt", "utf-8")
+  input = fs.readFileSync("02/input.txt", "utf-8")
     .replace(/\r/gm, "")
     .split("\n")
     .map(i => i.split(" ").map(j => parseInt(j)));
-
-  console.log(input);
 
   let totalSafeReports = 0;
 
   // check every record
   for (let r = 0; r < input.length; r++)
   {
-    console.log(r);
     totalSafeReports += ProcessReport(input[r]) ? 1 : 0;
   }
 
@@ -29,10 +26,11 @@ function ProcessReport(report)
   // process every report and its permutations. If at least one is valid, return
   if (ProcessSubReport(report)) { return true; }
 
-  for (let sr = 0; sr < report.length - 1; sr++)
+  for (let sr = 0; sr < report.length; sr++)
   {
     let subReport = report.slice(0, sr)
-      .concat(report.splice(sr + 1));
+      .concat(report.slice(sr + 1));
+
     console.log(`> Processing subreport ${sr + 1}/${report.length}: ${subReport}`);
 
     if (ProcessSubReport(subReport)) { return true; }
