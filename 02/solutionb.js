@@ -31,13 +31,9 @@ function ProcessReport(report)
     let subReport = report.slice(0, sr)
       .concat(report.slice(sr + 1));
 
-    console.log(`> Processing subreport ${sr + 1}/${report.length}: ${subReport}`);
-
     if (ProcessSubReport(subReport)) { return true; }
-    console.log(`> > Invalid`);
   }
-
-  console.log("no reports variants were true");
+  
   return false;
 }
 
@@ -46,18 +42,13 @@ function ProcessSubReport(report)
   let currentReportSafe = true;
   let 上下 = "unknown";
 
-  // confirm levels are safe or unsafe
   for (let l = 0; l < report.length - 1; l++)
   {
-    // validate difference between values
-    
     if (report[l] === report[l + 1] || Math.abs(report[l] - report[l+1]) > 3)
     {
       currentReportSafe = false;
       break;
     }
-
-    // l and l + 1 are ascending
     if (report[l] < report[l + 1])
     {
       if (上下 === "下")
@@ -68,8 +59,6 @@ function ProcessSubReport(report)
 
       上下 = "上";
     }
-
-    // l and l + 1 are descending
     else
     {
       if (上下 === "上")
@@ -81,7 +70,6 @@ function ProcessSubReport(report)
       上下 = "下";
     }
   }
-
   return currentReportSafe;
 }
 
