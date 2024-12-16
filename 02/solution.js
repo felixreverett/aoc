@@ -9,7 +9,7 @@ function Solution()
     .split("\n")
     .map(i => i.split(" ").map(j => parseInt(j)));
 
-  console.log(input);
+  //console.log(input);
 
   let totalSafeReports = 0;
 
@@ -23,7 +23,7 @@ function Solution()
     for (let l = 0; l < input[r].length - 1; l++)
     {
       // validate difference between values
-      console.log(`${input[r][l]} ${input[r][l + 1]}`);
+      //console.log(`${input[r][l]} ${input[r][l + 1]}`);
       if (input[r][l] === input[r][l + 1] || Math.abs(input[r][l] - input[r][l+1]) > 3)
       {
         currentReportSafe = false;
