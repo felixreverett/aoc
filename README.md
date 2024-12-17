@@ -4,7 +4,7 @@
 Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase my experience as a developer!
 
 ### Summary of puzzles
-1. Simple array processing (JavaScript 6ms | Go: 0.8ms)
+1. Simple array processing
 2. Validating ascending and descending sequences
 3. Regex
 4. Validating patterns in 2D arrays
@@ -26,3 +26,4 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 03a | 3.2ms       |           |
 | 03b | 3.1ms       |           |
 | 04a | 4.8ms       |           |
+| 04b | 4.1ms       |           |
