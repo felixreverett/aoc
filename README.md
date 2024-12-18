@@ -8,6 +8,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 2. Validating ascending and descending sequences
 3. Regex
 4. Validating patterns in 2D arrays
+5. Validating array sequences
 
 ### Commit messages
 - 🧩 Solution
@@ -27,3 +28,4 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 03b | 3.1ms       |           |
 | 04a | 4.8ms       |           |
 | 04b | 4.1ms       |           |
+| 05a | 20.0ms      |           |
