@@ -1,5 +1,4 @@
 var fs = require("fs"); // imports fs
-console.time('a');
 
 let rulesInput, updatesInput;
 
@@ -13,8 +12,6 @@ function Solution()
 
   let rules = rulesInput.split("\n")
     .map(i => i.split("|").map(j => parseInt(j)));
-
-  //console.log(rules); //debug
   
   let updates = updatesInput.split("\n")
     .map(i => i.split(",").map(j => parseInt(j)));
@@ -35,20 +32,17 @@ function Solution()
         if (ruleMustNotOccurBefore.includes(updates[update][j]))
         {
           updateIsValid = false;
-          //console.log(`Update ${update} is invalid`); //debug
         }
       }
     }
 
     if (updateIsValid)
     {
-      //console.log(`Update ${update} is valid`); //debug
       total += updates[update][Math.floor((updates[update].length / 2))];
     }
   }
 
   console.log(total);
-  console.timeEnd('a');
 }
 
 Solution();
