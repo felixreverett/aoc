@@ -6,65 +6,44 @@ let total = 0;
 
 function IsUpdateValid(update)
 {
-  for (let i = 0; i < update.length - 1; i++)
+  for (let i = 1; i < update.length; i++)
   {
-    if (rankingMap[update[i]] < rankingMap[update[i + 1]])
+    for (let j = i - 1; j >= 0; j--)
     {
-      console.log(`update is invalid because ${update[i + 1]} comes after ${update[i]}`);
-      return false;
+      if (rankingMap.has(update[i]) && rankingMap.get(update[i]).includes(update[j]))
+      {
+        return false;
+      }
     }
   }
   return true;
 }
 
-function GenerateRankingMap(rules)
+function DefineRankingMap(rules)
 {
   let map = new Map();
   for (let rule = 0; rule < rules.length; rule++)
   {
     let [key, value] = rules[rule];
-    if (!map.has(key))
-    {
-      map.set(key, [value]);
-    }
-    else
-    {
-      map.get(key).push(value);
-    }
+    if (!map.has(key)) map.set(key, [value]);
+    else map.get(key).push(value);
   }
-  console.log(map); //debug
-
-  let rankingMap = {};
-  let rank = 1;
-
-  function rankKey(key)
-  {
-    if (rankingMap[key] !== undefined) return; // Already ranked
-    
-    if (map.has(key))
-    {
-      for (let value of map.get(key))
-      {
-        rankKey(value);
-      }
-    }
-
-    rankingMap[key] = rank++;
-  }
-
-  for (let [key] of map.entries())
-  {
-    rankKey(key);
-  }
-
-  console.log(rankingMap); //debug
-  return rankingMap;
+  return map;
 }
 
 function SortUpdate(update)
 {
-  console.log("Sorting update");
-  return update.sort((a, b) => (rankingMap[a] || Infinity) - (rankingMap[b] || Infinity));
+  for (let i = 1; i < update.length - 1; i++)
+  {
+    for (let j = 0; j < update.length - i; j++)
+    {
+      if (rankingMap.has(update[j + 1]) && rankingMap.get(update[j + 1]).includes(update[j]))
+      {
+        [update[j], update[j + 1]] = [update[j + 1], update[j]];
+      }
+    }
+  }
+  return update;
 }
 
 function Solution()
@@ -75,7 +54,8 @@ function Solution()
 
   let rules = rulesInput.split("\n")
     .map(i => i.split("|").map(j => parseInt(j)));
-  rankingMap = GenerateRankingMap(rules);
+
+  rankingMap = DefineRankingMap(rules);
   
   updates = updatesInput.split("\n")
     .map(i => i.split(",").map(j => parseInt(j)));
