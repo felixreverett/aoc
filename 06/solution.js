@@ -41,7 +41,6 @@ function Solution()
   let visitedArea = mappedArea.map(row => row.slice());
 
   let guardPosition = FindGuard(mappedArea); // [row, col, direction]
-  console.log(guardPosition); //debug
 
   let guardInArray = true;
 
@@ -72,7 +71,6 @@ function Solution()
       || guardPosition[1] + nextPos[1] < 0
       || guardPosition[1] + nextPos[1] > visitedArea[guardPosition[0]].length - 1)
     {
-      console.log(`Guard moved out of bounds because position was ${guardPosition}`); //debug
       guardInArray = false;
     }
 
@@ -99,7 +97,6 @@ function Solution()
     // calculate next position without a turn
     else
     {
-      console.log("Moved with no obstacle"); //debug
       mappedArea[guardPosition[0]][guardPosition[1]] = ".";
       guardPosition[0] += nextPos[0];
       guardPosition[1] += nextPos[1];
@@ -108,7 +105,6 @@ function Solution()
   }
 
   let visitedMapPositions = CalculateVisitedMapPositions(visitedArea);
-  console.log(visitedArea); //debug
   console.log(`${visitedMapPositions} map positions were visited.`);
 }
 
