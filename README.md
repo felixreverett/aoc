@@ -30,3 +30,4 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 04b | 4.1ms       |           |
 | 05a | 20.0ms      |           |
 | 05b | 6.9ms       |           |
+| 06a | 5.7ms       |           |
