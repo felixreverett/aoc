@@ -86,6 +86,85 @@ function FindVisitedArea(mappedArea)
   return visitedArea;
 }
 
+function DetectLoopNew(mappedArea, guardPosition)
+{
+  //let guardPosition = FindGuard(mappedArea); // this might not work if I reconfigured the structure of mappedArea
+  let guardInArray = true;
+  let nextPosition = [];
+
+  while (guardInArray)
+  {
+    // 1. check if cell already visited from same direction
+    if (mappedArea[guardPosition[0]][guardPosition[1]].includes(guardPosition[2]))
+    {
+      console.log(`> True that ${mappedArea[guardPosition[0]][guardPosition[1]]} includes ${guardPosition[2]}, which has already been visited`);
+      console.log(`> This happened at ${guardPosition[0]}, ${guardPosition[1]}`);
+      return true; // loop found
+    }
+    
+    // 2. "visit" that cell
+    else
+    {
+      mappedArea[guardPosition[0]][guardPosition[1]].push(guardPosition[2]);
+    }
+
+    // 3. prepare next cell to visit
+    switch (guardPosition[2])
+    {
+      case "^":
+        nextPosition = [-1, 0];
+        break;
+      case ">":
+        nextPosition = [0,  1];
+        break;
+      case "v":
+        nextPosition = [1,  0];
+        break;
+      case "<":
+        nextPosition = [0, -1];
+        break;
+    }
+
+    // 4. check if next cell would be in area bounds
+    if ( guardPosition[0] + nextPosition[0] < 0
+      || guardPosition[0] + nextPosition[0] > mappedArea.length - 1
+      || guardPosition[1] + nextPosition[1] < 0
+      || guardPosition[1] + nextPosition[1] > mappedArea[guardPosition[0]].length - 1)
+    {
+      console.log(`> No loops were found & the guard exited the bounds of the area at ${guardPosition[0]}. ${guardPosition[1]}.`); //debug
+      return false; // no loop found
+    }
+
+    // 5. Check if next cell would be an obstacle
+    if (mappedArea[guardPosition[0] + nextPosition[0]][guardPosition[1] + nextPosition[1]][0] === "#")
+    {
+      // 5a. If an obstacle, update guardPosition[2]
+      switch (guardPosition[2])
+      {
+        case "^":
+        guardPosition[2] = ">";
+        break;
+      case ">":
+        guardPosition[2] = "v";
+        break;
+      case "v":
+        guardPosition[2] = "<";
+        break;
+      case "<":
+        guardPosition[2] = "^";
+        break;
+      }
+    }
+
+    // 6. If not an obstacle, update guardPosition[0] and guardPosition[1]
+    else
+    {
+      guardPosition[0] += nextPosition[0];
+      guardPosition[1] += nextPosition[1];
+    }
+  }
+}
+
 function DetectLoop(array, guardPosition)
 {
   let guardInArray = true; let initialCheck = true;
@@ -190,7 +269,7 @@ function Solution()
         newArray[row][col] = ["#"];
         console.log(`Calculating valid loop with obstacle at ${row}, ${col}.`);
 
-        totalValidLoops += DetectLoop(newArray, guardStartPosition.slice()) ? 1 : 0;
+        totalValidLoops += DetectLoopNew(newArray, guardStartPosition.slice()) ? 1 : 0;
       }
     }
   }
