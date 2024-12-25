@@ -1,4 +1,5 @@
 var fs = require("fs"); // imports fs
+console.time('a');
 
 function FindGuard(array)
 {
@@ -15,9 +16,10 @@ function FindGuard(array)
   throw "Error: no guard found in array";
 }
 
-function FindVisitedArea(mappedArea)
+function FindVisitedArea(array)
 {
-  let visitedArea = mappedArea.map(row => row.slice());
+  let mappedArea = array.map(row => row.slice());
+  let visitedArea = array.map(row => row.slice());
 
   let guardPosition = FindGuard(mappedArea); // [row, col, direction]
 
@@ -97,8 +99,6 @@ function DetectLoopNew(mappedArea, guardPosition)
     // 1. check if cell already visited from same direction
     if (mappedArea[guardPosition[0]][guardPosition[1]].includes(guardPosition[2]))
     {
-      console.log(`> True that ${mappedArea[guardPosition[0]][guardPosition[1]]} includes ${guardPosition[2]}, which has already been visited`);
-      console.log(`> This happened at ${guardPosition[0]}, ${guardPosition[1]}`);
       return true; // loop found
     }
     
@@ -131,7 +131,6 @@ function DetectLoopNew(mappedArea, guardPosition)
       || guardPosition[1] + nextPosition[1] < 0
       || guardPosition[1] + nextPosition[1] > mappedArea[guardPosition[0]].length - 1)
     {
-      console.log(`> No loops were found & the guard exited the bounds of the area at ${guardPosition[0]}. ${guardPosition[1]}.`); //debug
       return false; // no loop found
     }
 
@@ -165,99 +164,18 @@ function DetectLoopNew(mappedArea, guardPosition)
   }
 }
 
-function DetectLoop(array, guardPosition)
-{
-  let guardInArray = true; let initialCheck = true;
-  console.log(guardPosition);
-
-  while (guardInArray)
-  {
-    // 1. check if current position would be out of bounds (can't be a loop, so return false)
-    if ( guardPosition[0] < 0
-      || guardPosition[0] > array.length - 1
-      || guardPosition[1] < 0
-      || guardPosition[1] > array[guardPosition[0]].length - 1)
-    {
-      console.log(`> No loops were found as the guard exited the bounds.`); //debug
-      return false; // no loop found
-    }
-
-    // 2. check if current position has already been visited
-    if (!initialCheck)
-    {
-      if (array[guardPosition[0]][guardPosition[1]].includes(guardPosition[2]))
-      {
-        console.log(`> True that ${array[guardPosition[0]][guardPosition[1]]} includes ${guardPosition[2]}, which has already been visited`);
-        console.log(`> This happened at ${guardPosition[0]}, ${guardPosition[1]}`);
-        return true; // loop found
-      }
-    
-      // if not, then update array to "visit" it
-      else
-      {
-        array[guardPosition[0]][guardPosition[1]].push(guardPosition[2]);
-      }
-    }
-
-    initialCheck = false;
-
-    // 3. check is current position is an obstacle
-    if (array[guardPosition[0]][guardPosition[1]][0] === "#")
-    {
-      switch (guardPosition[2])
-      {
-        case "^":
-        guardPosition[2] = ">";
-        break;
-      case ">":
-        guardPosition[2] = "v";
-        break;
-      case "v":
-        guardPosition[2] = "<";
-        break;
-      case "<":
-        guardPosition[2] = "^";
-        break;
-      }
-      continue;
-    }
-
-    // 4. update guard position if current position is not an obstacle
-    switch (guardPosition[2])
-    {
-      case "^":
-        guardPosition[0]--;
-        break;
-      case ">":
-        guardPosition[1]++;
-        break;
-      case "v":
-        guardPosition[0]++;
-        break;
-      case "<":
-        guardPosition[1]--;
-        break;
-    }
-  }
-}
-
 function Solution()
 {
-  mappedArea = fs.readFileSync("06/sample-input.txt", "utf-8")
+  mappedArea = fs.readFileSync("06/input.txt", "utf-8")
     .replace(/\r/gm, "")
     .split("\n")
     .map(line => line.split(""));
 
   let guardStartPosition = FindGuard(mappedArea).slice();
-  console.log(guardStartPosition);
 
   let visitedArea = FindVisitedArea(mappedArea);
 
   let totalValidLoops = 0;
-
-  //let newArray = mappedArea.map(row => row.slice()).map(row => row.map(cell => [cell]));
-  //newArray[3][4] = ["#"];
-  //console.log(`Calculating valid loop with obstacle at ${3}, ${4}.`);
   
   for (let row = 0; row < visitedArea.length; row++)
   {
@@ -267,13 +185,15 @@ function Solution()
       {
         let newArray = mappedArea.map(r => r.slice()).map(r => r.map(cell => [cell]));
         newArray[row][col] = ["#"];
-        console.log(`Calculating valid loop with obstacle at ${row}, ${col}.`);
+        newArray[guardStartPosition[0]][guardStartPosition[1]] = ["."];
+        //console.log(`Calculating valid loop with obstacle at ${row}, ${col}.`);
 
         totalValidLoops += DetectLoopNew(newArray, guardStartPosition.slice()) ? 1 : 0;
       }
     }
   }
   console.log(`${totalValidLoops} valid loops were found.`);
+  console.timeEnd('a');
 }
 
 Solution();
