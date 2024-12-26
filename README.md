@@ -4,7 +4,7 @@
 Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase my experience as a developer!
 
 ### Summary of puzzles
-1. Simple array processing
+1. Simple array processing, maps (Go)
 2. Validating ascending and descending sequences
 3. Regex
 4. Validating patterns in 2D arrays
@@ -22,7 +22,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | Day | JavaScript  | Go        |
 | --- | ---------:  | --------: |
 | 01a | 6ms         | **0.8ms** |
-| 01b | 10.4ms      |           |
+| 01b | 10.4ms      | **2.7ms** |
 | 02a | 4.2ms       |           |
 | 02b | 4.9ms       |           |
 | 03a | 3.2ms       |           |
