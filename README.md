@@ -9,7 +9,9 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 3. Regex
 4. Validating patterns in 2D arrays
 5. Validating array sequences & defining sequence order
-6. FInding looping cycles in a 2d array
+6. Finding looping cycles in a 2d array
+7. Using recursion to find all valid combinations of numbers.
+    a. Using BigInt (js)
 
 ### Commit messages
 - 🧩 Solution
@@ -34,3 +36,4 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 06a | 5.7ms       |           |
 | 06b | 3,500ms     |           |
 | 07a | 25ms        |           |
+| 07b | 2,600ms     |           |
