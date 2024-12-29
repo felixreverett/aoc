@@ -9,7 +9,7 @@ function TestEquation(testValue, aggregateValue, calibrationValues) //int, int, 
     return (
       testValue === aggregateValue * calibrationValues[0] ||
       testValue === aggregateValue + calibrationValues[0] ||
-      testValue === aggregateValue * BigInt((10 ** Math.ceil(Math.log10(Number(calibrationValues[0]))))) + calibrationValues[0]
+      testValue === +(aggregateValue + "" + calibrationValues[0])
     );
   }
   else
@@ -18,7 +18,7 @@ function TestEquation(testValue, aggregateValue, calibrationValues) //int, int, 
     return (
       TestEquation(testValue, aggregateValue * calibrationValues[0], calibrationValues.slice(1)) ||
       TestEquation(testValue, aggregateValue + calibrationValues[0], calibrationValues.slice(1)) ||
-      TestEquation(testValue, aggregateValue * BigInt((10 ** (1 + Math.floor(Math.log10(Number(calibrationValues[0])))))) + calibrationValues[0], calibrationValues.slice(1))
+      TestEquation(testValue, +(aggregateValue + "" + calibrationValues[0]), calibrationValues.slice(1))
     );
   }
 }
@@ -29,16 +29,15 @@ function Solution()
     .replace(/\r/gm, "")
     .replace(/:\s/gm, " ")
     .split("\n")
-    .map(line => line.split(" ").map(number => BigInt(number)));
+    .map(line => line.split(" ").map(number => parseInt(number)));
 
   let total = BigInt(0);
 
   for (let e = 0; e < calibrationEquations.length; e++)
   {
     let testValue = calibrationEquations[e][0];
-    console.log(testValue);
     let calibrationValues = calibrationEquations[e].slice(1);
-    if (TestEquation(testValue, calibrationValues[0], calibrationValues.slice(1))) total += testValue;
+    if (TestEquation(testValue, calibrationValues[0], calibrationValues.slice(1))) total += BigInt(testValue);
   }
 
   console.timeEnd('a');
@@ -46,5 +45,3 @@ function Solution()
 }
 
 Solution();
-
-// 165271863194163 too low
