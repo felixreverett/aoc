@@ -25,7 +25,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | --- | ---------:  | --------: |
 | 01a | 6ms         | **0.8ms** |
 | 01b | 10.4ms      | **2.7ms** |
-| 02a | 4.2ms       |           |
+| 02a | 4.2ms       | **1.5ms** |
 | 02b | 4.9ms       |           |
 | 03a | 3.2ms       |           |
 | 03b | 3.1ms       |           |
@@ -37,3 +37,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 06b | 3,500ms     |           |
 | 07a | 25ms        |           |
 | 07b | 2,600ms     |           |
+
+### What have I learnt about Go
+- Go has no ternary operators 😬
+- Immediately Invoked Function Expressions (IIFE) are a way to cleanly process an input through multiple functions without nesting functions (verbose) or method chaining (not supported in Go).
