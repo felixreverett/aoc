@@ -38,6 +38,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 07a | 25ms        |           |
 | 07b | 2,600ms     |           |
 | 08a | 3.5ms       |           |
+| 08b | 1.7ms       |           |
 
 ### What have I learnt about Go
 - Go has no ternary operators 😬
