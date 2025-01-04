@@ -40,6 +40,9 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 08a | 3.5ms       |           |
 | 08b | 1.7ms       |           |
 
+### What have I learnt about JavaScript
+- `Array.forEach(i => { /*code*/ })` for efficiently iterating through arrays (see day 8)
+
 ### What have I learnt about Go
 - Go has no ternary operators 😬
 - Immediately Invoked Function Expressions (IIFE) are a way to cleanly process an input through multiple functions without nesting functions (verbose) or method chaining (not supported in Go).
