@@ -39,9 +39,10 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 07b | 2,600ms     |           |
 | 08a | 3.5ms       |           |
 | 08b | 1.7ms       |           |
+| 09a | 7.3ms       |           |
 
 ### What have I learnt about JavaScript
-- `Array.forEach(i => { /*code*/ })` for efficiently iterating through arrays (see day 8)
+- Using forEach (e.g. `Array.forEach(i => { /*code*/ })`) for efficiently iterating through arrays (see day 8)
 
 ### What have I learnt about Go
 - Go has no ternary operators 😬
