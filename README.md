@@ -14,6 +14,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
     a. Using BigInt (js)
 8. Populating 2D arrays
 9. Disk defragmentation
+10. Traversing a grid with a queue
 
 ### Commit messages
 - 🧩 Solution
@@ -43,9 +44,10 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 08b | 1.7ms       |           |
 | 09a | 7.3ms       |           |
 | 09b | 315ms       |           |
+| 10a | 6.8ms       |           |
 
 ### What have I learnt about JavaScript
-- Using forEach (e.g. `Array.forEach(i => { /*code*/ })`) for efficiently iterating through arrays (see day 8)
+- Using forEach (e.g. `Array.forEach(i => { /*code*/ })`) for efficiently iterating through arrays (see day 8, 10)
 
 ### What have I learnt about Go
 - Go has no ternary operators 😬
