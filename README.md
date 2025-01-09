@@ -45,6 +45,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 09a | 7.3ms       |           |
 | 09b | 315ms       |           |
 | 10a | 6.8ms       |           |
+| 10b | 3.0ms       |           |
 
 ### What have I learnt about JavaScript
 - Using forEach (e.g. `Array.forEach(i => { /*code*/ })`) for efficiently iterating through arrays (see day 8, 10)
