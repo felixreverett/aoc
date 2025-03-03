@@ -24,10 +24,10 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 
 ### Time durations
 
-| Day | JavaScript  | Go        | Day | JavaScript | Go       |
-| --- | ---------:  | --------: | --- | ---------: | -------: |
-| 01a | 6ms         | **0.8ms** | 11a | 21.3ms     |          |
-| 01b | 10.4ms      | **2.7ms** | 11b | 57ms       |          |
+| Day | JavaScript  | Go        | Day | JavaScript | Go        |
+| --- | ---------:  | --------: | --- | ---------: | --------: |
+| 01a | 6ms         | **0.8ms** | 11a | 21.3ms     | **3.5ms** |
+| 01b | 10.4ms      | **2.7ms** | 11b | 57.0ms     |           |
 | 02a | 4.2ms       | **1.5ms** |
 | 02b | 4.9ms       | **1.7ms** |
 | 03a | 3.2ms       |           |
