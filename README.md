@@ -15,6 +15,8 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 8. Populating 2D arrays
 9. Disk defragmentation
 10. Traversing a grid with a queue
+11. Memoisation and recursion
+12. Queues and Sets (for O(1) lookup)
 
 ### Commit messages
 - 🧩 Solution
@@ -28,7 +30,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | --- | ---------:  | --------: | --- | ---------: | ---------: |
 | 01a | 6ms         | **0.8ms** | 11a | 21.3ms     | **3.5ms**  |
 | 01b | 10.4ms      | **2.7ms** | 11b | 57.0ms     | **26.5ms** |
-| 02a | 4.2ms       | **1.5ms** |
+| 02a | 4.2ms       | **1.5ms** | 12a | 13.7ms     |            |
 | 02b | 4.9ms       | **1.7ms** |
 | 03a | 3.2ms       |           |
 | 03b | 3.1ms       |           |
