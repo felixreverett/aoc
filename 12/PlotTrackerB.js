@@ -3,7 +3,7 @@ class PlotTrackerB
     constructor()
     {
         this.type = "none"; // str
-        this.sides = new Set(); // int
+        this.sides = 0;     // int
         this.area = 0;      // int
     }
 }

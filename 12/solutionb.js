@@ -2,15 +2,14 @@ var fs = require("fs"); // imports fs
 const PlotTracker = require("./PlotTrackerB.js");
 console.time('a');
 const cardinals = [[-1, 0], [0, 1], [1, 0], [0, -1]];
-
-// Planned solution:
-// > Every time a perimeter would be found, determine if it's vertical or horizontal,
-//   and then check if it's in the sides Set under the form v/h + a row or col value
-// > If it's not in the Set, add it.
+const cornerCardinals = [
+  [-1, -1], [-1, 0], [-1, 1],
+  [ 0, -1],          [ 0, 1],
+  [ 1, -1], [ 1, 0], [ 1, 1]];
 
 function Solution()
 {
-  let plotGrid = fs.readFileSync("12/input.txt", "utf-8")
+  let plotGrid = fs.readFileSync("12/sample-input.txt", "utf-8")
     .replace(/\r/gm, "")
     .split("\n")
     .map(row => row.split(""));
@@ -33,8 +32,9 @@ function Solution()
       plotTracker.type = plotGrid[r][c];
 
       TraversePlot(r, c, plotTracker, plotGrid, visited);
+      console.log(`Calculated new plot of type ${plotTracker.type}, sides ${plotTracker.sides}, and area ${plotTracker.area}`)
 
-      total += plotTracker.sides.length * plotTracker.area;
+      total += plotTracker.sides * plotTracker.area;
     }
   }
   
@@ -55,32 +55,86 @@ function TraversePlot(row, col, plotTracker, plotGrid, visited)
       continue;
     }
 
-    // check all adjacent cells
+    // 1. Find adjacent cells
     for (const [dr, dc] of cardinals)
     {
       const newRow = r + dr;
       const newCol = c + dc;
 
-      // if the adjacent cell is in bounds
-      if (IsInBounds(newRow, newCol, plotGrid))
+      if (IsInBounds(newRow, newCol, plotGrid) && plotGrid[newRow][newCol] === plotTracker.type)
       {
-        // if the adjacent cell is of the same type, add to queue
-        if (plotGrid[newRow][newCol] === plotTracker.type)
-        {
-          queue.push([newRow, newCol]);
-        }
-        else
-        {
-          plotTracker.perimeter++;
-        }
-      }
-      else
-      {
-        plotTracker.perimeter++;
+        queue.push([newRow, newCol]);
       }
     }
 
-    // No matter the results, increment area and mark as visited
+    // 2. Calculate number of edges (sides) at that cell
+    let adjacents = [
+      [false,false,false],
+      [false,false,false],
+      [false,false,false]];
+
+    for (const [dr, dc] of cornerCardinals)
+    {
+      const newRow = r + dr;
+      const newCol = c + dc;
+
+      adjacents[1 + dr][1 + dc] = IsInBounds(newRow, newCol, plotGrid) && plotGrid[newRow][newCol] === plotTracker.type;
+      //console.log("Calculating adjacents");
+    }
+    console.log(adjacents);
+    // ^<
+    console.log(`> Checking ^<`);
+    if (!adjacents[1][0] && !adjacents[0][1])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+    else if (!adjacents[0][0] && adjacents[1][0] && adjacents[0][1])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+
+    // ^>
+    console.log(`> Checking ^>`);
+    if (!adjacents[0][1] && !adjacents[1][2])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+    else if (!adjacents[0][2] && adjacents[0][1] && adjacents[1][2])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+
+    // v>
+    console.log(`> Checking v>`);
+    if (!adjacents[2][1] && !adjacents[1][2])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+    else if (!adjacents[2][2] && adjacents[2][1] && adjacents[1][2])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+
+    // v<
+    console.log(`> Checking v<`);
+    if (!adjacents[2][1] && !adjacents[1][0])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+    else if (!adjacents[2][0] && adjacents[2][1] && adjacents[1][0])
+    {
+      console.log("> > Found 1 side");
+      plotTracker.sides++;
+    }
+
+    // 3. No matter the results, increment area and mark as visited
     plotTracker.area++;
     visited.add(`${r}-${c}`);
   }
