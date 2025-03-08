@@ -9,7 +9,7 @@ const cornerCardinals = [
 
 function Solution()
 {
-  let plotGrid = fs.readFileSync("12/sample-input.txt", "utf-8")
+  let plotGrid = fs.readFileSync("12/input.txt", "utf-8")
     .replace(/\r/gm, "")
     .split("\n")
     .map(row => row.split(""));
@@ -32,14 +32,13 @@ function Solution()
       plotTracker.type = plotGrid[r][c];
 
       TraversePlot(r, c, plotTracker, plotGrid, visited);
-      console.log(`Calculated new plot of type ${plotTracker.type}, sides ${plotTracker.sides}, and area ${plotTracker.area}`)
 
       total += plotTracker.sides * plotTracker.area;
     }
   }
   
   console.timeEnd('a');
-  console.log(`Day 12a solution: ${total}`);
+  console.log(`Day 12b solution: ${total}`);
 }
 
 function TraversePlot(row, col, plotTracker, plotGrid, visited)
@@ -79,58 +78,44 @@ function TraversePlot(row, col, plotTracker, plotGrid, visited)
       const newCol = c + dc;
 
       adjacents[1 + dr][1 + dc] = IsInBounds(newRow, newCol, plotGrid) && plotGrid[newRow][newCol] === plotTracker.type;
-      //console.log("Calculating adjacents");
     }
-    console.log(adjacents);
     // ^<
-    console.log(`> Checking ^<`);
     if (!adjacents[1][0] && !adjacents[0][1])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
     else if (!adjacents[0][0] && adjacents[1][0] && adjacents[0][1])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
 
     // ^>
-    console.log(`> Checking ^>`);
     if (!adjacents[0][1] && !adjacents[1][2])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
     else if (!adjacents[0][2] && adjacents[0][1] && adjacents[1][2])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
 
     // v>
-    console.log(`> Checking v>`);
     if (!adjacents[2][1] && !adjacents[1][2])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
     else if (!adjacents[2][2] && adjacents[2][1] && adjacents[1][2])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
 
     // v<
-    console.log(`> Checking v<`);
     if (!adjacents[2][1] && !adjacents[1][0])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
     else if (!adjacents[2][0] && adjacents[2][1] && adjacents[1][0])
     {
-      console.log("> > Found 1 side");
       plotTracker.sides++;
     }
 
