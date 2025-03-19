@@ -10,9 +10,10 @@ import (
 
 func main() {
 	Solution()
+	SolutionB()
 }
 
-func ProcessClawMachine(clawMachineString []string) int {
+func ProcessClawMachine(clawMachineString []string, partB bool) int {
 	stringButtonA, stringButtonB, stringPrize := clawMachineString[0], clawMachineString[1], clawMachineString[2]
 	Ax, Ay := func() (int, int) {
 		parsed := strings.Split(strings.ReplaceAll(stringButtonA, "Button A: X+", ""), ", Y+")
@@ -41,6 +42,11 @@ func ProcessClawMachine(clawMachineString []string) int {
 		}
 		return integised[0], integised[1]
 	}()
+
+	if partB {
+		Px += 10000000000000
+		Py += 10000000000000
+	}
 
 	det := Ax*By - Bx*Ay
 
@@ -82,11 +88,42 @@ func Solution() {
 	total := 0
 
 	for _, machine := range clawMachines {
-		total += ProcessClawMachine(machine)
+		total += ProcessClawMachine(machine, false)
 	}
 
 	fmt.Printf("13a solution: %d\n", total)
 
 	elapsed := time.Since(start)
 	fmt.Printf("Elapsed time for 13a: %s\n", elapsed)
+}
+
+func SolutionB() {
+	start := time.Now()
+
+	content, err := os.ReadFile("13/input.txt")
+	if err != nil {
+		fmt.Printf("Failed to read file: %s\n", err)
+		return
+	}
+
+	clawMachines := func() [][]string {
+		input := strings.ReplaceAll(string(content), "\r", "")
+		splitInput := strings.Split(input, "\n\n")
+		var clawMachines [][]string
+		for _, row := range splitInput {
+			clawMachines = append(clawMachines, strings.Split(row, "\n"))
+		}
+		return clawMachines
+	}()
+
+	total := 0
+
+	for _, machine := range clawMachines {
+		total += ProcessClawMachine(machine, true)
+	}
+
+	fmt.Printf("13b solution: %d\n", total)
+
+	elapsed := time.Since(start)
+	fmt.Printf("Elapsed time for 13b: %s\n", elapsed)
 }
