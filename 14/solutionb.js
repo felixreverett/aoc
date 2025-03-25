@@ -2,47 +2,91 @@ var fs = require("fs"); // imports fs
 console.time('a');
 
 /* Plan 14b
-> 
+> Chinese Remainder Theorem
 */
 
-function ProcessRobot(robot, mapWidth, mapHeight, seconds)
+function SimulateSecond(CorR, robots, modulo)
 {
-  let [pCol, pRow, vCol, vRow] = robot;
+  let position = CorR ? 0 : 1;
+  let velocity = CorR ? 2 : 3;
 
-  let finalRow = (pRow + seconds * vRow ) % mapHeight;
-  let adjustedFinalRow = finalRow < 0 ? finalRow + mapHeight : finalRow;
-  let finalCol = (pCol + seconds * vCol ) % mapWidth;
-  let adjustedFinalCol = finalCol < 0 ? finalCol + mapWidth : finalCol;
+  let newRobots = robots.map(robot => [...robot]);
 
-  console.log(`Final position for ${pRow}, ${pCol} is ${finalRow}, ${finalCol}. Adjusted to ${adjustedFinalRow}, ${adjustedFinalCol}.`);
+  newRobots.forEach((robot) => {
+    let newPosition = (robot[position] + robot[velocity]) % modulo;
+    robot[position] = newPosition < 0 ? newPosition + modulo : newPosition; 
+  });
 
-  // calculate quadrant
-  if (adjustedFinalRow === Math.floor(mapHeight / 2) || adjustedFinalCol === Math.floor(mapWidth / 2))
+  return newRobots;
+}
+
+function FindMinimumVariance(CorR, robots, width, height)
+{
+  let multiplier = CorR ? height : width;
+  let scale = CorR ? 0 : 1;
+  let offset = CorR ? 1 : 0;
+  let sequence = [];
+
+  robots.forEach((robot) =>
   {
-    return 4;
-  }
+    sequence.push(robot[scale] * multiplier + robot[offset]);
+  });
 
-  if (adjustedFinalRow < mapHeight / 2)
+  sequence.sort((a, b) => a - b);
+
+  // calculate variance
+  let n = sequence.length;
+  let sum = sequence.reduce((acc, val) => acc + val, 0);
+  let sumSquares = sequence.reduce((acc, val) => acc + val * val, 0);
+
+  let mean = sum / n;
+  let variance = (sumSquares / n) - (mean * mean);
+
+  //console.log("Sequence:", sequence);
+  console.log("Variance:", variance);
+
+  return variance;
+}
+
+function NewSolution(robots, width, height)
+{
+  // calculate min variance for columns
+  let lowestVariantSeconds;
+  let lowestVariance = Infinity;
+
+  for (let i = 0; i < width; i ++)
   {
-    if (adjustedFinalCol < mapWidth / 2)
+    robots = SimulateSecond(true, robots, width, height);
+    let variance = FindMinimumVariance(true, robots, width, height);
+    if (variance < lowestVariance)
     {
-      return 0;
+      lowestVariance = variance;
+      lowestVariantSeconds = i;
     }
-    return 1;
   }
-  else
+  console.log(lowestVariantSeconds);
+
+  // calculate min variance for rows
+  let lowestVariantSeconds2;
+  let lowestVariance2 = Infinity;
+
+  for (let i = 0; i < height; i ++)
   {
-    if (adjustedFinalCol < mapWidth / 2)
+    robots = SimulateSecond(false, robots, width, height);
+    let variance = FindMinimumVariance(false, robots, width, height);
+    if (variance < lowestVariance2)
     {
-      return 3;
+      lowestVariance2 = variance;
+      lowestVariantSeconds2 = i;
     }
-    return 2;
   }
+  console.log(lowestVariantSeconds2);
+
 }
 
 function SolutionB(mapWidth, mapHeight, seconds)
 {
-  let robots = fs.readFileSync("14/input.txt", "utf-8")
+  let robots = fs.readFileSync("14/sample-input.txt", "utf-8")
     .replace(/\r/gm, "")
     .replace(/p=/gm, "")
     .replace(/\sv=/gm, ",")
@@ -50,22 +94,10 @@ function SolutionB(mapWidth, mapHeight, seconds)
     .map(row => row.split(","))
     .map(row => row.map(col => parseInt(col)));
 
-  console.log(robots);
-
-  let solution = 0;
-  let quadrants = [0, 0, 0, 0, 0] // NW, NE, SE, SW, Centre
-
-  robots.forEach((robot) => {
-    quadrant = ProcessRobot(robot, mapWidth, mapHeight, seconds);
-    quadrants[quadrant]++;
-  });
-
-  console.log(quadrants);
-
-  solution = quadrants.slice(0, 4).reduce((acc, num) => acc * num, 1);
+  NewSolution(robots, 11, 7);
   
   console.timeEnd('a');
-  console.log(`Day 14a solution: ${solution}`);
+  //console.log(`Day 14a solution: ${solution}`);
   // 94785600 too low
 }
 
