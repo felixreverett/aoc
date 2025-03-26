@@ -16,7 +16,7 @@ function ProcessRobot(robot, mapWidth, mapHeight, seconds)
   let finalCol = (pCol + seconds * vCol ) % mapWidth;
   let adjustedFinalCol = finalCol < 0 ? finalCol + mapWidth : finalCol;
 
-  console.log(`Final position for ${pRow}, ${pCol} is ${finalRow}, ${finalCol}. Adjusted to ${adjustedFinalRow}, ${adjustedFinalCol}.`);
+  //console.log(`Final position for ${pRow}, ${pCol} is ${finalRow}, ${finalCol}. Adjusted to ${adjustedFinalRow}, ${adjustedFinalCol}.`);
 
   // calculate quadrant
   if (adjustedFinalRow === Math.floor(mapHeight / 2) || adjustedFinalCol === Math.floor(mapWidth / 2))
@@ -52,8 +52,6 @@ function Solution(mapWidth, mapHeight, seconds)
     .map(row => row.split(","))
     .map(row => row.map(col => parseInt(col)));
 
-  console.log(robots);
-
   let solution = 0;
   let quadrants = [0, 0, 0, 0, 0] // NW, NE, SE, SW, Centre
 
@@ -62,13 +60,10 @@ function Solution(mapWidth, mapHeight, seconds)
     quadrants[quadrant]++;
   });
 
-  console.log(quadrants);
-
   solution = quadrants.slice(0, 4).reduce((acc, num) => acc * num, 1);
   
   console.timeEnd('a');
   console.log(`Day 14a solution: ${solution}`);
-  // 94785600 too low
 }
 
 Solution(101, 103, 100);
