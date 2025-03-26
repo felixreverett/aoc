@@ -18,6 +18,9 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 11. Memoisation and recursion
 12. Queues and Sets (for O(1) lookup)
 13. Solving linear equations through matrices
+14. 
+    a. Simple use of modulos
+    b. Chinese Remainder Theorem
 
 ### Commit messages
 - 🧩 Solution
@@ -35,8 +38,8 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 02b | 4.9ms       | 1.7ms     | 12b | 25.2ms     | 8.5ms      |
 | 03a | 3.2ms       |           | 13a | 1.3ms      | 0.5ms      |
 | 03b | 3.1ms       |           | 13b | 1.3ms      | 0.5ms      |
-| 04a | 4.8ms       |           |
-| 04b | 4.1ms       |           |
+| 04a | 4.8ms       |           | 14a | 0.8ms
+| 04b | 4.1ms       |           | 14b | 14.5ms
 | 05a | 20.0ms      |           |
 | 05b | 6.9ms       |           |
 | 06a | 5.7ms       |           |
