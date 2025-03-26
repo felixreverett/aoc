@@ -1,12 +1,24 @@
 var fs = require("fs"); // imports fs
 console.time('a');
 
-/* Plan 14b
-> Chinese Remainder Theorem
+/* Explanation 14b
+> I don't normally write these, but this one was a headache to start, and a joy to end.
+> Conceptually, two things are happening:
+>  1) I am using Chinese Remainder Theorem to find the first 'overlap' of organised robots in both axes.
+>  2) I am determining 'organised' robots by finding the pattern with the lowest variance.
+> I never visualised my solution, so I trusted in the community advice that CRT can solve this.
+> I trusted in myself that I can learn it and implement it successfully. I did because I am unstoppable.
+> Here is a more detailed breakdown of the logic flow:
+   1) Solution() parses data into a list of "robots" and calls GetMinimumTime()
+   2) GetMinimumTime() finds the lowest Column and lowest Row variances, and uses these to calculate the solution
+   3) GetTimeOfLowestVariance() finds the lowest Column or Row variances
+   4) SimulateSecond() moves all robots along either the Column or Row
+   5) FindVariance() returns the variance of the robots array at its given point in time
 */
 
-function SimulateSecond(CorR, robots, modulo)
+function SimulateSecond(CorR, robots, width, height)
 {
+  let modulo = CorR ? width : height;
   let position = CorR ? 0 : 1;
   let velocity = CorR ? 2 : 3;
 
@@ -20,8 +32,9 @@ function SimulateSecond(CorR, robots, modulo)
   return newRobots;
 }
 
-function FindMinimumVariance(CorR, robots, width, height)
+function FindVariance(CorR, robots, width, height)
 {
+  // establish values depending on whether calculating variance for height or width
   let multiplier = CorR ? height : width;
   let scale = CorR ? 0 : 1;
   let offset = CorR ? 1 : 0;
@@ -42,51 +55,49 @@ function FindMinimumVariance(CorR, robots, width, height)
   let mean = sum / n;
   let variance = (sumSquares / n) - (mean * mean);
 
-  //console.log("Sequence:", sequence);
-  console.log("Variance:", variance);
-
   return variance;
 }
 
-function NewSolution(robots, width, height)
+function GetTimeOfLowestVariance(CorR, robots, width, height)
 {
-  // calculate min variance for columns
-  let lowestVariantSeconds;
-  let lowestVariance = Infinity;
+  let newRobots = robots.map(robot => [...robot]);
+  let optimalTime = 0;
+  let lowestVariance = FindVariance(CorR, newRobots, width, height); // Compute variance at t = 0
 
-  for (let i = 0; i < width; i ++)
+  for (let t = 1; t < (CorR ? width : height); t++)
   {
-    robots = SimulateSecond(true, robots, width, height);
-    let variance = FindMinimumVariance(true, robots, width, height);
+    newRobots = SimulateSecond(CorR, newRobots, width, height);
+    let variance = FindVariance(CorR, newRobots, width, height);
     if (variance < lowestVariance)
     {
       lowestVariance = variance;
-      lowestVariantSeconds = i;
+      optimalTime = t;
     }
   }
-  console.log(lowestVariantSeconds);
-
-  // calculate min variance for rows
-  let lowestVariantSeconds2;
-  let lowestVariance2 = Infinity;
-
-  for (let i = 0; i < height; i ++)
-  {
-    robots = SimulateSecond(false, robots, width, height);
-    let variance = FindMinimumVariance(false, robots, width, height);
-    if (variance < lowestVariance2)
-    {
-      lowestVariance2 = variance;
-      lowestVariantSeconds2 = i;
-    }
-  }
-  console.log(lowestVariantSeconds2);
-
+  return optimalTime;
 }
 
-function SolutionB(mapWidth, mapHeight, seconds)
+function GetMinimumTime(robots, width, height)
 {
-  let robots = fs.readFileSync("14/sample-input.txt", "utf-8")
+  let bestC = GetTimeOfLowestVariance(true, robots, width, height);
+  
+  let bestR = GetTimeOfLowestVariance(false, robots, width, height);
+
+  let W = width;
+  let H = height;
+
+  let t = bestC;
+  while (t % H !== bestR % H)
+  {
+    t += W;
+  }
+  
+  return t;
+}
+
+function Solution(width, height)
+{
+  let robots = fs.readFileSync("14/input.txt", "utf-8")
     .replace(/\r/gm, "")
     .replace(/p=/gm, "")
     .replace(/\sv=/gm, ",")
@@ -94,11 +105,10 @@ function SolutionB(mapWidth, mapHeight, seconds)
     .map(row => row.split(","))
     .map(row => row.map(col => parseInt(col)));
 
-  NewSolution(robots, 11, 7);
-  
+  let solution = GetMinimumTime(robots, width, height);
+
   console.timeEnd('a');
-  //console.log(`Day 14a solution: ${solution}`);
-  // 94785600 too low
+  console.log(`Solution: ${solution}`);
 }
 
-SolutionB(101, 103, 100);
+Solution(101, 103);
