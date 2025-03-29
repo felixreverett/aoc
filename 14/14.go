@@ -169,7 +169,87 @@ func SolutionB() {
 	fmt.Printf("Elapsed time for 14b: %s\n", elapsed)
 }
 
+// Solution A
+
+func ProcessRobot(robot []int, width, height, seconds int) int {
+	pCol := robot[0]
+	pRow := robot[1]
+	vCol := robot[2]
+	vRow := robot[3]
+
+	finalRow := (pRow + seconds*vRow) % height
+	if finalRow < 0 {
+		finalRow = finalRow + height
+	}
+	finalCol := (pCol + seconds*vCol) % width
+	if finalCol < 0 {
+		finalCol = finalCol + width
+	}
+
+	if finalRow == height/2 || finalCol == width/2 {
+		return 4
+	}
+
+	if finalRow < height/2 {
+		if finalCol < width/2 {
+			return 0
+		} else {
+			return 1
+		}
+	} else {
+		if finalCol < width/2 {
+			return 3
+		} else {
+			return 2
+		}
+	}
+}
+
+func SolutionA() {
+	start := time.Now()
+
+	content, err := os.ReadFile("14/input.txt")
+	if err != nil {
+		fmt.Printf("Failed to read file: %s\n", err)
+		return
+	}
+
+	robots := func() [][]int {
+		splitInput := AogString(content).
+			ReplaceAll("\r", "").
+			ReplaceAll("p=", "").
+			ReplaceAll(" v=", ",").
+			Split("\n").
+			ToStringArray()
+
+		var robots [][]int
+		for _, row := range splitInput {
+			var robot []int
+			parts := strings.Split(row, ",")
+			for _, part := range parts {
+				num, _ := strconv.Atoi(part)
+				robot = append(robot, num)
+			}
+			robots = append(robots, robot)
+		}
+		return robots
+	}()
+
+	quadrants := [5]int{0, 0, 0, 0, 0}
+
+	for _, robot := range robots {
+		quadrant := ProcessRobot(robot, 101, 103, 100)
+		quadrants[quadrant]++
+	}
+
+	solution := quadrants[0] * quadrants[1] * quadrants[2] * quadrants[3]
+
+	elapsed := time.Since(start)
+	fmt.Printf("Day 14a solution: %d\n", solution)
+	fmt.Printf("Elapsed time for 14a: %s\n", elapsed)
+}
+
 func main() {
-	//Solution()
+	SolutionA()
 	SolutionB()
 }
