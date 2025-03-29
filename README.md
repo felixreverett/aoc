@@ -38,7 +38,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 02b | 4.9ms       | 1.7ms     | 12b | 25.2ms     | 8.5ms      |
 | 03a | 3.2ms       |           | 13a | 1.3ms      | 0.5ms      |
 | 03b | 3.1ms       |           | 13b | 1.3ms      | 0.5ms      |
-| 04a | 4.8ms       |           | 14a | 0.8ms      |            |
+| 04a | 4.8ms       |           | 14a | 0.8ms      | 0.5ms      |
 | 04b | 4.1ms       |           | 14b | 14.5ms     | 6.5ms      |
 | 05a | 20.0ms      |           |
 | 05b | 6.9ms       |           |
@@ -62,6 +62,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 - Variadic functions
  - functions which can have a varying number of arguments of the same type. Example: append([]type(nil, array...)
  - Declared by adding ellipsis before a function parameter in its signature: func Foo(param ...type)
+ - Receiver functions: approximation of class methods accessible through dot notation
 
 ### What have I learnt about DSA?
 - Linear Equations
