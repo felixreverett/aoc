@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	utils "github.com/felixreverett/adventofgo"
 )
 
 func SimulateSecond(CorR bool, robots [][]int, width, height int) [][]int {
@@ -215,7 +217,7 @@ func SolutionA() {
 	}
 
 	robots := func() [][]int {
-		splitInput := AogString(content).
+		splitInput := utils.AogString(content).
 			ReplaceAll("\r", "").
 			ReplaceAll("p=", "").
 			ReplaceAll(" v=", ",").
