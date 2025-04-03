@@ -13,7 +13,8 @@ function FindRobot(map)
     {
       if (map[row][col] === "@")
       {
-        return row, col
+        //console.log(`Found robot at ${row}, ${col}`);
+        return [row, col];
       }
     }
   }
@@ -29,14 +30,16 @@ function IsInBounds(row, col, map)
   return true;
 }
 
-function ProcessInstruction(map, instruction, x, y)
+function ProcessInstruction(map, instruction, row, col)
 {
   // Process instruction
   // If x and y are not -1 and @ is at location of x y, use this value
   // Otherwise find @
-  if (!IsInBounds(row, col) || map[row][col] === "@")
+  console.log(`Processing instruction: ${instruction}\nProcessing row/col: ${row}, ${col}`);
+  if (!IsInBounds(row, col, map) || map[row][col] !== "@")
   {
-    row, col = FindRobot(map);
+    [row, col] = FindRobot(map);
+    console.log(`Updating row/col to: ${row}, ${col}`);
   }
   
   let offset = [];
@@ -56,6 +59,31 @@ function ProcessInstruction(map, instruction, x, y)
     default:
       console.error("instruction type not found.");
   }
+
+  let numberOfBoxes = 0;
+
+  while (true)
+  {
+    //console.log(numberOfBoxes);
+    //console.log(`indexing row: ${row + offset[0]*(numberOfBoxes+1)}, col: ${col + offset[1]*(numberOfBoxes+1)}`);
+    let val = map[row + offset[0]*(numberOfBoxes+1)][col + offset[1]*(numberOfBoxes+1)];
+
+    if (val === "O")
+    {
+      numberOfBoxes++;
+    }
+    else if (val === "#")
+    {
+      return [row, col];
+    }
+    else if (val === ".")
+    {
+      map[row][col] = ".";
+      map[row + offset[0]*(numberOfBoxes+1)][col] = "O";
+      map[row + offset[0]][col + offset[1]] = "@";
+      return [row + offset[0], col + offset[1]];
+    }
+  }
 }
 
 function Solution()
@@ -70,11 +98,25 @@ function Solution()
   let row = -1;
   let col = -1;
 
-  instructions.forEach(instruction => {
-    row, col = ProcessInstruction(map, instruction, row, col);
+  map.forEach(row => {
+    let string = "";
+    row.forEach(col => {
+      string += col;
+    });
+    console.log(string);
   });
 
-  console.log(map);
+  instructions.forEach(instruction => {
+    [row, col] = ProcessInstruction(map, instruction, row, col);
+  });
+
+  map.forEach(row => {
+    let string = "";
+    row.forEach(col => {
+      string += col;
+    });
+    console.log(string);
+  });
 
   let solution = 0;
   
