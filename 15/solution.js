@@ -5,6 +5,33 @@ console.time('a');
 > Break input into warehouse map and instruction set
 */
 
+function SumOfGPSBoxCoords(map)
+{
+  let tally = 0;
+  for (let row = 0; row < map.length; row++)
+  {
+    for (let col = 0; col < map[row].length; col++)
+    {
+      if (map[row][col] === "O")
+      {
+        tally+=100*row+col;
+      }
+    }
+  }
+  return tally;
+}
+
+function PrintMap(map)
+{
+  map.forEach(row => {
+    let string = "";
+    row.forEach(col => {
+      string += col;
+    });
+    console.log(string);
+  });
+}
+
 function FindRobot(map)
 {
   for (let row = 0; row < map.length; row++)
@@ -35,11 +62,11 @@ function ProcessInstruction(map, instruction, row, col)
   // Process instruction
   // If x and y are not -1 and @ is at location of x y, use this value
   // Otherwise find @
-  console.log(`Processing instruction: ${instruction}\nProcessing row/col: ${row}, ${col}`);
+  //console.log(`Processing instruction: ${instruction}\nProcessing row/col: ${row}, ${col}`);
   if (!IsInBounds(row, col, map) || map[row][col] !== "@")
   {
     [row, col] = FindRobot(map);
-    console.log(`Updating row/col to: ${row}, ${col}`);
+    //console.log(`Updating row/col to: ${row}, ${col}`);
   }
   
   let offset = [];
@@ -78,8 +105,11 @@ function ProcessInstruction(map, instruction, row, col)
     }
     else if (val === ".")
     {
+      if (numberOfBoxes !== 0)
+      {
+        map[row + offset[0]*(numberOfBoxes+1)][col + offset[1]*(numberOfBoxes+1)] = "O";
+      }
       map[row][col] = ".";
-      map[row + offset[0]*(numberOfBoxes+1)][col] = "O";
       map[row + offset[0]][col + offset[1]] = "@";
       return [row + offset[0], col + offset[1]];
     }
@@ -88,7 +118,7 @@ function ProcessInstruction(map, instruction, row, col)
 
 function Solution()
 {
-  let mapAndInstructions = fs.readFileSync("15/sample-input.txt", "utf-8")
+  let mapAndInstructions = fs.readFileSync("15/input.txt", "utf-8")
     .replace(/\r/gm, "")
     .split("\n\n");
 
@@ -98,27 +128,14 @@ function Solution()
   let row = -1;
   let col = -1;
 
-  map.forEach(row => {
-    let string = "";
-    row.forEach(col => {
-      string += col;
-    });
-    console.log(string);
-  });
+  //PrintMap(map);
 
   instructions.forEach(instruction => {
     [row, col] = ProcessInstruction(map, instruction, row, col);
+    //PrintMap(map);
   });
 
-  map.forEach(row => {
-    let string = "";
-    row.forEach(col => {
-      string += col;
-    });
-    console.log(string);
-  });
-
-  let solution = 0;
+  let solution = SumOfGPSBoxCoords(map);
   
   console.timeEnd('a');
   console.log(`Day 15a solution: ${solution}`);
