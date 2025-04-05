@@ -40,7 +40,7 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 03b | 3.1ms       |           | 13b | 1.3ms      | 0.5ms      |
 | 04a | 4.8ms       |           | 14a | 0.8ms      | 0.5ms      |
 | 04b | 4.1ms       |           | 14b | 14.5ms     | 6.5ms      |
-| 05a | 20.0ms      |           |
+| 05a | 20.0ms      |           | 15a | 15.1ms
 | 05b | 6.9ms       |           |
 | 06a | 5.7ms       |           |
 | 06b | 3,500ms     |           |
