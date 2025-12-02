@@ -1,6 +1,6 @@
 const fs = require("fs"); // imports file management
 const path = require("path");
-const filePath = path.join(__dirname, "sample-input.txt");
+const filePath = path.join(__dirname, "input.txt");
 
 function PartOne() {
     let input = fs.readFileSync(filePath, "utf-8")
@@ -30,30 +30,34 @@ function PartTwo() {
     let dialLocation = 50;
     let TotalTimesPassedZero = 0;
 
-    console.log((Math.abs(0)/100|0)+1);
-    console.log(100/100|0);
-    //return;
-    
     for (let [direction, magnitude] of input)
     {
-        let delta = direction * magnitude;
-        let previousLoc = dialLocation;
-        let nextLoc = dialLocation + delta;
+        let oldLocation = dialLocation;
+        dialLocation += direction * magnitude;
+        let cycles = 0;
 
-        if (previousLoc - nextLoc < 0) {
+        if (dialLocation == 0) { TotalTimesPassedZero++ }
 
+        if (dialLocation < 0) {
+            if (oldLocation == 0) {
+                cycles = Math.abs(dialLocation)/100|0
+            } else {
+                cycles = (Math.abs(dialLocation)/100|0)+1;
+            }
+        } else {
+            cycles = Math.abs(dialLocation)/100|0;
         }
+        console.log(`Value moved ${direction*magnitude} from ${oldLocation} to ${dialLocation}`);
+        console.log(`Crossed zero ${cycles} times.`);
+        TotalTimesPassedZero += cycles;
         
-
         dialLocation = (((dialLocation) % 100) + 100) % 100;
+        
+        console.log(`Value was then clamped to ${dialLocation}\n=====`);
     }
 
     console.log(TotalTimesPassedZero);
 }
 
-//PartOne();
+PartOne();
 PartTwo();
-
-// 6467
-// 6467 x
-// 6917 x
