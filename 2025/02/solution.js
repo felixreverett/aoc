@@ -3,6 +3,7 @@ const path = require("path");
 const filePath = path.join(__dirname, "input.txt");
 
 function PartOne() {
+    console.time('a');
     let input = fs.readFileSync(filePath, "utf-8")
         .replace(/\r|\n/gm, "")
         .split(",")
@@ -21,10 +22,12 @@ function PartOne() {
         }
     }
 
+    console.timeEnd('a');
     console.log(total);
 }
 
 function PartTwo() {
+    console.time('a');
     let input = fs.readFileSync(filePath, "utf-8")
         .replace(/\r|\n/gm, "")
         .split(",")
@@ -43,6 +46,7 @@ function PartTwo() {
         }
     }
 
+    console.timeEnd('a');
     console.log(total);
 }
 

@@ -3,6 +3,7 @@ const path = require("path");
 const filePath = path.join(__dirname, "input.txt");
 
 function PartOne() {
+    console.time('a');
     let input = fs.readFileSync(filePath, "utf-8")
         .replace(/\r/gm, "")
         .split("\n")
@@ -18,10 +19,12 @@ function PartOne() {
         //console.log(`dial location is now ${dialLocation}`);
     }
 
+    console.timeEnd('a');
     console.log(timesAtZero);
 }
 
 function PartTwo() {
+    console.time('a');
     let input = fs.readFileSync(filePath, "utf-8")
             .replace(/\r/gm, "")
             .split("\n")
@@ -39,6 +42,7 @@ function PartTwo() {
         dialLocation = (((dialLocation) % 100) + 100) % 100;
     }
 
+    console.timeEnd('a');
     console.log(TotalTimesPassedZero);
 }
 
