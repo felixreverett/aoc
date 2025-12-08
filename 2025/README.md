@@ -11,8 +11,8 @@ This year we only have 12 days of challenges. That means a little more time to t
 
 | Day | JavaScript  | Python    |
 | --- | ---------:  | --------: |
-| 01a | 3.3 ms      |      |
-| 01b | 2.8 ms      |      |
+| 01a | 3.3 ms      |           |
+| 01b | 2.8 ms      |           |
 | 02a | 175.0 ms    | 780.0 ms  |
 | 02b | 220.0 ms    | 1,044.1 ms|
 | 03a | 2.9 ms      |
@@ -23,3 +23,22 @@ This year we only have 12 days of challenges. That means a little more time to t
 | 05b |             | 0.7ms
 | 06a |             | 0.9ms
 | 06b |             | 15.9ms
+| 07a |             | 0.2ms     |
+| 07b |             | 3.2ms     |
+| 08a |
+| 08b |
+| 09a |
+| 09b |
+| 10a |
+| 10b |
+| 11a |
+| 11b |
+| 12a |
+| 12b |
+
+| Day | JavaScript  | Python    |
+| --- | ---------:  | --------: |
+| Tot |
+| Avg |
+| Min |
+| Max |
