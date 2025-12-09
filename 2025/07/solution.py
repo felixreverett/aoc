@@ -84,7 +84,7 @@ def traverse(r, c):
                     return 1
 
 def main():
-    #Part_One()
+    Part_One()
     Part_Two()
 
 if __name__ == "__main__":
