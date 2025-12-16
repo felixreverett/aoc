@@ -70,8 +70,10 @@ def Part_Two():
             distances_map.append([distance, [i, j]])
 
     distances_map = sorted(distances_map)
+    trees.append(distances_map[0][1])
+    c = 1
 
-    for c in range(number_of_connections):
+    while True:
         box_a, box_b = distances_map[c][1]
         tree_with_a = -1
         tree_with_b = -1
@@ -97,10 +99,14 @@ def Part_Two():
         else:
             trees.append([box_a, box_b])
 
-    trees = sorted(trees, key=len, reverse=True)
+        trees = sorted(trees, key=len, reverse=True)
+        if len(trees[0]) > len(box_positions):
+            break
+        c+=1
+        print(trees)
+        print(c)
+    
     total = 1
-    for t in range(0, number_of_circuits):
-        total*=len(trees[t])
     print(f"Finished in {time.perf_counter() - start_time:.4f} seconds") 
     print(total)
 
