@@ -11,6 +11,7 @@ class UnionFind:
         self.n = n
         self.parent = list(range(n))
         self.size = [1] * n
+        self.num_groups = n
 
     def find(self, i):
         if self.parent[i] != i:
@@ -31,6 +32,7 @@ class UnionFind:
             self.parent[root_j] = root_i
             self.size[root_i] += self.size[root_j]
 
+        self.num_groups -= 1
         return True
     
     def get_unique_roots(self):
@@ -45,6 +47,67 @@ class UnionFind:
         return group_sizes
 
 def Part_One():
+    start_time = time.perf_counter()
+    with open(file_path, "r") as file_handle:
+        file = file_handle.read().replace(r"\rgm", "").split("\n")
+    box_positions = [[int(val) for val in row.split(",")] for row in file]
+
+    distances_map = []
+
+    for i in range(0, len(box_positions)):
+        for j in range(i+1, len(box_positions)):
+            distance = math.dist(box_positions[i], box_positions[j])
+            distances_map.append((distance, i, j))
+
+    distances_map = sorted(distances_map)
+    number_of_nodes = len(box_positions)
+
+    uf = UnionFind(number_of_nodes)
+
+    for c in range(number_of_connections):
+        _, node_i, node_j = distances_map[c]
+        uf.union(node_i, node_j)
+
+    total = math.prod(uf.get_unique_roots()[:3])
+
+    print(total)
+    print(f"Finished in {time.perf_counter() - start_time:.4f} seconds") 
+
+def Part_Two():
+    start_time = time.perf_counter()
+    with open(file_path, "r") as file_handle:
+        file = file_handle.read().replace(r"\rgm", "").split("\n")
+    box_positions = [[int(val) for val in row.split(",")] for row in file]
+
+    distances_map = []
+
+    for i in range(0, len(box_positions)):
+        for j in range(i+1, len(box_positions)):
+            distance = math.dist(box_positions[i], box_positions[j])
+            distances_map.append((distance, i, j))
+
+    distances_map.sort()
+    number_of_nodes = len(box_positions)
+
+    uf = UnionFind(number_of_nodes)
+    
+    total = 0
+
+    for edge in distances_map:
+        _, node_i, node_j = edge
+        if uf.union(node_i, node_j):
+            if uf.num_groups == 1:
+                total = box_positions[node_i][0] * box_positions[node_j][0]
+                break
+
+    print(total)
+    print(f"Finished in {time.perf_counter() - start_time:.4f} seconds") 
+
+# ====================
+# Initial version
+# ====================
+
+def Part_One_Old():
     start_time = time.perf_counter()
     with open(file_path, "r") as file_handle:
         file = file_handle.read().replace(r"\rgm", "").split("\n")
@@ -93,34 +156,7 @@ def Part_One():
     print(f"Finished in {time.perf_counter() - start_time:.4f} seconds") 
     print(total)
 
-def Part_One_v2():
-    start_time = time.perf_counter()
-    with open(file_path, "r") as file_handle:
-        file = file_handle.read().replace(r"\rgm", "").split("\n")
-    box_positions = [[int(val) for val in row.split(",")] for row in file]
-
-    distances_map = []
-
-    for i in range(0, len(box_positions)):
-        for j in range(i+1, len(box_positions)):
-            distance = math.dist(box_positions[i], box_positions[j])
-            distances_map.append((distance, i, j))
-
-    distances_map = sorted(distances_map)
-    number_of_nodes = len(box_positions)
-
-    uf = UnionFind(number_of_nodes)
-
-    for c in range(number_of_connections):
-        _, node_i, node_j = distances_map[c]
-        uf.union(node_i, node_j)
-
-    total = math.prod(uf.get_unique_roots()[:3])
-
-    print(total)
-    print(f"Finished in {time.perf_counter() - start_time:.4f} seconds") 
-    
-def Part_Two():
+def Part_Two_Old():
     start_time = time.perf_counter()
     with open(file_path, "r") as file_handle:
         file = file_handle.read().replace(r"\rgm", "").split("\n")
@@ -176,8 +212,6 @@ def Part_Two():
     print(total)
 
 def main():
-    Part_One_v2()
-    return
     Part_One()
     Part_Two()
 
