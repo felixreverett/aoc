@@ -25,7 +25,7 @@ This year we only have 12 days of challenges. That means a little more time to t
 | 06b |             | 15.9ms
 | 07a |             | 0.2ms     |
 | 07b |             | 3.2ms     |
-| 08a |
+| 08a |             | 297.3ms   |
 | 08b |
 | 09a |
 | 09b |
@@ -42,3 +42,14 @@ This year we only have 12 days of challenges. That means a little more time to t
 | Avg |
 | Min |
 | Max |
+
+### Programming Concepts
+1.
+2.
+3.
+4.
+5.
+6.
+7. Memoization
+8. Union Joins
+9.
