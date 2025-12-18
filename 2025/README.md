@@ -27,7 +27,7 @@ This year we only have 12 days of challenges. That means a little more time to t
 | 07b |             | 3.2ms     |
 | 08a |             | 297.3ms   |
 | 08b |             | 298.3ms   |
-| 09a |
+| 09a |             | 20.6ms    |
 | 09b |
 | 10a |
 | 10b |
@@ -52,4 +52,4 @@ This year we only have 12 days of challenges. That means a little more time to t
 6.
 7. Memoization
 8. Union Joins
-9.
+9. 
