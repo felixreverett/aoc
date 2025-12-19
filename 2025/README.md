@@ -17,8 +17,8 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 
 ### Time durations (includes file handling)
 
-| Day | JavaScript  | Python    |
-| --- | ---------:  | --------: |
+| Day | JavaScript  | Python    | Go    |
+| --- | ---------:  | --------: | ----: |
 | 01a | 3.3 ms      |           |
 | 01b | 2.8 ms      |           |
 | 02a | 175.0 ms    | 780.0 ms  |
@@ -27,8 +27,8 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 | 03b | 3.1 ms      |           |
 | 04a | 4.5ms       |           |
 | 04b | 27.0ms      |           |
-| 05a |             | 8.3ms     |
-| 05b |             | 0.7ms     |
+| 05a |             | 8.3ms     | 0.8ms
+| 05b |             | 0.7ms     | 0.0ms*
 | 06a |             | 0.9ms     |
 | 06b |             | 15.9ms    |
 | 07a |             | 0.2ms     |
@@ -36,34 +36,33 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 | 08a |             | 297.3ms   |
 | 08b |             | 298.3ms   |
 | 09a |             | 20.6ms    |
-| 09b |
+| 09b |             | ...       |
 | 10a |             | 10.2ms    |
 | 10b |
 | 11a |
 | 11b |
 | 12a |
 | 12b |
+| Tot | 438.6ms     | 2,478.7ms | 0.8ms |
+| Avg | 54.8ms      | 206.6ms   | 0.4ms |
+| Min | 2.8ms       | 0.2ms     | 0.0ms |         
+| Max | 220ms       | 1,044.1ms | 0.8ms |
 
-| Day | JavaScript  | Python    |
-| --- | ---------:  | --------: |
-| Tot |
-| Avg |
-| Min |
-| Max |
+*Yes, this genuinely took trivial time.
 
 ### Programming Concepts and Perceived Difficulty
 
-| Day | Programming Concepts        | Algorithmic Complexity
-| --- | --------------------------  | ---
-| 01  | Modulo/Basic Arithmetic 🤪  | ...
-| 02  | Regular Expressions 😋      | ...
-| 03  | Array Processing 🙂‍↕️         | ...
-| 04  | Array Processing 🙂‍↔️         | O(n^2)
-| 05  | Interval Merging 😸         | O(n*m)
-| 06  | Array Transpositions 🤔     | ...
-| 07  | Memoization 😎              | ...
-| 08  | Union Joins 🤨              | ...
-| 09  | ... 😥                      | ...
+| Day | Programming Concepts                    | Algorithmic Complexity
+| --- | --------------------------              | ---
+| 01  | Modulo/Basic Arithmetic 🤪              | ...
+| 02  | Regular Expressions 😋                  | ...
+| 03  | Array Processing 🙂‍↕️                     | ...
+| 04  | Array Processing 🙂‍↔️                     | O(n^2)
+| 05  | Interval Merging 😸, Binary Search 😯   | O(n*m), O(n log m)
+| 06  | Array Transpositions 🤔                 | ...
+| 07  | Memoization 😎                          | ...
+| 08  | Union Joins 🤨                          | ...
+| 09  | ... 😥                                  | ...
 | 10  | Bitwise Arithmetic 🤪, Linear Programming 💀 | ...
 | 11  |
 | 12  |
