@@ -90,7 +90,30 @@ def make_joltage_machines(file: list[str]) -> list[JoltageMachine]:
         for parts in [re.split(r"\]\s|\s\{", row)]
     ]
 
+def traverse_joltage_route(jm: JoltageMachine) -> int:
+    prob = pulp.LpProblem("Minimize_Presses", pulp.LpMinimize)
 
+    button_vars = [
+        pulp.LpVariable(f"btn_{i}", lowBound=0, cat=pulp.LpInteger) 
+        for i in range(len(jm.buttons))
+    ]
+
+    prob += pulp.lpSum(button_vars)
+
+    for counter_idx, target in enumerate(jm.target_state):
+        buttons_affecting_this = [
+            button_vars[btn_idx] 
+            for btn_idx, btn_indices in enumerate(jm.buttons) 
+            if counter_idx in btn_indices
+        ]
+        prob += pulp.lpSum(buttons_affecting_this) == target
+
+    prob.solve(pulp.PULP_CBC_CMD(msg=0))
+
+    if pulp.LpStatus[prob.status] == 'Optimal':
+        return int(pulp.value(prob.objective))
+    
+    return -1
 
 def traverse_joltage_route_old(jm: JoltageMachine) -> int:
     

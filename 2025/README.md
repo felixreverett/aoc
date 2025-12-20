@@ -8,7 +8,7 @@ Of these, my [favourite individual solution](https://github.com/felixreverett/ao
 Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc/blob/main/2025/07/solution.py), where I was able to employ the dynamic programming I learnt in previous years without any external help. Computation for day 7i and 7ii is particularly fast.
 
 ### Commit messages
-- 🧩 Solution
+- 📖 Solution
 - ⚙️ Progress towards a solution
 - 🧹 Code cleanup
 - 📖 Other (e.g. documentation)
