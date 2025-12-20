@@ -4,5 +4,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+<<<<<<< HEAD
 **.txt
 __pycache__
+=======
+**.txt
+>>>>>>> old-repo/main
