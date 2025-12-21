@@ -39,7 +39,7 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 | 09b |             | ...       |
 | 10a |             | 10.2ms    |
 | 10b |
-| 11a |
+| 11a |             | 26.4ms    |
 | 11b |
 | 12a |
 | 12b |
@@ -64,5 +64,5 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 | 08  | Union Joins 🤨                          | ...
 | 09  | ... 😥                                  | ...
 | 10  | Bitwise Arithmetic 🤪, Linear Programming 💀 | ...
-| 11  |
+| 11  | Memoization/Recursion 😎
 | 12  |
