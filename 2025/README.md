@@ -40,7 +40,7 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 | 10a |             | 10.2ms    |
 | 10b |
 | 11a |             | 26.4ms    |
-| 11b |
+| 11b |             | 1.4ms     |
 | 12a |
 | 12b |
 | Tot | 438.6ms     | 2,478.7ms | 0.8ms |
