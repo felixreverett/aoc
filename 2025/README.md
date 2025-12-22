@@ -19,8 +19,8 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 
 | Day | JavaScript  | Python    | Go    |
 | --- | ---------:  | --------: | ----: |
-| 01a | 3.3 ms      |           |
-| 01b | 2.8 ms      |           |
+| 01a | 3.3 ms      | 1.4ms     |
+| 01b | 2.8 ms      | 2.4ms     |
 | 02a | 175.0 ms    | 780.0 ms  |
 | 02b | 220.0 ms    | 1,044.1 ms|
 | 03a | 2.9 ms      |           |
@@ -36,17 +36,19 @@ Another favourite is [my solution to day 7](https://github.com/felixreverett/aoc
 | 08a |             | 297.3ms   |
 | 08b |             | 298.3ms   |
 | 09a |             | 20.6ms    |
-| 09b |             | ...       |
+| 09b |             | 166.2ms   |
 | 10a |             | 10.2ms    |
-| 10b |
+| 10b |             | ...       |
 | 11a |             | 26.4ms    |
 | 11b |             | 1.4ms     |
-| 12a |
-| 12b |
-| Tot | 438.6ms     | 2,478.7ms | 0.8ms |
-| Avg | 54.8ms      | 206.6ms   | 0.4ms |
-| Min | 2.8ms       | 0.2ms     | 0.0ms |         
-| Max | 220ms       | 1,044.1ms | 0.8ms |
+| 12a |             | 1.5ms     |
+
+| Day | JavaScript  | Python    | Go    |
+| --- | ---------:  | --------: | ----: |
+| Tot | ...ms       | ...ms     | ...ms |
+| Avg | ...ms       | ...ms     | ...ms |
+| Min | ...ms       | ...ms     | ...ms |         
+| Max | ...ms       | ...ms     | ...ms |
 
 *Yes, this genuinely took trivial time.
 
