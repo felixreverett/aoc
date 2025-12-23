@@ -6,3 +6,7 @@
 *.sln.docstates
 **.txt
 __pycache__
+
+# Scala
+.bsp
+.scala-build
