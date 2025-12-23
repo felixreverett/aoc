@@ -9,6 +9,7 @@ In the meantime, enjoy some top-level stats:
 
 | Year | Stars Obtained | Language(s)   | Notable Days
 | ---- | -------------: | ------------- | ---
+| 2022 | 02/50 (04%)    | Scala         |
 | 2023 | 40/50 (80%)    | JS            | [17](https://github.com/felixreverett/aoc/tree/main/2023/day-X7)
 | 2024 | 29/50 (58%)    | JS, Go        | [11](https://github.com/felixreverett/aoc/tree/main/2024/11)
 | 2025 | 24/24 (100%)   | JS, Python, Go| [07](https://github.com/felixreverett/aoc/blob/main/2025/07/solution.py); [10i](https://github.com/felixreverett/aoc/tree/main/2025/10)
