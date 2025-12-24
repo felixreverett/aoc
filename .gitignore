@@ -10,3 +10,5 @@ __pycache__
 # Scala
 .bsp
 .scala-build
+.metals
+.vscode
