@@ -1,3 +1,5 @@
+package aoc2022.day02
+
 import scala.io.Source
 import java.io.File
 
