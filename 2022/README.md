@@ -17,7 +17,7 @@ My initial objective is to use this as an opportunity to familiarise myself with
 | --- | ----------: |
 | 01a | 136.6ms     |
 | 01b | 13.1ms      |
-| 02a |             |
+| 02a | 243.0ms     |
 | 02b |             |
 | 03a |             |
 | 03b |             |
