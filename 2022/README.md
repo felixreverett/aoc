@@ -4,21 +4,21 @@ My solutions to the 2022 Advent of Code. This is the first year I'll be "backdat
 My initial objective is to use this as an opportunity to familiarise myself with the syntax of Scala.
 
 ### Commit messages
-- 🧩 Solution
+- 📖 Solution
 - ⚙️ Progress towards a solution
 - 🧹 Code cleanup
 - 📖 Other (e.g. documentation)
 
 ## Stats
 
-### Time durations (includes file handling)
+### Time durations (excludes file handling)
 
 | Day | Scala       |
 | --- | ----------: |
-| 01a | 136.6ms     |
-| 01b | 13.1ms      |
-| 02a | 243.0ms     |
-| 02b | 13.0ms      |
+| 01a | 162.6ms     |
+| 01b | 34.1ms      |
+| 02a | 10.6ms      |
+| 02b | 3.3ms       |
 | 03a |             |
 | 03b |             |
 | 04a |             |

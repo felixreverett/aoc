@@ -10,7 +10,7 @@ def XYZScore(c: String): Int = {
         case "X" => 1
 }
 
-def partOne(): Int = {
+def partOne(): (Int, Double) = {
     val filename = "2022/02/input.txt"
     val input = Source.fromFile(new File(filename)).mkString
 
@@ -22,12 +22,18 @@ def partOne(): Int = {
             (parts(0), parts(1))
         }
 
-    rounds.map { (i, j) =>
+    val startTime = System.nanoTime()
+
+    val solution = rounds.map { (i, j) =>
         (i, j) match
             case ("A", "Y") | ("B", "Z") | ("C", "X") => 6 + XYZScore(j)
             case ("A", "X") | ("B", "Y") | ("C", "Z") => 3 + XYZScore(j)
             case _ => XYZScore(j)
     }.sum
+
+    val duration = (System.nanoTime() - startTime) / 1e6
+
+    (solution, duration)
 }
 
 def XYZScore2(i: String, j: String): Int = {
@@ -46,7 +52,7 @@ def XYZScore2(i: String, j: String): Int = {
             case "C" => 2 // would play paper
 }
 
-def partTwo(): Int = {
+def partTwo(): (Int, Double) = {
     val filename = "2022/02/input.txt"
     val input = Source.fromFile(new File(filename)).mkString
 
@@ -58,7 +64,9 @@ def partTwo(): Int = {
             (parts(0), parts(1))
         }
 
-    rounds.map { (i, j) =>
+    val startTime = System.nanoTime()
+
+    val solution = rounds.map { (i, j) =>
         (i, j) match
             // need to win
             case ("A", "Z") | ("B", "Z") | ("C", "Z") => 6 + XYZScore2(i, j)
@@ -67,18 +75,18 @@ def partTwo(): Int = {
             // need to lose
             case _ => XYZScore2(i, j)
     }.sum
+
+    val duration = (System.nanoTime() - startTime) / 1e6
+
+    (solution, duration)
 }
 
 @main def run(): Unit = {
-    val s1 = System.nanoTime()
-    val p1 = partOne()
-    val d1 = (System.nanoTime() - s1) / 1e6
+    val (p1, d1) = partOne()
     println(s"Part 1 Solution: ${p1}")
     println(s"Time Part 1: ${d1}ms")
 
-    val s2 = System.nanoTime()
-    val p2 = partTwo()
-    val d2 = (System.nanoTime() - s2) / 1e6
+    val (p2, d2) = partTwo()
     println(s"Part 2 Solution: ${p2}")
     println(s"Time Part 2: ${d2}ms")
 }
