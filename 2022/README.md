@@ -20,7 +20,7 @@ My initial objective is to use this as an opportunity to familiarise myself with
 | 02a | 10.6ms      |
 | 02b | 3.3ms       |
 | 03a | 113.0ms     |
-| 03b |             |
+| 03b | 21.5ms      |
 | 04a |             |
 | 04b |             |
 | 05a |             |
