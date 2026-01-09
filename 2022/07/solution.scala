@@ -5,63 +5,46 @@ import java.io.File
 import scala.compiletime.ops.string
 import scala.collection.mutable
 
-class Folder(val name: String, val parent: String) {
-    var subfolders = mutable.ArrayBuffer[String]()
-    var files = mutable.ArrayBuffer[String]()
-    var totalSize: Long = 0
-}
-
 def partOne(): (Int, Double) = {
     val filename = "2022/07/input.txt"
     val input = Source.fromFile(new File(filename)).mkString
-
     val startTime = System.nanoTime()
 
-    val initialDirs = Map("/" -> new Folder("/", ""))
-    var currentPath = List.empty[String]
+    val initialAcc = (Map("/" -> 0L), List.empty[String])
 
-    val directories = input
+    val (directories, _) = input
         .split("\r?\n")
         .map(_.split(" "))
-        .foldLeft(initialDirs) { (acc, i) =>
-            val cwdKey = "/" + currentPath.mkString("/")
+        .foldLeft(initialAcc) { case ((acc, path), instruction) =>
+            val cwdKey = "/" + path.mkString("/")
 
-            i(0) match
-                case "$" => {
-                    i(1) match
-                        case "cd" => {
-                            i(2) match
-                                case ".." => currentPath = currentPath.dropRight(1)
-                                case "/" => currentPath = List.empty
-                                case target => currentPath = currentPath :+ target
-                        }
-                            acc
-                        case "ls" => acc
+            instruction match {
+                case Array("$", "cd", "..") => (acc, path.dropRight(1))
+                case Array("$", "cd", "/") => (acc, List.empty)
+                case Array("$", "cd", target) => (acc, path :+ target)
+                case Array("$", "ls") => (acc, path)
+                case Array("dir", dirName) => {
+                    val fullPath = "/" + (path :+ dirName).mkString("/")
+                    if (!acc.contains(fullPath)) (acc + (fullPath -> 0L), path)
+                    else (acc, path)
                 }
-                case "dir" => {
-                    val newFolderName = i(1)
-                    val fullPath = ("/" + (currentPath :+ newFolderName).mkString("/"))
-                    if (!acc.contains(fullPath)) acc + (fullPath -> new Folder(newFolderName, cwdKey))
-                    else acc
-                }
-                case sizeStr if sizeStr.forall(_.isDigit) => {
+                case Array(sizeStr, _) if sizeStr.forall(_.isDigit) => {
                     val fileSize = sizeStr.toLong
-                    acc(cwdKey).totalSize += sizeStr.toLong
-                    acc
+                    val pathsToUpdate = (0 to path.length).map { i =>
+                        "/" + path.take(i).mkString("/")
+                    }
+                    val updatedDirs = pathsToUpdate.foldLeft(acc) { (accMap, p) => 
+                        val currentSize = accMap.getOrElse(p, 0L)
+                        accMap + (p -> (currentSize + fileSize))
+                    }
+                    (updatedDirs, path)
                 }
-                case _ => acc
+                case _ => (acc, path)
+            }
         }
 
-    val allFolderSizes = directories.keys.map { targetPath =>
-        directories.map { case (folderPath, folderObj) =>
-            val isChild = if (targetPath == "/") true 
-                        else folderPath == targetPath || folderPath.startsWith(targetPath + "/")
-            
-            if (isChild) folderObj.totalSize else 0L
-        }.sum
-    }
-
-    val solution = allFolderSizes
+    val solution = directories
+        .values
         .filter(_ <= 100000)
         .sum
         .toInt
