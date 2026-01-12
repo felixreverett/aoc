@@ -49,6 +49,59 @@ def partOne(): (Int, Double) = {
     (solution, duration)
 }
 
+def getViewingDistance(grid: Array[Array[(Int, Int, Int)]], r: Int, c: Int, rChange: Int, cChange: Int): Int = {
+    val heightToMatch = grid(r)(c)(0)
+    val lazyPath = Iterator.iterate((r + rChange, c + cChange)) { case (currR, currC) =>
+        (currR + rChange, currC + cChange)    
+    }
+
+    val visibleTrees = lazyPath
+        .takeWhile { case (r, c) => isInBounds(grid, r, c) && isValidHeight(heightToMatch, grid, r, c) }
+        .
+        
+}
+
+def partTwo(): (Int, Double) = {
+    val filename = "2022/08/sample-input.txt"
+    val input = Source.fromFile(new File(filename)).mkString
+    val startTime = System.nanoTime()
+
+    val treeGrid = input
+        .split("\r?\n")
+        .zipWithIndex
+        .map { case (line, row) =>
+            line
+                .split("")
+                .zipWithIndex
+                .map { case (value, col) => (value.toInt, row, col) }
+        }
+
+    val allCoordinates = for {
+        r <- 0 until treeGrid.length
+        c <- 0 until treeGrid(0).length
+    } yield (r, c)
+
+    val solution = allCoordinates
+        .foldLeft(0) { (acc, coords) =>
+            val (r, c) = coords
+            val (currentVal, _, _) = treeGrid(r)(c)
+
+            val mult = getViewingDistance(treeGrid, r, c, -1, 0)    // ^
+                * getViewingDistance(treeGrid, r, c, 0, 1)          // >
+                * getViewingDistance(treeGrid, r, c, 1, 0)          // v
+                * getViewingDistance(treeGrid, r, c, 0, -1)         // <
+            
+            if mult > acc then { mult 
+            } else {
+                acc
+            }
+        }
+
+    val duration = (System.nanoTime() - startTime) / 1e6
+
+    (solution, duration)
+}
+
 @main def run(): Unit = {
     val (p1, d1) = partOne()
     println(s"Part 1 Solution: ${p1}")
