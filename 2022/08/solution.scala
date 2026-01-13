@@ -49,16 +49,18 @@ def partOne(): (Int, Double) = {
     (solution, duration)
 }
 
-def getViewingDistance(grid: Array[Array[(Int, Int, Int)]], r: Int, c: Int, rChange: Int, cChange: Int): Int = {
-    val heightToMatch = grid(r)(c)(0)
+def isInBounds(grid: Array[Array[(Int, Int, Int)]], r: Int, c: Int): Boolean = {
+    r >= 0 && r < grid.length && c >= 0 && c < grid(r).length
+}
+
+def getViewingDistance(grid: Array[Array[(Int, Int, Int)]], r: Int, c: Int, rChange: Int, cChange: Int, startHeight: Int): Int = {
     val lazyPath = Iterator.iterate((r + rChange, c + cChange)) { case (currR, currC) =>
         (currR + rChange, currC + cChange)    
     }
 
-    val visibleTrees = lazyPath
-        .takeWhile { case (r, c) => isInBounds(grid, r, c) && isValidHeight(heightToMatch, grid, r, c) }
-        .
-        
+    lazyPath
+        .takeWhile { case (r, c) => isInBounds(grid, r, c) && grid(r)(c)(0) < startHeight }
+        .size       
 }
 
 def partTwo(): (Int, Double) = {
@@ -86,10 +88,10 @@ def partTwo(): (Int, Double) = {
             val (r, c) = coords
             val (currentVal, _, _) = treeGrid(r)(c)
 
-            val mult = getViewingDistance(treeGrid, r, c, -1, 0)    // ^
-                * getViewingDistance(treeGrid, r, c, 0, 1)          // >
-                * getViewingDistance(treeGrid, r, c, 1, 0)          // v
-                * getViewingDistance(treeGrid, r, c, 0, -1)         // <
+            val mult = getViewingDistance(treeGrid, r, c, -1, 0, currentVal)    // ^
+                * getViewingDistance(treeGrid, r, c, 0, 1, currentVal)          // >
+                * getViewingDistance(treeGrid, r, c, 1, 0, currentVal)          // v
+                * getViewingDistance(treeGrid, r, c, 0, -1, currentVal)         // <
             
             if mult > acc then { mult 
             } else {
@@ -107,7 +109,7 @@ def partTwo(): (Int, Double) = {
     println(s"Part 1 Solution: ${p1}")
     println(s"Time Part 1: ${d1}ms")
 
-    //val (p2, d2) = partTwo()
-    //println(s"Part 2 Solution: ${p2}")
-    //println(s"Time Part 2: ${d2}ms")
+    val (p2, d2) = partTwo()
+    println(s"Part 2 Solution: ${p2}")
+    println(s"Time Part 2: ${d2}ms")
 }
