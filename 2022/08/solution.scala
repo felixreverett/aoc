@@ -54,17 +54,22 @@ def isInBounds(grid: Array[Array[(Int, Int, Int)]], r: Int, c: Int): Boolean = {
 }
 
 def getViewingDistance(grid: Array[Array[(Int, Int, Int)]], r: Int, c: Int, rChange: Int, cChange: Int, startHeight: Int): Int = {
-    val lazyPath = Iterator.iterate((r + rChange, c + cChange)) { case (currR, currC) =>
-        (currR + rChange, currC + cChange)    
-    }
+    val lazyPath = Iterator
+        .iterate((r + rChange, c + cChange)) { case (currR, currC) =>
+            (currR + rChange, currC + cChange)    
+        }
+        .takeWhile { case (r, c) => isInBounds(grid, r, c)  }
+    
+    val (shorterTrees, blockingTrees) = lazyPath
+        .span { case (currR, currC) =>
+            grid(currR)(currC)._1 < startHeight    
+        }
 
-    lazyPath
-        .takeWhile { case (r, c) => isInBounds(grid, r, c) && grid(r)(c)(0) < startHeight }
-        .size       
+    shorterTrees.size + (if (blockingTrees.hasNext) 1 else 0)
 }
 
 def partTwo(): (Int, Double) = {
-    val filename = "2022/08/sample-input.txt"
+    val filename = "2022/08/input.txt"
     val input = Source.fromFile(new File(filename)).mkString
     val startTime = System.nanoTime()
 
