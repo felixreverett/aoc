@@ -9,6 +9,8 @@ __pycache__
 
 # Nodes
 node_modules/*
+package-lock.json
+package.json
 
 # Scala
 .bsp
