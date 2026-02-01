@@ -45,6 +45,39 @@ object Day10 {
         (solution, duration)
     }
 
+    // solution based on 4HbQ's parsing approach on Reddit
+    def partOne4HbQ() : (Int, Double) = {
+        val filename = "2022/10/input.txt"
+        val input = Source.fromFile(new File(filename)).mkString
+        val startTime = System.nanoTime()
+
+        val solution = input
+            .split("""\s+""")
+            .map { i => i.toIntOption.getOrElse(0) }
+            .foldLeft ( (1, 1, Vector.empty[(Int, Int)]) ) { case ((cycle, x, twenties), value) =>
+                (cycle + 1,  x + value, if ((cycle-20) % 40 == 0 ) twenties :+ (cycle, x) else twenties)
+            }
+            ._3
+            .foldLeft(0) { case (acc, i) =>
+                acc + i(0) * i(1)
+            }
+
+        val duration = (System.nanoTime() - startTime) / 1e6
+
+        (solution, duration)
+    }
+
+    def partTwo(): (Int, Double) = {
+        val filename = "2022/10/input.txt"
+        val input = Source.fromFile(new File(filename)).mkString
+        val startTime = System.nanoTime()
+
+
+
+
+        (0, 0)
+    }
+
 }
 
 @main def run10(): Unit = {
