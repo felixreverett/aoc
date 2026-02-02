@@ -72,10 +72,34 @@ object Day10 {
         val input = Source.fromFile(new File(filename)).mkString
         val startTime = System.nanoTime()
 
+        val initialGrid = Vector.fill(6, 40)(".")
 
+        val solution = input
+            .split("""\s+""")
+            .map { i => i.toIntOption.getOrElse(0) }
+            .foldLeft ( (1, 1, initialGrid) ) { case ((cycle, x, currentGrid), value) =>
 
+                val currentRow = (cycle-1) / 40
+                val currentCol = (cycle-1) % 40
 
-        (0, 0)
+                val nextGrid = if (currentCol >= x - 1 && currentCol <= x + 1) {
+                    currentGrid.updated(currentRow, currentGrid(currentRow).updated(currentCol, "#"))
+                } else {
+                    currentGrid
+                }
+
+                (cycle + 1,  x + value, nextGrid)
+            }._3
+            .map { r =>
+                r.map { c => 
+                    print(c)
+                }
+                print("\n")
+            }
+
+        val duration = (System.nanoTime() - startTime) / 1e6
+
+        (0, duration)
     }
 
 }
@@ -85,7 +109,7 @@ object Day10 {
     println(s"Part 1 Solution: ${p1}")
     println(s"Time Part 1: ${d1}ms")
 
-    //val (p2, d2) = Day10.partTwo()
-    //println(s"Part 2 Solution: ${p2}")
-    //println(s"Time Part 2: ${d2}ms")
+    val (p2, d2) = Day10.partTwo()
+    println(s"Part 2 Solution: ${p2}")
+    println(s"Time Part 2: ${d2}ms")
 }
