@@ -45,6 +45,9 @@ On occasion, I may produce a solution in another language, usually to allow myse
 | 08a | 5.00 ms | 4.24 ms | 7.29 ms  |
 | 08b | 6.15 ms | 4.26 ms | 10.80 ms |
 | 09a | 7.57 ms | 6.22 ms | 9.45 ms  |
+| 09b | 13.02 ms| 4.87 ms | 30.33 ms |
+| 10a | 0.16 ms | 0.11 ms | 0.29 ms  |
+| 10b | 10.7 ms | 7.4 ms  | 19.2 ms  |
 
 ### Time durations (TypeScript, 1 tests)
 
