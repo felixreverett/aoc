@@ -32,8 +32,6 @@ startsWith string matcher
 
 || =========================================
 
-solution = partOne parsedInput
-
 partOne :: [str] -> num
 partOne input
   = xPartOne input dialLocation timesAtZero
@@ -56,8 +54,38 @@ partOne input
         newT = currentT + 1, if newD = 0
              = currentT, otherwise
 
-    || parseTurn :: str -> num
-    parseTurn ('L' : amount) = -(numval amount)
-    parseTurn ('R' : amount) = numval amount
+|| =====
 
-main = show (solution) ++ "\n"
+parseTurn :: str -> num
+parseTurn ('L' : amount) = -(numval amount)
+parseTurn ('R' : amount) = numval amount
+
+|| =====
+
+partTwo :: [str] -> num
+
+partTwo input
+  = xPartTwo input dialLocation timesAtZero
+    where
+
+    xPartTwo [] d t
+      = t
+
+    xPartTwo (front : rest) currentLoc currentT
+      = xPartTwo rest newLoc newT
+        where
+        || gets where the dial would go without bounds
+        rawLoc = currentLoc + parseTurn front
+
+        || clamps the dial
+        newLoc = rawLoc mod 100
+
+        || Gets new timesAtZero
+        newT = currentT + abs (rawLoc div 100) + extra
+        extra = 1, if rawLoc < 0 & (rawLoc mod 100) ~= 0
+              = 0, otherwise
+
+main = "Part 1: " ++ show (partOne parsedInput) ++
+       "\n" ++
+       "Part 2: " ++ show (partTwo parsedInput) ++
+       "\n"
