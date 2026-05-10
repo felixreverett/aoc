@@ -1,12 +1,76 @@
 || Miranda Solution
 
-filePath = "input.txt"
+main = "Part 1: " ++ show (partOne parsedInput) ++
+       "\n" ++
+       "Part 2: " ++ show (partTwo parsedInput) ++
+       "\n"
 
-dialLocation = 50;
-timesAtZero = 0;
+filePath     = "input.txt"
+dialLocation = 50
+timesAtZero  = 0
+parsedInput  = split "\n" (read filePath)
 
-parsedInput
-  = split "\n" (read filePath)
+partOne :: [str] -> num
+partOne input
+  = xPartOne input dialLocation timesAtZero
+    where
+
+    || xPartOne :: [str] -> num -> num -> num
+    || > takes the input plus two accumulators. Returns the final
+    ||   value of accumulator 't'
+
+    || Converging case: On the empty list, return t
+    xPartOne [] d t
+      = t
+
+    || Recursive case: get tail plus new accumulators d, t
+    xPartOne (front : rest) currentD currentT
+      = xPartOne rest newD newT
+        where
+        newD
+          = ((currentD + (parseTurn front) mod 100) + 100) mod 100
+        newT = currentT + 1, if newD = 0
+             = currentT, otherwise
+
+|| =========================================
+
+parseTurn :: str -> num
+parseTurn ('L' : amount) = -(numval amount)
+parseTurn ('R' : amount) = numval amount
+
+|| =========================================
+
+partTwo :: [str] -> num
+
+partTwo input
+  = xPartTwo input dialLocation timesAtZero
+    where
+
+    xPartTwo [] d t
+      = t
+
+    xPartTwo (front : rest) currentLoc currentT
+      = xPartTwo rest newLoc newT
+        where
+
+        || gets where the dial would go without bounds
+
+        rawLoc = currentLoc + parseTurn front
+
+        || find how many times the dial passed zero
+
+        newLoc = ((rawLoc mod 100) + 100) mod 100
+
+        || Gets new timesAtZero. Because the bounds are 0 to 99,
+        || we need to add + 1 to timesAtZero if the value was
+        || negative (e.g. 3 to -1 crosses zero, but -1 div 100 = 0)
+
+        newT    = currentT + (abs rawLoc) div 100 + extra + hitZero
+        extra   = 1, if rawLoc < 0 & currentLoc ~= 0
+                = 0, otherwise
+        hitZero = 1, if rawLoc = 0
+                = 0, otherwise
+
 
 || ===== boilerplate utility functions =====
 
@@ -31,61 +95,3 @@ startsWith string matcher
     xstartsWith (x:xs) (y:ys) = False
 
 || =========================================
-
-partOne :: [str] -> num
-partOne input
-  = xPartOne input dialLocation timesAtZero
-    where
-
-    || xPartOne :: [str] -> num -> num -> num
-    || > takes the input plus two accumulators. Returns the final
-    ||   value of accumulator 't'
-
-    || Converging case: On the empty list, return t
-    xPartOne [] d t
-      = t
-
-    || Recursive case: get tail plus new accumulators d, t
-    xPartOne (front : rest) currentD currentT
-      = xPartOne rest newD newT
-        where
-        newD
-          = ((currentD + (parseTurn front) mod 100) + 100) mod 100
-        newT = currentT + 1, if newD = 0
-             = currentT, otherwise
-
-|| =====
-
-parseTurn :: str -> num
-parseTurn ('L' : amount) = -(numval amount)
-parseTurn ('R' : amount) = numval amount
-
-|| =====
-
-partTwo :: [str] -> num
-
-partTwo input
-  = xPartTwo input dialLocation timesAtZero
-    where
-
-    xPartTwo [] d t
-      = t
-
-    xPartTwo (front : rest) currentLoc currentT
-      = xPartTwo rest newLoc newT
-        where
-        || gets where the dial would go without bounds
-        rawLoc = currentLoc + parseTurn front
-
-        || clamps the dial
-        newLoc = rawLoc mod 100
-
-        || Gets new timesAtZero
-        newT = currentT + abs (rawLoc div 100) + extra
-        extra = 1, if rawLoc < 0 & (rawLoc mod 100) ~= 0
-              = 0, otherwise
-
-main = "Part 1: " ++ show (partOne parsedInput) ++
-       "\n" ++
-       "Part 2: " ++ show (partTwo parsedInput) ++
-       "\n"
