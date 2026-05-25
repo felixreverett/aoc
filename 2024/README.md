@@ -21,6 +21,8 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 14. 
     a. Simple use of modulos
     b. Chinese Remainder Theorem
+15.
+16. Dijkstra's
 
 ### Commit messages
 - 🧩 Solution
@@ -40,18 +42,18 @@ Please enjoy my solutions to the 2024 Advent of Code, as I continue to increase 
 | 03b | 3.1ms       |           | 13b | 1.3ms      | 0.5ms      |
 | 04a | 4.8ms       |           | 14a | 0.8ms      | 0.5ms      |
 | 04b | 4.1ms       |           | 14b | 14.5ms     | 6.5ms      |
-| 05a | 20.0ms      |           | 15a | 15.1ms
-| 05b | 6.9ms       |           |
-| 06a | 5.7ms       |           |
-| 06b | 3,500ms     |           |
-| 07a | 25ms        |           |
-| 07b | 2,600ms     |           |
-| 08a | 3.5ms       |           |
-| 08b | 1.7ms       |           |
-| 09a | 7.3ms       |           |
-| 09b | 315ms       |           |
-| 10a | 6.8ms       |           |
-| 10b | 3.0ms       |           |
+| 05a | 20.0ms      |           | 15a | 15.1ms     |            |
+| 05b | 6.9ms       |           | 15b |            |            |
+| 06a | 5.7ms       |           | 16a |            | 33.2ms     |
+| 06b | 3,500ms     |           | 16b |            |            |
+| 07a | 25ms        |           | 17a |            |            |
+| 07b | 2,600ms     |           | 17b |            |            |
+| 08a | 3.5ms       |           | 18a |            |            |
+| 08b | 1.7ms       |           | 18b |            |            |
+| 09a | 7.3ms       |           | 19a |            |            |
+| 09b | 315ms       |           | 19b |            |            |
+| 10a | 6.8ms       |           | 20a |            |            |
+| 10b | 3.0ms       |           | 20b |            |            |
 
 ### What have I learnt about JavaScript
 - Using forEach (e.g. `Array.forEach(i => { /*code*/ })`) for efficiently iterating through arrays (see day 8, 10)
