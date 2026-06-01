@@ -1,5 +1,6 @@
 package aoc2022
 
+// from project root
 // scala-cli 2022 --main-class aoc2022.run
 
 import scala.compiletime.ops.double
