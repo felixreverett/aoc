@@ -9,9 +9,9 @@ import scala.compiletime.ops.string
     println(s"Part 1 Solution: ${p1}")
     println(s"Time Part 1: ${d1}ms")
 
-    //val (p2, d2) = Day11.partTwo()
-    //println(s"Part 2 Solution: ${p2}")
-    //println(s"Time Part 2: ${d2}ms")
+    val (p2, d2) = Day11.partTwo(10000)
+    println(s"Part 2 Solution: ${p2}")
+    println(s"Time Part 2: ${d2}ms")
 }
 
 object Day11 {
@@ -28,12 +28,12 @@ object Day11 {
       */
     case class Monkey(
         id:             Int,
-        items:          List[Int],
-        operation:      Int => Int,
+        items:          List[Long],
+        operation:      Long => Long,
         divTest:        Int,
         ifTrue:         Int,
         ifFalse:        Int,
-        inspectedItems: Int
+        inspectedItems: Long
     )
 
     /**
@@ -42,8 +42,8 @@ object Day11 {
       */
     sealed trait Token
     case object VarX extends Token
-    case class Num(value: Int) extends Token
-    case class Operator(func: (Int, Int) => Int) extends Token
+    case class Num(value: Long) extends Token
+    case class Operator(func: (Long, Long) => Long) extends Token
 
     extension (expression: String) {
         
@@ -51,7 +51,7 @@ object Day11 {
          * Builds a left-associative lambda function from an expression of type String.
          * We assume the expression contains only valid values from the Token type above.
          */
-        def toOperation: Int => Int = {
+        def toOperation: Long => Long = {
 
             val tokens: List[Token] = expression
                 .trim
@@ -63,18 +63,18 @@ object Day11 {
                     case "-"    => Operator(_ - _)
                     case "*"    => Operator(_ * _)
                     case "/"    => Operator(_ / _)
-                    case num    => Num(num.toInt)
+                    case num    => Num(num.toLong)
                 }
 
-            (x: Int) => {
-                def resolve(t: Token): Int = t match {
+            (x: Long) => {
+                def resolve(t: Token): Long = t match {
                     case VarX => x
                     case Num(n) => n
                     case other => throw new Exception(s"Expected a value token. Received $other")
                 }
 
                 // Recursively extract 3 items from the Token list to generate lambda expression.
-                def evaluate(remainingTokens: List[Token]): Int = remainingTokens match {
+                def evaluate(remainingTokens: List[Token]): Long = remainingTokens match {
 
                     case t1 :: Operator(op) :: t2 :: rest =>
                         val leftVal = resolve(t1)
@@ -97,11 +97,15 @@ object Day11 {
     /** 
       * Takes an Int value and a Monkey as arguments and calculates the destination monkey index
       */
-    def getTargetIndex(value: Int, monkey: Monkey): (Int, Int) = {
+    def getTargetIndex(value: Long, monkey: Monkey, isPartTwo: Boolean = false, commonMultiple: Long = 3): (Int, Long) = {
 
-        val operatedValue: Int = monkey.operation(value)
+        val operatedValue: Long = monkey.operation(value)
 
-        val dividedValue: Int = operatedValue / 3
+        val dividedValue: Long = if (isPartTwo) {
+            operatedValue % commonMultiple
+        } else {
+            operatedValue / 3
+        }
 
         val targetIndex = if (dividedValue % monkey.divTest == 0) {
             monkey.ifTrue
@@ -124,7 +128,7 @@ object Day11 {
             .map { monkey => 
                 val lines = monkey.split("\r?\n")
                 val id = lines(0).replaceAll("\\D", "").toInt
-                val items = lines(1).trim.replace("Starting items: ", "").split(", ").toList.map(_.toInt)
+                val items = lines(1).trim.replace("Starting items: ", "").split(", ").toList.map(_.toLong)
                 val operation = lines(2).trim.replace("Operation: new = ", "").toOperation
                 val divTest = lines(3).replaceAll("\\D", "").toInt
                 val ifTrue = lines(4).replaceAll("\\D", "").toInt
@@ -185,7 +189,84 @@ object Day11 {
         // Take the two Monkeys with the most items inspected and multiply their values
         val solution = inspectedMonkeys
             .map(_.inspectedItems)
-            .sorted(using Ordering[Int].reverse)
+            .sorted(using Ordering[Long].reverse)
+            .take(2)
+            .product
+            .toInt
+            
+        val duration = (System.nanoTime() - startTime) / 1e6
+
+        (solution, duration)
+    }
+
+    def partTwo(number_of_rounds: Int = 10000): (Long, Double) = {
+
+        val filename = "11/input.txt"
+        val input = Source.fromFile(new File(filename)).mkString
+        val startTime = System.nanoTime()
+
+        val monkeyList: Vector[Monkey] = input
+            .split("\r?\n\r?\n")
+            .map { monkey => 
+                val lines = monkey.split("\r?\n")
+                val id = lines(0).replaceAll("\\D", "").toInt
+                val items = lines(1).trim.replace("Starting items: ", "").split(", ").toList.map(_.toLong)
+                val operation = lines(2).trim.replace("Operation: new = ", "").toOperation
+                val divTest = lines(3).replaceAll("\\D", "").toInt
+                val ifTrue = lines(4).replaceAll("\\D", "").toInt
+                val ifFalse = lines(5).replaceAll("\\D", "").toInt
+
+                Monkey(
+                    id =         id,
+                    items =      items,
+                    operation =  operation,
+                    divTest =    divTest,
+                    ifTrue =     ifTrue,
+                    ifFalse =    ifFalse,
+                    inspectedItems = 0
+                )
+            }
+            .toVector
+
+        val commonMultiple = monkeyList.map(_.divTest).product
+
+        val inspectedMonkeys: Vector[Monkey] = (0 until number_of_rounds)
+            .foldLeft(monkeyList) { (accumulatedMList, roundNumber) =>
+
+                (0 until accumulatedMList.length).foldLeft(accumulatedMList) { (roundMList, mIndex) =>
+
+                    val currentM = roundMList(mIndex)
+                    val itemsToProcess = currentM.items
+
+                    itemsToProcess.foldLeft(roundMList) { (itemProcessMList, currentItem) => 
+                        
+                        val srcMonkey = itemProcessMList(mIndex)
+
+                        val (targetIndex, newItemValue) = getTargetIndex(currentItem, srcMonkey, true, commonMultiple)
+
+                        val destMonkey = itemProcessMList(targetIndex)
+
+                        val updatedSrcMonkey = srcMonkey.copy(
+                            items = srcMonkey.items.tail,
+                            inspectedItems = srcMonkey.inspectedItems + 1
+                        )
+
+                        val updatedDestMonkey = destMonkey.copy(items = destMonkey.items :+ newItemValue)
+
+                        if (mIndex == targetIndex) {
+                            itemProcessMList
+                        } else {
+                            itemProcessMList
+                                .updated(mIndex, updatedSrcMonkey)
+                                .updated(targetIndex, updatedDestMonkey)
+                        }
+                    }    
+                }
+            }
+        
+        val solution = inspectedMonkeys
+            .map(_.inspectedItems)
+            .sorted(using Ordering[Long].reverse)
             .take(2)
             .product
             
