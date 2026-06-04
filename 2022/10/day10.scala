@@ -3,12 +3,21 @@ package aoc2022
 import scala.io.Source
 import java.io.File
 import scala.compiletime.ops.string
+import java.io.FileNotFoundException
 
 object Day10 {
 
     def partOne(): (Int, Double) = {
-        val filename = "2022/10/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "10/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+        
         val startTime = System.nanoTime()
 
         val solution = input
@@ -47,8 +56,16 @@ object Day10 {
 
     // solution based on 4HbQ's parsing approach on Reddit
     def partOne4HbQ() : (Int, Double) = {
-        val filename = "2022/10/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "10/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+
         val startTime = System.nanoTime()
 
         val solution = input
@@ -68,8 +85,16 @@ object Day10 {
     }
 
     def partTwo(): (Int, Double) = {
-        val filename = "2022/10/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "10/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+
         val startTime = System.nanoTime()
 
         val initialGrid = Vector.fill(6, 40)(".")
@@ -92,9 +117,9 @@ object Day10 {
             }._3
             .map { r =>
                 r.map { c => 
-                    print(c)
+                    //print(c)
                 }
-                print("\n")
+                //print("\n")
             }
 
         val duration = (System.nanoTime() - startTime) / 1e6

@@ -3,6 +3,7 @@ package aoc2022
 import scala.io.Source
 import java.io.File
 import scala.compiletime.ops.string
+import java.io.FileNotFoundException
 
 // pass through each row except rows 0 and n both ways, storing visible coords in a set
 // then pass through each col except columns 0 and n
@@ -25,8 +26,16 @@ object Day08 {
     }
 
     def partOne(): (Int, Double) = {
-        val filename = "2022/08/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "08/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+
         val startTime = System.nanoTime()
 
         val treeGrid = input
@@ -71,8 +80,16 @@ object Day08 {
     }
 
     def partTwo(): (Int, Double) = {
-        val filename = "2022/08/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "08/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+        
         val startTime = System.nanoTime()
 
         val treeGrid = input

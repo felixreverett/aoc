@@ -2,6 +2,7 @@ package aoc2022
 
 import scala.io.Source
 import java.io.File
+import java.io.FileNotFoundException
 import scala.compiletime.ops.string
 
 @main def run11(): Unit = {
@@ -119,7 +120,15 @@ object Day11 {
     def partOne(number_of_rounds: Int = 20): (Int, Double) = {
 
         val filename = "11/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+
         val startTime = System.nanoTime()
 
         // Initial parsed list of Monkeys and their data
@@ -202,7 +211,15 @@ object Day11 {
     def partTwo(number_of_rounds: Int = 10000): (Long, Double) = {
 
         val filename = "11/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+
         val startTime = System.nanoTime()
 
         val monkeyList: Vector[Monkey] = input

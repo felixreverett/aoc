@@ -3,12 +3,21 @@ package aoc2022
 import scala.io.Source
 import java.io.File
 import scala.compiletime.ops.string
+import java.io.FileNotFoundException
 
 object Day09 {
 
     def partOne(): (Int, Double) = {
-        val filename = "2022/09/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "09/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+        
         val startTime = System.nanoTime()
 
         val solution = input
@@ -63,8 +72,16 @@ object Day09 {
     }
 
     def partTwo(): (Int, Double) = {
-        val filename = "2022/09/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "09/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
+
         val startTime = System.nanoTime()
 
         val initialChain = Vector((0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0))

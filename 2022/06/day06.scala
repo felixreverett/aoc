@@ -3,12 +3,20 @@ package aoc2022
 import scala.io.Source
 import java.io.File
 import scala.compiletime.ops.string
+import java.io.FileNotFoundException
 
 object Day06 {
 
     def partOne(): (Int, Double) = {
-        val filename = "2022/06/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "06/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
 
         val startTime = System.nanoTime()
 
@@ -27,8 +35,15 @@ object Day06 {
     }
 
     def partTwo(): (Int, Double) = {
-        val filename = "2022/06/input.txt"
-        val input = Source.fromFile(new File(filename)).mkString
+        val filename = "06/input.txt"
+        
+        val input: String = try {
+            Source.fromFile(new File(filename)).mkString
+        } catch {
+            case e: FileNotFoundException =>
+                println(s"[!] Could not file the file specified: \"$filename\". Aborting program.")
+                sys.exit(1)
+        }
 
         val startTime = System.nanoTime()
 
