@@ -26,7 +26,8 @@ val days = Map(
     "day09part2" -> ( () => Day09.partTwo()),
     "day10part1" -> ( () => Day10.partOne()),
     "day10part2" -> ( () => Day10.partTwo()),
-    "day11part1" -> ( () => Day11.partOne())
+    "day11part1" -> ( () => Day11.partOne()),
+    "day11part2" -> ( () => Day11.partTwo())
 )
 
 def runAll(times: Int): Unit = {
