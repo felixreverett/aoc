@@ -1,7 +1,7 @@
 package aoc2022
 
-// from project root
-// scala-cli 2022 --main-class aoc2022.run
+// cwd 2022
+// scala-cli . --main-class aoc2022.run
 
 import scala.compiletime.ops.double
 
@@ -25,7 +25,8 @@ val days = Map(
     "day09part1" -> ( () => Day09.partOne()),
     "day09part2" -> ( () => Day09.partTwo()),
     "day10part1" -> ( () => Day10.partOne()),
-    "day10part2" -> ( () => Day10.partTwo())
+    "day10part2" -> ( () => Day10.partTwo()),
+    "day11part1" -> ( () => Day11.partOne())
 )
 
 def runAll(times: Int): Unit = {
