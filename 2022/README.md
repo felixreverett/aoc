@@ -60,6 +60,7 @@ On occasion, I may produce a solution in another language, usually to allow myse
 | 10a | 0.16 ms | 0.11 ms | 0.29 ms  |
 | 10b | 0.65 ms | 0.22 ms | 2.27 ms  |
 | 11a | 1.40 ms | 0.87 ms | 3.56 ms  |
+| 11b | 133.2 ms| 99.63ms | 204.1 ms |
 
 ### 3.2 Time durations (TypeScript, 1 tests)
 
