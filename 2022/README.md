@@ -1,30 +1,41 @@
 # Advent Of Code 2022
-*Readme last updated Januaey 2026*
+*Readme last updated June 2026*
 
-## 1. Overview
-Behond my solutions to the 2022 Advent of Code. This is the first time I'll be "backdating" to previous years after starting Advent of Code initially from 2023.
+## 1 Overview
+My solutions to the 2022 Advent of Code. This is the first time I'll be backdating to previous years after first starting Advent of Code from 2023.
 
-### Objectives
-My primary objective is to use AOC to familiarise myself with the syntax of Scala. More broadly, I want to deepen my understanding of functional programming style and etiquette, particularly the avoidance of mutable states, and the use of the functional toolkit made available to me.
+### 1.1 Objectives
+My primary objective for **aoc22** is to use the puzzles to familiarise myself with the syntax of Scala. More broadly, I want to deepen my understanding of functional programming style and etiquette, particularly the avoidance of mutable states, and the use of the functional toolkit at my disposal.
 
-A secondary objective is to design solutions **exclusively using [method chaining](https://felixreverett.com/blog/method-chaining)** where possible.
+A secondary objective is to design solutions **exclusively using [method chaining](https://felixreverett.com/blog/method-chaining)** where possible. This can be further extended by writing custom type methods using Scala's `extension` syntax.
 
-### Benchmarking
-I will also be making a concerted effort to optimise my solutions. See the file `2022.scala` for a script to execute all solutions for performance benchmarking. This is configured to allow the Virtual Machine to optimise the code before creating any measurements. As an aside, it is written entirely without mutable state.
+### 1.2 Benchmarking
+I will also be making a concerted effort to optimise my solutions. The file `2022.scala` contains a script that executes all solutions for performance benchmarking. This is configured to allow the Virtual Machine to optimise the code before creating any measurements. As an aside, it is written entirely without mutable state.
 
-### Commit messages
+### 1.3 Commit messages
 As always, my commit messages follow this approximate convention:
 - 🧩 Solution
 - ⚙️ Progress towards a solution
 - 🧹 Code cleanup
 - 📖 Other (e.g. documentation)
 
-## 2. Stats
-The following section covers statistics from Advent of Code 2022. Unless specified, time durations will generally exclude the loading of files from non-volatile memory, although sometimes this is not easy to measure separately.
+## 2 Build instructions
+You will need to obtain your own `input.txt` from the Advent Of Code website.
+
+To execute all files:
+    - Set your current working directory to `<aoc>/2022`, where `<aoc>` represents the repository root;
+    - Enter `scala-cli . --main-class aoc2022.run` (you will need Scala installed).
+
+To execute an individual day:
+    - Set your current working directory to `<aoc>/2022`;
+    - Enter `scala <day>/day<day>.scala`.
+
+## 3 Stats
+The following section covers statistics from Advent of Code 2022. Unless specified, time durations will generally exclude the loading of files from storage, although given my usage of data pipelining this is not always easy to measure separately.
 
 On occasion, I may produce a solution in another language, usually to allow myself to conceptualise a solution before finding its equivalent in Scala, but sometimes just because I want to.
 
-### Time durations (Scala, 10 tests)
+### 3.1 Time durations (Scala, 10 tests)
 
 | Day | AVG     | Min     | Max      |
 | --- | ------: | ------: | -------: |
@@ -47,22 +58,25 @@ On occasion, I may produce a solution in another language, usually to allow myse
 | 09a | 7.57 ms | 6.22 ms | 9.45 ms  |
 | 09b | 13.02 ms| 4.87 ms | 30.33 ms |
 | 10a | 0.16 ms | 0.11 ms | 0.29 ms  |
-| 10b | 10.7 ms | 7.4 ms  | 19.2 ms  |
+| 10b | 0.65 ms | 0.22 ms | 2.27 ms  |
+| 11a | 1.40 ms | 0.87 ms | 3.56 ms  |
 
-### Time durations (TypeScript, 1 tests)
+### 3.2 Time durations (TypeScript, 1 tests)
 
 | Day | AVG     |
 | --- | ------: |
 | 09a | 10.4 ms |
 
-## Notable Programming Concepts
+## 4 Notable Programming Concepts
 
-| Day | Programming Concepts                    | Functional Concepts
-| --- | --------------------------              | ---
-| 01  | Basic Input Marshalling                 |
-| 04  | Range Intersections                     |
-| 05  | ...                                     | foldLeft (instead of a for loop)
-| 06  |                                         | .sliding(n) : a function for iterating through an Interable with a slice of size n. Pair with .find() to extract some kind of match.
-| 07  | File system traversal                   | pattern matching with match case
-| 08  |                                         | nested foldLeft
-| 09  |                                         | nested foldLeft -> improved familiarity with recursively passing state
+| Day   | Programming Concepts                      | Functional Concepts
+| ----- | ----------------------------------------- | ---
+| 01    | Basic Input Marshalling                   |
+| 04    | Range Intersections                       |
+| 05    | ...                                       | foldLeft (instead of a for loop)
+| 06    |                                           | .sliding(n) : a function for iterating through an Interable with a slice of size n. Pair with .find() to extract some kind of match.
+| 07    | File system traversal                     | pattern matching with match case
+| 08    |                                           | nested foldLeft
+| 09    |                                           | nested foldLeft -> improved familiarity with recursively passing state
+| 10    | |
+| 11    |                                           | nested foldLeft
