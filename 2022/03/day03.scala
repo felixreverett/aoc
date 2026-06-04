@@ -68,7 +68,7 @@ object Day03 {
             .filter(_.trim.nonEmpty)
             .grouped(3)
             .map { group =>
-                val commonStr = findIntersect(group.toArray)
+                val commonStr = findIntersect(group.toSeq)
                 convertToPriority(commonStr.head)
             }
             .sum
