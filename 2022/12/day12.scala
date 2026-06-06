@@ -12,6 +12,10 @@ import scala.io.Source
     val (p1, d1) = Day12.partOne()
     println(s"Part 1 Solution: ${p1}")
     println(s"Time Part 1: ${d1}ms")
+
+    val (p2, d2) = Day12.partTwo()
+    println(s"Part 2 Solution: ${p2}")
+    println(s"Time Part 2: ${d2}ms")
 }
 
 object Day12 {
@@ -83,7 +87,45 @@ object Day12 {
 
         val startTime = System.nanoTime()
 
-        val solution: Int = 0; val duration: Double = 0
+        val heightMap: Vector[Vector[Char]] = input
+            .split("\r?\n")
+            .toVector
+            .map { _.toVector }
+
+        // 2) Get all startpoints this time
+        val (startPoints: List[(Int, Int)], endPoint: (Int, Int)) = try {
+            
+            val startPointsAndEndPoint: List[(Char, (Int, Int))] = for {
+                (rowList, rowIndex) <- heightMap.toList.zipWithIndex
+                (char, colIndex) <- rowList.zipWithIndex
+                if char == 'S' || char == 'E' || char == 'a'
+            } yield char -> (rowIndex, colIndex)
+
+            val startPoints: List[(Int, Int)] = startPointsAndEndPoint
+                .filter(i => i._1 != 'E')
+                .map(i => i._2)
+                .toList
+
+            val endPoint: (Int, Int) = startPointsAndEndPoint
+                .filter(i => i._1 == 'E' )
+                .map(i => i._2)
+                .head
+
+            (startPoints, endPoint)
+        } catch {
+            case e: Exception => {
+                println(s"[!] Grid parsing failed: ${e.getMessage}")
+                sys.exit(1)
+            }
+        }
+
+        // Now iterate over every startPoint and take the smallest path
+        val solution: Int = startPoints
+            .map(sp => heightMap.doDijkstras(sp, endPoint))
+            .sorted
+            .head
+
+        val duration: Double = (System.nanoTime() - startTime) / 1e6
 
         (solution, duration)
     }
