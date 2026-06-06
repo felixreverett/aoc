@@ -29,7 +29,7 @@ object Day11 {
       */
     case class Monkey(
         id:             Int,
-        items:          List[Long],
+        items:          Vector[Long],
         operation:      Long => Long,
         divTest:        Int,
         ifTrue:         Int,
@@ -48,11 +48,22 @@ object Day11 {
 
     extension (expression: String) {
         
+        def toOperation: Long => Long = {
+            val parts = expression.trim.split(" ")
+            (parts(0), parts(1), parts(2)) match {
+                case ("old", "+", "old") => x => x + x
+                case ("old", "*", "old") => x => x * x
+                case ("old", "+", num) => val n = num.toLong; x => x + n
+                case ("old", "*", num) => val n = num.toLong; x => x * n
+                case _ => throw new Exception(s"Unsupported operation: $expression")
+            }
+        }
+
         /**
          * Builds a left-associative lambda function from an expression of type String.
          * We assume the expression contains only valid values from the Token type above.
          */
-        def toOperation: Long => Long = {
+        def toOperation_OLD: Long => Long = {
 
             val tokens: List[Token] = expression
                 .trim
@@ -137,7 +148,7 @@ object Day11 {
             .map { monkey => 
                 val lines = monkey.split("\r?\n")
                 val id = lines(0).replaceAll("\\D", "").toInt
-                val items = lines(1).trim.replace("Starting items: ", "").split(", ").toList.map(_.toLong)
+                val items = lines(1).trim.replace("Starting items: ", "").split(", ").toVector.map(_.toLong)
                 val operation = lines(2).trim.replace("Operation: new = ", "").toOperation
                 val divTest = lines(3).replaceAll("\\D", "").toInt
                 val ifTrue = lines(4).replaceAll("\\D", "").toInt
@@ -222,67 +233,73 @@ object Day11 {
 
         val startTime = System.nanoTime()
 
+        // Parse input into monkeyList as before
         val monkeyList: Vector[Monkey] = input
             .split("\r?\n\r?\n")
             .map { monkey => 
                 val lines = monkey.split("\r?\n")
                 val id = lines(0).replaceAll("\\D", "").toInt
-                val items = lines(1).trim.replace("Starting items: ", "").split(", ").toList.map(_.toLong)
+                val items = lines(1).trim.replace("Starting items: ", "").split(", ").toVector.map(_.toLong)
                 val operation = lines(2).trim.replace("Operation: new = ", "").toOperation
                 val divTest = lines(3).replaceAll("\\D", "").toInt
                 val ifTrue = lines(4).replaceAll("\\D", "").toInt
                 val ifFalse = lines(5).replaceAll("\\D", "").toInt
 
-                Monkey(
-                    id =         id,
-                    items =      items,
-                    operation =  operation,
-                    divTest =    divTest,
-                    ifTrue =     ifTrue,
-                    ifFalse =    ifFalse,
-                    inspectedItems = 0
-                )
+                Monkey(id, items, operation, divTest, ifTrue, ifFalse, 0)
             }
             .toVector
 
+        // Calculate the common multiple to keep the worry levels from integer overvlows
         val commonMultiple = monkeyList.map(_.divTest).product
 
-        val inspectedMonkeys: Vector[Monkey] = (0 until number_of_rounds)
-            .foldLeft(monkeyList) { (accumulatedMList, roundNumber) =>
+        // Now map each object value into flat arrays (Structure of Arrays)
+        // This is better for cache performance
 
-                (0 until accumulatedMList.length).foldLeft(accumulatedMList) { (roundMList, mIndex) =>
+        val inspectedCounts = Array.fill(monkeyList.length)(0L)
+        val divTests        = monkeyList.map(_.divTest).toArray
+        val ifTrues         = monkeyList.map(_.ifTrue).toArray
+        val ifFalses        = monkeyList.map(_.ifFalse).toArray
+        val operations      = monkeyList.map(_.operation).toArray
 
-                    val currentM = roundMList(mIndex)
-                    val itemsToProcess = currentM.items
+        // Map all the items into flat mutable buffers for 0-allocation appending
+        val itemBuffers = monkeyList.map(m => scala.collection.mutable.ArrayBuffer.from(m.items)).toArray
 
-                    itemsToProcess.foldLeft(roundMList) { (itemProcessMList, currentItem) => 
-                        
-                        val srcMonkey = itemProcessMList(mIndex)
+        // Iterate over every monkey for every round
+        for (_ <- 0 until number_of_rounds) {
+            for (mIndex <- itemBuffers.indices) {
 
-                        val (targetIndex, newItemValue) = getTargetIndex(currentItem, srcMonkey, true, commonMultiple)
+                // The item buffer and its length
+                val buffer = itemBuffers(mIndex)
+                val len = buffer.length
 
-                        val destMonkey = itemProcessMList(targetIndex)
+                // Inspect all items in the buffer in a single op
+                inspectedCounts(mIndex) += len
 
-                        val updatedSrcMonkey = srcMonkey.copy(
-                            items = srcMonkey.items.tail,
-                            inspectedItems = srcMonkey.inspectedItems + 1
-                        )
+                // Pull relevant values out of their arrays
+                val op      = operations(mIndex)
+                val div     = divTests(mIndex)
+                val ifTrue  = ifTrues(mIndex)
+                val ifFalse = ifFalses(mIndex)
 
-                        val updatedDestMonkey = destMonkey.copy(items = destMonkey.items :+ newItemValue)
+                // yucky mutable state
+                var i = 0
+                while (i < len) {
+                    val currentItem = buffer(i)
+                    val operatedValue = op(currentItem)
+                    val dividedValue = operatedValue % commonMultiple
 
-                        if (mIndex == targetIndex) {
-                            itemProcessMList
-                        } else {
-                            itemProcessMList
-                                .updated(mIndex, updatedSrcMonkey)
-                                .updated(targetIndex, updatedDestMonkey)
-                        }
-                    }    
+                    val targetIndex = if (dividedValue % div == 0) ifTrue else ifFalse
+
+                    itemBuffers(targetIndex).addOne(dividedValue)
+
+                    i+=1
                 }
+
+                buffer.clear()
             }
-        
-        val solution = inspectedMonkeys
-            .map(_.inspectedItems)
+        }
+
+        val solution = inspectedCounts
             .sorted(using Ordering[Long].reverse)
             .take(2)
             .product
