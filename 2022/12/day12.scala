@@ -120,10 +120,8 @@ object Day12 {
         }
 
         // Now iterate over every startPoint and take the smallest path
-        val solution: Int = startPoints
-            .map(sp => heightMap.doDijkstras(sp, endPoint))
-            .sorted
-            .head
+        val solution: Int = heightMap
+            .doDijkstrasMultisource(startPoints, endPoint)
 
         val duration: Double = (System.nanoTime() - startTime) / 1e6
 
@@ -173,6 +171,43 @@ object Day12 {
 
             search(Queue(Node(startPoint, 0)), Set(startPoint))
         } 
+
+        def doDijkstrasMultisource(startPoints: List[(Int, Int)], endPoint: (Int, Int)): Int = {
+
+            @tailrec
+            def search(
+                queue: Queue[Node],
+                visited: Set[(Int, Int)]
+            ): Int = {
+
+                queue.dequeueOption match {
+                    case None =>
+                        Int.MaxValue
+
+                    case Some((current, rest)) if current.id == endPoint =>
+                        current.weight
+
+                    case Some((current, rest)) =>
+                        val neighbours = heightMap.getValidNeighbours(current.id._1, current.id._2)
+                            .filter { coord => !visited.contains(coord)
+                            }
+
+                        val neighbourNodes = neighbours
+                            .map { case (r, c) =>
+                                Node(id = (r, c), weight = current.weight + 1)
+                            }
+
+                        val nextQueue = rest.enqueueAll(neighbourNodes)
+                        val nextVisited = visited ++ neighbours
+
+                        search(nextQueue, nextVisited)
+                }
+            }
+
+            val initialNodes = startPoints.map(sp => Node(id = sp, weight = 0))
+
+            search(Queue.from(initialNodes), startPoints.toSet)
+        }
 
         /**
          * Returns a list of all valid neighbours for a given character on the heightMap
