@@ -25,6 +25,7 @@ You will need to obtain your own `input.txt` from the Advent Of Code website.
 To execute all files:
     - Set your current working directory to `<aoc>/2022`, where `<aoc>` represents the repository root;
     - Enter `scala-cli . --main-class aoc2022.run` (you will need Scala installed).
+    - Optionally export results with `scala-cli . --main-class aoc2022.run -- -export`
 
 To execute an individual day:
     - Set your current working directory to `<aoc>/2022`;
@@ -60,7 +61,9 @@ On occasion, I may produce a solution in another language, usually to allow myse
 | 10a | 0.16 ms | 0.11 ms | 0.29 ms  |
 | 10b | 0.65 ms | 0.22 ms | 2.27 ms  |
 | 11a | 1.40 ms | 0.87 ms | 3.56 ms  |
-| 11b | 133.2 ms| 99.63ms | 204.1 ms |
+| 11b | 17.3 ms | 11.58 ms| 24.10 ms |
+| 12a | 9.54 ms | 6.67 ms | 12.73 ms |
+| 12b | 6.44 ms | 4.61 ms | 8.14 ms  |
 
 ### 3.2 Time durations (TypeScript, 1 tests)
 
@@ -81,3 +84,4 @@ On occasion, I may produce a solution in another language, usually to allow myse
 | 09    |                                           | nested foldLeft -> improved familiarity with recursively passing state
 | 10    | |
 | 11    |                                           | nested foldLeft
+| 12    | Dijkstra's
