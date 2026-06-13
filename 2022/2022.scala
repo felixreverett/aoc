@@ -4,6 +4,10 @@ package aoc2022
 // scala-cli . --main-class aoc2022.run
 
 import scala.compiletime.ops.double
+import java.nio.file.Paths
+import java.nio.file.Files
+import java.nio.charset.StandardCharsets
+import scala.util.{Try, Success, Failure}
 
 val days = Map(
     "day01part1" -> ( () => Day01.partOne()),
@@ -27,10 +31,12 @@ val days = Map(
     "day10part1" -> ( () => Day10.partOne()),
     "day10part2" -> ( () => Day10.partTwo()),
     "day11part1" -> ( () => Day11.partOne()),
-    "day11part2" -> ( () => Day11.partTwo())
+    "day11part2" -> ( () => Day11.partTwo()),
+    "day12part1" -> ( () => Day12.partOne()),
+    "day12part2" -> ( () => Day12.partTwo())
 )
 
-def runAll(times: Int): Unit = {
+def runAll(times: Int, doExport: Boolean): Unit = {
 
     println("Warming up program")
     days.foreach { case (id, func) =>
@@ -65,9 +71,47 @@ def runAll(times: Int): Unit = {
             println(f"$dayID%-15s | $avg%-10.4f | $min%-10.4f | $max%-10.4f")
     }
     println("="*55)
+
+    if (doExport) {
+
+        val exportFilename: String = "data/2022_results.txt"
+
+        println(s"Exporting data to ${exportFilename}")
+
+        val header: String = "Day,Average,Min,Max\n"
+
+        val dataRows: String = allResults
+            .toSeq
+            .sortBy(_._1)
+            .map{ case (day, (avg, min, max)) =>
+                s"$day, $avg, $min, $max"    
+            }
+            .mkString("\n")
+
+        val payload: String = header + dataRows + "\n"
+
+        payload.exportTo(exportFilename)
+    }
 }
 
-@main def run(): Unit = {
+extension (payload: String) {
 
-    runAll(10)
+    def exportTo(exportFilename: String): Unit = {
+
+        Try {
+            val path = Paths.get(exportFilename)
+
+            Files.writeString(path, payload, StandardCharsets.UTF_8)
+        } match {
+            case Success(_) => println(s"Succesfully exported data.")
+            case Failure(e) => println(s"[!] Failed to export data. Error: ${e.getMessage}")
+        }
+    }
+}
+
+@main def run(args: String*): Unit = {
+
+    val doExport: Boolean = args.contains("-export")
+
+    runAll(10, doExport)
 }
